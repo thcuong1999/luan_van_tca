@@ -1,0 +1,67 @@
+#tableMaterial {
+  select#mui-479754017 {
+    width: 23px;
+  }
+
+  thead {
+    background: #f4f6f8;
+  }
+
+  td,
+  th {
+    height: 52px;
+    padding-left: 52px;
+    text-align: left;
+  }
+
+  th {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    color: #666;
+  }
+
+  td {
+    font-family: "Montserrat", sans-serif;
+    font-size: 13px;
+  }
+
+  img {
+    width: 35px;
+
+    &.noImage {
+      opacity: 0.15;
+    }
+  }
+}
+
+.MuiToolbar-root {
+  p {
+    margin: auto;
+  }
+  select {
+    width: 22px;
+
+    option {
+      text-align: center;
+    }
+  }
+}
+
+#tablePhanphat {
+  img.noImage {
+    opacity: 0.2;
+  }
+
+  input {
+    width: 50px;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    outline: none;
+    text-align: center;
+  }
+
+  input:focus {
+    border: 1px solid #333;
+  }
+}

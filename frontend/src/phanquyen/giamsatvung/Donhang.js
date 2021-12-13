@@ -1,0 +1,90 @@
+import React, { useState, useEffect } from "react";
+import BackdropMaterial from "../../components/BackdropMaterial";
+import Header from "../../components/Header";
+import {
+  Container,
+  Content,
+  Filter,
+  FilterSection,
+  SearchBox,
+  TableSection,
+  Title,
+  TitleWrapper,
+} from "./styledComponents";
+import TableDonhang from "./tables/TableDonhang";
+import { useSelector } from "react-redux";
+import apiGSV from "../../axios/apiGSV";
+
+const Donhang = (props) => {
+  const [query, setQuery] = useState("");
+  const [searchColumns] = useState(["ma", "ten", "mota"]);
+  const [loading, setLoading] = useState(false);
+  const [dsDonhang, setDsDonhang] = useState([]);
+  const [rowsRemoved, setRowsRemoved] = useState(false);
+  const { userInfo } = useSelector((state) => state.user);
+
+  const fetchDsSanpham = async () => {
+    setLoading(true);
+    const { gsv } = await apiGSV.singleGsvBasedUserId(userInfo._id);
+    const { donhang } = await apiGSV.dsDonhang(gsv._id);
+    setDsDonhang(donhang);
+    setLoading(false);
+  };
+
+  const search = (dsSanpham) => {
+    return (
+      dsSanpham &&
+      dsSanpham.filter((item) =>
+        searchColumns.some(
+          (col) =>
+            item[col].toString().toLowerCase().indexOf(query.toLowerCase()) > -1
+        )
+      )
+    );
+  };
+
+  useEffect(() => {
+    setRowsRemoved(false);
+    fetchDsSanpham();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rowsRemoved]);
+
+  if (loading) {
+    return <BackdropMaterial />;
+  }
+
+  return (
+    <>
+      <Container>
+        <Header title="Đơn hàng" />
+        <Content>
+          <FilterSection>
+            <TitleWrapper>
+              <Title>Danh sách đơn hàng</Title>
+            </TitleWrapper>
+            <Filter>
+              <SearchBox>
+                <i class="fas fa-search"></i>
+                <input
+                  type="text"
+                  placeholder="Tìm đơn hàng theo mã"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+              </SearchBox>
+            </Filter>
+
+            <TableSection>
+              <TableDonhang
+                dsDonhang={dsDonhang}
+                setRowsRemoved={setRowsRemoved}
+              />
+            </TableSection>
+          </FilterSection>
+        </Content>
+      </Container>
+    </>
+  );
+};
+
+export default Donhang;

@@ -1,0 +1,166 @@
+useEffect(() => {},[]) => useEffect chỉ chạy 1 lần khác với state thay đổi làm rerender components
+-> 2 thằng ko liên quan j nhau
+
+ham reduce javascript
+
+*** REACT LIFECYCLE METHOD: TỨC CÁC METHOD(HÀM/PHUONG THỨC DÙNG TRONG LIFECYCLE), quan sát sơ đồ
+*** REACT LIFECYCLE: vòng đời react (mounting: sinh ra tức render vào DOM, updating: phát triển tức update DOM, unmounting: chết, tức bị loại khỏi DOM)
+*** Method: render() -> render component vào DOM/UI (xảy ra ở 2 gđ: mouting, updating). Cách check: console.log trong component react, bên ngoài all hàm
+*** method: componentDidMount(), trigger sau hàm render() vì nhìn vào sơ đồ hàm này ở sau hàm render(). Hàm trigger ngay sau khi component vừa render, cách hiêu tiếng việt: component đã mount
+*** method: componentDidUpdate(), component ĐÃ update thì làm j...
+*** method: componentWillUnmount(), component sẽ chết, rút ra khỏi DOM, trước khi rút khỏi DOM thì làm j....
+
+Lấy single đơn hàng từ GSV, ko cần dùng giamsatvungModel vì Giamsatvung collection chỉ reference đến document
+của Donhang collection => Dùng luôn router Donhang để lấy single đơn hàng
+
+* 1 langf nghe nhieu/1 sanpham
+* show thao tac
+* show thong ke trong page Tong quan
+* giao dien kho hang
+* qly lang nghe -> muon biet qlkd/cty, sp nao do lang nghe nao dap ung dc/mua 1 sp mua o dau/
+* tien do bao cao -> muon biet 1 cacsh tong quat, muon 1 sp -> khi nao co'
+* xem thong tin lang nghe -> click icon langnghe
+* langnghe: don dat hang, tuong tac voi' nong dan, theo doi don hang, su kien xay ra -> thong bao'
+
+db.bophankds.updateMany({}, { $set: { dssanpham: [] }});
+db.bophankds.updateMany({}, { $set: { dscongcu: [] }});
+db.bophankds.updateMany({}, { $set: { dsvattu: [] }});
+db.bophankds.updateMany({}, { $set: { dsnguyenlieu: [] }});
+db.bophankds.updateMany({}, { $set: { donhang: [] }});
+db.bophankds.updateMany({}, { $set: { subdonhang: [] }});
+
+db.giamsatvungs.updateMany({}, { $set: { dssanpham: [] }});
+db.giamsatvungs.updateMany({}, { $set: { dscongcu: [] }});
+db.giamsatvungs.updateMany({}, { $set: { dsvattu: [] }});
+db.giamsatvungs.updateMany({}, { $set: { dsnguyenlieu: [] }});
+db.giamsatvungs.updateMany({}, { $set: { donhang: [] }});
+db.giamsatvungs.updateMany({}, { $set: { subdonhang: [] }});
+
+db.daily1.updateMany({}, { $set: { dssanpham: [] }});
+db.daily1.updateMany({}, { $set: { dscongcu: [] }});
+db.daily1.updateMany({}, { $set: { dsvattu: [] }});
+db.daily1.updateMany({}, { $set: { dsnguyenlieu: [] }});
+db.daily1.updateMany({}, { $set: { donhang: [] }});
+db.daily1.updateMany({}, { $set: { subdonhang: [] }});
+
+db.daily2.updateMany({}, { $set: { dssanpham: [] }});
+db.daily2.updateMany({}, { $set: { dscongcu: [] }});
+db.daily2.updateMany({}, { $set: { dsvattu: [] }});
+db.daily2.updateMany({}, { $set: { dsnguyenlieu: [] }});
+db.daily2.updateMany({}, { $set: { donhang: [] }});
+db.daily2.updateMany({}, { $set: { subdonhang: [] }});
+
+db.hodans.updateMany({}, { $set: { dssanpham: [] }});
+db.hodans.updateMany({}, { $set: { dscongcu: [] }});
+db.hodans.updateMany({}, { $set: { dsvattu: [] }});
+db.hodans.updateMany({}, { $set: { dsnguyenlieu: [] }});
+db.hodans.updateMany({}, { $set: { donhang: [] }});
+
+db.daily2.updateMany({}, { $set: { dsgiaohang: [] }});
+db.daily1.updateMany({}, { $set: { dsgiaohang: [] }});
+db.giamsatvungs.updateMany({}, { $set: { dsgiaohang: [] }});
+db.bophankds.updateMany({}, { $set: { dsgiaohang: [] }});
+
+db.donhangs.drop();
+db.giaohangs.drop();
+
+
+//===================
+padding: 36px 20px;
+
+onclick={() => myFunc()} : Gọi hàm <=> onclick={myFunc} : tham chiếu
+
+MẤY CÁI REF TRONG COLLECTION CHỈ LÀ THAM CHIẾU THÔI, KO TÁC ĐỘNG LÊ NÓ KHI UPDATE
+=> CHỈ TÁC ĐỘNG LÊN COLLECTION MÀ NÓ THAM CHIẾU ĐẾN THÔI
+- khi cập nhật or thêm, sửa, xóa -> đặt giả thiết field này có tồn tại ko
+    nêu tồn tại thì làm j, ko tồn tại thì làm j
+ 
+- generate passwd
+- nhieu sp, ser nhieu sp
+- gsv -> gs làng nghề có bn sp | thêm list sp. ql hộ dân đan
+    + add hodan -> bpkd
+    + sale, marketing
+- bpkd: tên sp: admin nhpa
+    + add sp (msdh, mssp): 
+    + cty cc kiểu đan, cách đan
+    + nhận đơn hàng, qly đơn hàng
+    + nhap sp: admin nhập
+    
+gsv A (A, B, C)
+    DL1A (A, B)
+        DL2A (A, B)
+            HDA(LSP: A)
+            HDB(LSP: B)
+        DL2B (B)
+            HDC(LSP: B)
+            HDD(LSP: B)
+    DL1B (A, B, C)                      => A, B, C
+        DL2C (A, B)
+            HDE(LSP: A)
+            HDF(LSP: B)
+        DL2D (C)
+            HDG(LSP: C)
+            HDH(LSP: C)
+    
+gsv B (A, D, E)
+    DL1C (A, D, E)
+        DL2E (A)
+            HDL(LSP: A)
+            HDM(LSP: A)
+        DL2F (D, E)
+            HDN(LSP: D)
+            HDO(LSP: E)
+    DL1D (D, E)                        => A, D, E
+        DL2G (E)
+            HDP(LSP: E)
+            HDK(LSP: E)
+        DL2H (D, E)
+            HDQ(LSP: D)
+            HDZ(LSP: E)
+     
+
+db.sanphams.find({"createdAt":{ $gte:ISODate("2021-11-10"), $lt:ISODate("2021-11-18") }
+}).pretty();
+
+
+*** ham xoa ho dan => update loaisp
+*** validate admin nhap ma sp
+
+
+==================================================
+const tongsl = tongsl of dh goc
+
+- Bophankd
+    bophankd
+        -> tien do hoan thanh: (donhang tong hop cua 
+            bophankd, field: danhan / tongsl)
+    gsv
+        -> tinh trang nhan don: subdonhang bpkd
+            if(xacnhan == true) -> tong
+        
+        -> tien do hoan thanh: (donhang tong hop cua 
+            cac gsv, field: danhan)
+    dl1
+        -> tinh trang nhan don: (subdonhang gsv, 
+            field: xacnhan)
+        -> tien do hoan thanh: (donhang tong hop cua 
+            cac dl1, field: danhan)
+    dl2
+        -> tinh trang nhan don: (subdonhang dl1, field: 
+            xacnhan)
+        -> tien do hoan thanh: (donhang tong hop cua 
+            cac dl2, field: danhan)
+
+gsvA: 70
+gsvB: 30 -> xac nhan: TTND_GSV: 30%
+
+dl1B: 10
+dl1A: 10 -> xac nhan: TTND_DL1: 20%
+dl1C: 10 -> xac nhan: TTND_DL1: 20%
+
+DL2A: 5
+DL2B: 5 -> xac nhan: TTND_DL2: 5%
+
+======================
+
+

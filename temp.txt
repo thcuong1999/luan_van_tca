@@ -1,0 +1,12 @@
+
+useContext()
+    => create context xong thì use context này thôi
+
+- old phanphatId -> to update old record
+- items[] -> array of congcu thieu'
+- from,
+- to
+- trangthai
+- thieu
+- hoanthanh
+- ngaytao
