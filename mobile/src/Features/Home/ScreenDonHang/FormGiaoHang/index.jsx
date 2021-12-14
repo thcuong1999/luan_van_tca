@@ -108,25 +108,59 @@ function FormGiaoHang(props) {
     setVisible3(true);
   };
 
+  // const handleSumitForm = async (values) => {
+  //   try {
+  //     if (image) {
+  //       const dataForm = {
+  //         donhangId: data._id,
+  //         hodanId: hodanId,
+  //         dssanpham: [
+  //           {
+  //             sanpham: data.dssanpham.find(
+  //               (sp) => sp.sanpham.ma === selectedMaSP
+  //             ).sanpham._id,
+  //             dagiao: parseInt(values.soluong),
+  //           },
+  //         ],
+  //       };
+  //       // console.log(dataForm);
+  //       const sendRequest = await apiGiaohang.hodanToDaily2(dataForm);
+  //       // console.log(sendRequest);
+  //       handleOpen2();
+  //     } else {
+  //       handleOpen();
+  //     }
+  //   } catch (error) {}
+  // };
+
   const handleSumitForm = async (values) => {
     try {
       if (image) {
-        const dataForm = {
-          donhangId: data._id,
-          hodanId: hodanId,
-          dssanpham: [
-            {
-              sanpham: data.dssanpham.find(
-                (sp) => sp.sanpham.ma === selectedMaSP
-              ).sanpham._id,
-              dagiao: parseInt(values.soluong),
-            },
-          ],
-        };
-        // console.log(dataForm);
-        const sendRequest = await apiGiaohang.hodanToDaily2(dataForm);
-        // console.log(sendRequest);
-        handleOpen2();
+        const sanphamId = data.dssanpham.find(
+          (sp) => sp.sanpham.ma === selectedMaSP
+        ).sanpham._id;
+        //kiem tra so luong hoan thanh cua san pham
+        const checkSanPham = data.dssanpham.find(
+          (item) => item.sanpham._id === sanphamId
+        );
+        if (
+          checkSanPham.soluonghoanthanh > 0 &&
+          parseInt(values.soluong) + checkSanPham.dagiao <=
+            checkSanPham.soluonghoanthanh
+        ) {
+          const dataForm = {
+            donhangId: data._id,
+            hodanId: hodanId,
+            dssanpham: [
+              { sanpham: sanphamId, dagiao: parseInt(values.soluong) },
+            ],
+          };
+          // console.log(dataForm);
+          const sendRequest = await apiGiaohang.hodanToDaily2(dataForm);
+          handleOpen2();
+        } else {
+          handleOpen3();
+        }
       } else {
         handleOpen();
       }

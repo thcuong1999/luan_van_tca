@@ -847,8 +847,24 @@ daily2Router.get("/dssubdhofsingledh/:daily2Id/:madh", async (req, res) => {
 daily2Router.get("/tiendodonhang/:dl2Id/:maDH", async (req, res) => {
   try {
     const daily2 = await Daily2.findById(req.params.dl2Id)
-      .populate("donhang")
-      .populate("subdonhang");
+      .populate({
+        path: "donhang",
+        populate: {
+          path: "from to dssanpham dscongcu dsvattu dsnguyenlieu",
+          populate: {
+            path: "daily1 daily2 sanpham congcu vattu nguyenlieu",
+          },
+        },
+      })
+      .populate({
+        path: "subdonhang",
+        populate: {
+          path: "from to dssanpham dscongcu dsvattu dsnguyenlieu",
+          populate: {
+            path: "daily2 hodan sanpham congcu vattu nguyenlieu",
+          },
+        },
+      });
     // don hang tong hop cua daily1:
     const daily2Donhang = daily2.donhang.find(
       (dh) => dh.ma === req.params.maDH
@@ -856,6 +872,37 @@ daily2Router.get("/tiendodonhang/:dl2Id/:maDH", async (req, res) => {
     // tong so luong sp cua dh goc (trường hợp này đơn hàng gốc là DL2)
     const tongSLSPDonhangGoc = daily2Donhang.tongsanpham;
     // daily2 tien do hoan thanh
+
+    //-------------------------------
+    let daily2Subdonhang = daily2.subdonhang;
+    daily2Subdonhang = daily2Subdonhang.filter(
+      (dh) => dh.ma === req.params.maDH
+    );
+
+    let dsDonhangTonghopHodan = [];
+    let dsHodan = [];
+    for (const item of daily2Subdonhang) {
+      let hodan = await Hodan.findById(item.to.hodan).populate({
+        path: "donhang",
+        populate: {
+          path: "from to dssanpham dscongcu dsvattu dsnguyenlieu",
+          populate: {
+            path: "daily2 hodan sanpham congcu vattu nguyenlieu",
+          },
+        },
+      });
+      let hodanDonhang = hodan.donhang.find((dh) => dh.ma === req.params.maDH);
+      dsDonhangTonghopHodan = [hodanDonhang, ...dsDonhangTonghopHodan];
+      dsHodan = [hodan, ...dsHodan];
+    }
+
+    //===============================================
+    let hodanDSDonhang = [];
+    dsHodan.forEach((hd) => {
+      hodanDSDonhang = [...hd.donhang, ...hodanDSDonhang];
+    });
+    hodanDSDonhang = hodanDSDonhang.filter((dh) => dh.ma === req.params.maDH);
+    //=======================================
     const daily2TDHT = Math.round(
       (daily2Donhang.dssanpham.reduce(
         (acc, sp) => acc + (sp.danhan ? sp.danhan : 0),
@@ -864,26 +911,13 @@ daily2Router.get("/tiendodonhang/:dl2Id/:maDH", async (req, res) => {
         tongSLSPDonhangGoc) *
         100
     );
-    //-------------------------------
-    let daily2Subdonhang = daily2.subdonhang;
-    daily2Subdonhang = daily2Subdonhang.filter(
-      (dh) => dh.ma === req.params.maDH
-    );
-
     // ho dan tinh trang nhan don
-    const hodanTTND = getTinhtrangNhandon(daily2Subdonhang, tongSLSPDonhangGoc);
-
-    let dsDonhangTonghopHodan = [];
-    for (const item of daily2Subdonhang) {
-      let hodan = await Hodan.findById(item.to.hodan).populate("donhang");
-      let hodanDonhang = hodan.donhang.find((dh) => dh.ma === req.params.maDH);
-      dsDonhangTonghopHodan = [hodanDonhang, ...dsDonhangTonghopHodan];
-    }
+    const hodanTTND = getTinhtrangNhandon(hodanDSDonhang, tongSLSPDonhangGoc);
     // hodan tien do hoan thanh
     const hodanTDHT = getTiendoHoanthanh(
-      dsDonhangTonghopHodan,
+      hodanDSDonhang,
       tongSLSPDonhangGoc,
-      (pq = "hodan")
+      "hodan"
     );
 
     res.send({
@@ -891,6 +925,8 @@ daily2Router.get("/tiendodonhang/:dl2Id/:maDH", async (req, res) => {
       daily2TDHT,
       hodanTTND,
       hodanTDHT,
+      daily2DSDonhang: [daily2Donhang],
+      hodanDSDonhang,
       success: true,
     });
   } catch (error) {

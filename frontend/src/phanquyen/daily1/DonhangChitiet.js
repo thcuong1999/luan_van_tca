@@ -37,6 +37,7 @@ import apiDaily1 from "../../axios/apiDaily1";
 import { MaDonhang } from "../bophankd/styledComponents";
 import HorizontalBarChart from "../../components/HorizontalBarChart";
 import HorizontalBarChartItem from "../../components/HorizontalBarChartItem";
+import CustomModal from "../../components/CustomModal";
 
 const DonhangChitiet = (props) => {
   const [loading, setLoading] = useState(false);
@@ -48,6 +49,90 @@ const DonhangChitiet = (props) => {
   const [tiLePhanphat, setTiLePhanphat] = useState(null);
   const [tiendoHT, setTiendoHT] = useState(null);
   const [tiendoDonhang, setTiendoDonhang] = useState(null);
+  const [dlXNDH, setDlXNDH] = useState(false);
+  const [alertMsg, setAlertMsg] = useState("");
+  const [dlOpen, setDlOpen] = useState(false);
+  const [selectedPQ, setSelectedPQ] = useState({
+    dsDonhang: [],
+    type: "",
+    type2: "",
+  });
+
+  const emptyTableData = (dsDonhang, type) => {
+    const typeName = type === "daily2" ? "Đại lý cấp 2" : "Hộ dân";
+    if (!dsDonhang.length) {
+      setAlertMsg(
+        `Các ${typeName} trong nhánh chưa có đơn hàng ${singleDonhang?.ma}`
+      );
+      handleOpenDL();
+      return true;
+    }
+    return false;
+  };
+
+  const handleClickTableData = (pqType) => {
+    switch (pqType) {
+      case "daily1TDHT":
+        if (!emptyTableData(tiendoDonhang?.daily1DSDonhang, "daily1")) {
+          setSelectedPQ({
+            dsDonhang: tiendoDonhang.daily1DSDonhang,
+            type: "daily1Only",
+            type2: "TDHT",
+          });
+          handleOpen();
+        }
+        break;
+      case "daily2TTND":
+        if (!emptyTableData(tiendoDonhang?.daily2DSDonhang, "daily2")) {
+          setSelectedPQ({
+            dsDonhang: tiendoDonhang.daily2DSDonhang,
+            type: "daily2",
+            type2: "TTND",
+          });
+          handleOpen();
+        }
+        break;
+      case "daily2TDHT":
+        if (!emptyTableData(tiendoDonhang?.daily2DSDonhang, "daily2")) {
+          setSelectedPQ({
+            dsDonhang: tiendoDonhang.daily2DSDonhang,
+            type: "daily2",
+            type2: "TDHT",
+          });
+          handleOpen();
+        }
+        break;
+      case "hodanTTND":
+        if (!emptyTableData(tiendoDonhang?.hodanDSDonhang, "hodan")) {
+          setSelectedPQ({
+            dsDonhang: tiendoDonhang.hodanDSDonhang,
+            type: "hodan",
+            type2: "TTND",
+          });
+          handleOpen();
+        }
+        break;
+      case "hodanTDHT":
+        if (!emptyTableData(tiendoDonhang?.hodanDSDonhang, "hodan")) {
+          setSelectedPQ({
+            dsDonhang: tiendoDonhang.hodanDSDonhang,
+            type: "hodan",
+            type2: "TDHT",
+          });
+          handleOpen();
+        }
+        break;
+
+      default:
+        return;
+    }
+  };
+
+  const handleOpenDL = () => setDlOpen(true);
+  const handleCloseDL = () => setDlOpen(false);
+
+  const handleOpenXNDL = () => setDlXNDH(true);
+  const handleCloseXNDL = () => setDlXNDH(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -196,26 +281,31 @@ const DonhangChitiet = (props) => {
                     <tbody>
                       <tr>
                         <td
+                          onClick={() => handleClickTableData("daily1TDHT")}
                           className={getTableDataClass(
                             tiendoDonhang?.daily1TDHT
                           )}
                         >{`${tiendoDonhang?.daily1TDHT} %`}</td>
                         <td
+                          onClick={() => handleClickTableData("daily2TTND")}
                           className={getTableDataClass(
                             tiendoDonhang?.daily2TTND
                           )}
                         >{`${tiendoDonhang?.daily2TTND} %`}</td>
                         <td
+                          onClick={() => handleClickTableData("daily2TDHT")}
                           className={getTableDataClass(
                             tiendoDonhang?.daily2TDHT
                           )}
                         >{`${tiendoDonhang?.daily2TDHT} %`}</td>
                         <td
+                          onClick={() => handleClickTableData("hodanTTND")}
                           className={getTableDataClass(
                             tiendoDonhang?.hodanTTND
                           )}
                         >{`${tiendoDonhang?.hodanTTND} %`}</td>
                         <td
+                          onClick={() => handleClickTableData("hodanTDHT")}
                           className={getTableDataClass(
                             tiendoDonhang?.hodanTDHT
                           )}
@@ -359,7 +449,10 @@ const DonhangChitiet = (props) => {
                   <i class="fas fa-check"></i> Đã duyệt
                 </button>
               ) : (
-                <button className="btn btn-success px-4" onClick={handleOpen}>
+                <button
+                  className="btn btn-success px-4"
+                  onClick={handleOpenXNDL}
+                >
                   Xác nhận
                 </button>
               )}
@@ -369,14 +462,30 @@ const DonhangChitiet = (props) => {
       </Container>
 
       <DialogMaterial
-        open={open}
-        onClose={handleClose}
+        open={dlXNDH}
+        onClose={handleCloseXNDL}
         title="Xác nhận"
         content="Xác nhận đơn hàng ?"
         text1="Hủy"
         text2="Đồng ý"
-        onClick1={handleClose}
+        onClick1={handleCloseXNDL}
         onClick2={handleXacnhan}
+      />
+
+      <CustomModal
+        open={open}
+        setOpen={setOpen}
+        phanquyen={selectedPQ}
+        singleDonhang={singleDonhang}
+      />
+
+      <DialogMaterial
+        open={dlOpen}
+        onClose={handleCloseDL}
+        title="Chưa có đơn hàng"
+        content={alertMsg}
+        text2="OK"
+        onClick2={handleCloseDL}
       />
     </>
   );

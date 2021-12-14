@@ -344,6 +344,57 @@ export const headCellsSanphamDonhangChitiet = [
   },
 ];
 
+export const headCellsSanphamDonhangChitiet2 = [
+  {
+    id: "ma",
+    numeric: false,
+    disablePadding: true,
+    label: "Mã",
+  },
+  {
+    id: "hinhanh",
+    numeric: false,
+    disablePadding: true,
+    label: "Hình ảnh",
+  },
+  {
+    id: "ten",
+    numeric: false,
+    disablePadding: false,
+    label: "Tên sản phẩm",
+  },
+  {
+    id: "soluong",
+    numeric: false,
+    disablePadding: false,
+    label: "Số lượng",
+  },
+  {
+    id: "soluonght",
+    numeric: false,
+    disablePadding: false,
+    label: "Hộ dân hoàn thành",
+  },
+  {
+    id: "dagiao",
+    numeric: false,
+    disablePadding: false,
+    label: "Đã giao",
+  },
+  {
+    id: "conlai",
+    numeric: false,
+    disablePadding: false,
+    label: "Còn lại",
+  },
+  {
+    id: "gia",
+    numeric: false,
+    disablePadding: false,
+    label: "Giá",
+  },
+];
+
 export const headCellsVattuDonhang = [
   {
     id: "hinhanh",

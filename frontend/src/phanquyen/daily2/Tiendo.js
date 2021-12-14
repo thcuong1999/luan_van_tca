@@ -43,6 +43,7 @@ import apiDaily2 from "../../axios/apiDaily2";
 import { formatMoney, getTableDataClass } from "../../utils";
 import { MaDonhang } from "../bophankd/styledComponents";
 import apiHodan from "../../axios/apiHodan";
+import CustomModal from "../../components/CustomModal";
 
 const Tiendo = (props) => {
   const [dsSubDonhang, setDsSubDonhang] = useState([]);
@@ -50,12 +51,38 @@ const Tiendo = (props) => {
   const [value, setValue] = useState("1");
   const { userInfo } = useSelector((state) => state.user);
   const { id: donhangId } = props.match.params;
+  const [open, setOpen] = useState(false);
+  const [singleDonhang, setSingleDonhang] = useState(null);
   const [tiendoDonhang, setTiendoDonhang] = useState(null);
   const ref = useRef();
+  const [selectedPQ, setSelectedPQ] = useState({
+    dsDonhang: [],
+    type: "",
+    type2: "",
+  });
+
+  const handleClickTableData = (pqType) => {
+    switch (pqType) {
+      case "hodanTDHT":
+        setSelectedPQ({
+          dsDonhang: tiendoDonhang?.hodanDSDonhang,
+          type: "hodanOnly",
+          type2: "TDHT",
+        });
+        handleOpen();
+        break;
+
+      default:
+        return;
+    }
+  };
+
+  const handleOpen = () => setOpen(true);
 
   const handleChangeTab = (event, newValue) => {
     setValue(newValue);
     fetchTiendoDonhang(newValue);
+    setSingleDonhang(dsSubDonhang.find((dh) => dh._id === newValue));
   };
 
   const fetchTiendoDonhang = async (donhangId) => {
@@ -87,9 +114,11 @@ const Tiendo = (props) => {
         ...ngl,
       })),
     }));
+    setSingleDonhang(subdonhang[0]);
     setDsSubDonhang(subdonhang);
     setValue(subdonhang[0]?._id);
     ref.current = data;
+    setTiendoDonhang(data);
     setLoading(false);
   };
 
@@ -157,6 +186,7 @@ const Tiendo = (props) => {
                           <tbody>
                             <tr>
                               <td
+                                style={{ cursor: "default" }}
                                 className={
                                   tiendoDonhang && tiendoDonhang.hodanNhandon
                                     ? "success"
@@ -180,6 +210,9 @@ const Tiendo = (props) => {
                                 )}
                               </td>
                               <td
+                                onClick={() =>
+                                  handleClickTableData("hodanTDHT")
+                                }
                                 className={getTableDataClass(
                                   tiendoDonhang
                                     ? tiendoDonhang.hodanTDHT
@@ -317,6 +350,13 @@ const Tiendo = (props) => {
           </Form>
         </Content>
       </Container>
+
+      <CustomModal
+        open={open}
+        setOpen={setOpen}
+        phanquyen={selectedPQ}
+        singleDonhang={singleDonhang}
+      />
     </>
   );
 };

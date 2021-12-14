@@ -517,14 +517,24 @@ export const TiendoDonhang = styled.div`
     &.success {
       background: #28a745;
       color: #fff;
+      &:hover {
+        background: #27851a;
+      }
     }
     &.danger {
       background: #dc3545;
       color: #fff;
+      &:hover {
+        background: #bc3823;
+      }
     }
     &.warning {
       background: #ffc107;
       color: #343a40;
+      &:hover {
+        background: #e7ae06;
+        color: #fff;
+      }
     }
   }
 `;

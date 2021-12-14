@@ -43,6 +43,7 @@ import dsnglieu from "../../assets/icons/dsnglieu.png";
 import loai from "../../assets/icons/loai.png";
 import bpkd from "../../assets/icons/bpkd2.png";
 import apiGSV from "../../axios/apiGSV";
+import DialogMaterial from "../../components/DialogMaterial";
 
 const Tiendo = (props) => {
   const [dsSubDonhang, setDsSubDonhang] = useState([]);
@@ -50,16 +51,120 @@ const Tiendo = (props) => {
   const [value, setValue] = useState("1");
   const { userInfo } = useSelector((state) => state.user);
   const { id: donhangId } = props.match.params;
-  const [open, setOpen] = useState(false);
-  const [selectedPQ, setSelectedPQ] = useState({ subdh: [], type: "" });
   const [tiendoDonhang, setTiendoDonhang] = useState(null);
+  const [singleDonhang, setSingleDonhang] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [alertMsg, setAlertMsg] = useState("");
+  const [dlOpen, setDlOpen] = useState(false);
   const ref = useRef();
+  const [selectedPQ, setSelectedPQ] = useState({
+    dsDonhang: [],
+    type: "",
+    type2: "",
+  });
+
+  const handleOpenDL = () => setDlOpen(true);
+  const handleCloseDL = () => setDlOpen(false);
+
+  const emptyTableData = (dsDonhang, type) => {
+    const typeName =
+      type === "daily1"
+        ? "Đại lý cấp 1"
+        : type === "daily2"
+        ? "Đại lý cấp 2"
+        : "Hộ dân";
+    if (!dsDonhang.length) {
+      setAlertMsg(
+        `Các ${typeName} trong nhánh chưa có đơn hàng ${singleDonhang?.ma}`
+      );
+      handleOpenDL();
+      return true;
+    }
+    return false;
+  };
 
   const handleOpen = () => setOpen(true);
+
+  const handleClickTableData = (pqType) => {
+    switch (pqType) {
+      case "gsvTDHT":
+        setSelectedPQ({
+          dsDonhang: tiendoDonhang?.gsvDSDonhang,
+          type: "gsvOnly",
+          type2: "TDHT",
+        });
+        handleOpen();
+        break;
+      case "daily1TTND":
+        if (!emptyTableData(tiendoDonhang?.daily1DSDonhang, "daily1")) {
+          setSelectedPQ({
+            dsDonhang: tiendoDonhang?.daily1DSDonhang,
+            type: "daily1",
+            type2: "TTND",
+          });
+          handleOpen();
+        }
+        break;
+      case "daily1TDHT":
+        if (!emptyTableData(tiendoDonhang?.daily1DSDonhang, "daily1")) {
+          setSelectedPQ({
+            dsDonhang: tiendoDonhang?.daily1DSDonhang,
+            type: "daily1",
+            type2: "TDHT",
+          });
+          handleOpen();
+        }
+        break;
+      case "daily2TTND":
+        if (!emptyTableData(tiendoDonhang?.daily2DSDonhang, "daily2")) {
+          setSelectedPQ({
+            dsDonhang: tiendoDonhang?.daily2DSDonhang,
+            type: "daily2",
+            type2: "TTND",
+          });
+          handleOpen();
+        }
+        break;
+      case "daily2TDHT":
+        if (!emptyTableData(tiendoDonhang?.daily2DSDonhang, "daily2")) {
+          setSelectedPQ({
+            dsDonhang: tiendoDonhang?.daily2DSDonhang,
+            type: "daily2",
+            type2: "TDHT",
+          });
+          handleOpen();
+        }
+        break;
+      case "hodanTTND":
+        if (!emptyTableData(tiendoDonhang?.hodanDSDonhang, "hodan")) {
+          setSelectedPQ({
+            dsDonhang: tiendoDonhang?.hodanDSDonhang,
+            type: "hodan",
+            type2: "TTND",
+          });
+          handleOpen();
+        }
+        break;
+      case "hodanTDHT":
+        if (!emptyTableData(tiendoDonhang?.hodanDSDonhang, "hodan")) {
+          setSelectedPQ({
+            dsDonhang: tiendoDonhang?.hodanDSDonhang,
+            type: "hodan",
+            type2: "TDHT",
+          });
+          handleOpen();
+        }
+        break;
+
+      default:
+        return;
+    }
+  };
 
   const handleChangeTab = async (event, newValue) => {
     setValue(newValue);
     fetchTiendoDonhang(newValue);
+    setSingleDonhang(dsSubDonhang.find((dh) => dh._id === newValue));
   };
 
   const fetchTiendoDonhang = async (donhangId) => {
@@ -78,7 +183,7 @@ const Tiendo = (props) => {
       donhang.ma
     );
     const data = await apiGSV.tiendoDonhang(
-      subdonhang[0].to.giamsatvung._id,
+      subdonhang[0]?.to.giamsatvung._id,
       donhang.ma
     );
     subdonhang = subdonhang.map((dh) => ({
@@ -91,9 +196,11 @@ const Tiendo = (props) => {
         ...ngl,
       })),
     }));
+    setSingleDonhang(subdonhang[0]);
     setDsSubDonhang(subdonhang);
     setValue(subdonhang[0]._id);
     ref.current = data;
+    setTiendoDonhang(data);
     setLoading(false);
   };
 
@@ -170,6 +277,7 @@ const Tiendo = (props) => {
                           <tbody>
                             <tr>
                               <td
+                                style={{ cursor: "default" }}
                                 className={
                                   tiendoDonhang && tiendoDonhang.gsvNhandon
                                     ? "success"
@@ -192,6 +300,7 @@ const Tiendo = (props) => {
                                 )}
                               </td>
                               <td
+                                onClick={() => handleClickTableData("gsvTDHT")}
                                 className={getTableDataClass(
                                   tiendoDonhang
                                     ? tiendoDonhang.gsvTDHT
@@ -203,6 +312,9 @@ const Tiendo = (props) => {
                                   : ref.current.gsvTDHT
                               } %`}</td>
                               <td
+                                onClick={() =>
+                                  handleClickTableData("daily1TTND")
+                                }
                                 className={getTableDataClass(
                                   tiendoDonhang
                                     ? tiendoDonhang.daily1TTND
@@ -214,6 +326,9 @@ const Tiendo = (props) => {
                                   : ref.current.daily1TTND
                               } %`}</td>
                               <td
+                                onClick={() =>
+                                  handleClickTableData("daily1TDHT")
+                                }
                                 className={getTableDataClass(
                                   tiendoDonhang
                                     ? tiendoDonhang.daily1TDHT
@@ -225,6 +340,9 @@ const Tiendo = (props) => {
                                   : ref.current.daily1TDHT
                               } %`}</td>
                               <td
+                                onClick={() =>
+                                  handleClickTableData("daily2TTND")
+                                }
                                 className={getTableDataClass(
                                   tiendoDonhang
                                     ? tiendoDonhang.daily2TTND
@@ -236,6 +354,9 @@ const Tiendo = (props) => {
                                   : ref.current.daily2TTND
                               } %`}</td>
                               <td
+                                onClick={() =>
+                                  handleClickTableData("daily2TDHT")
+                                }
                                 className={getTableDataClass(
                                   tiendoDonhang
                                     ? tiendoDonhang.daily2TDHT
@@ -247,6 +368,9 @@ const Tiendo = (props) => {
                                   : ref.current.daily2TDHT
                               } %`}</td>
                               <td
+                                onClick={() =>
+                                  handleClickTableData("hodanTTND")
+                                }
                                 className={getTableDataClass(
                                   tiendoDonhang
                                     ? tiendoDonhang.hodanTTND
@@ -258,6 +382,9 @@ const Tiendo = (props) => {
                                   : ref.current.hodanTTND
                               } %`}</td>
                               <td
+                                onClick={() =>
+                                  handleClickTableData("hodanTDHT")
+                                }
                                 className={getTableDataClass(
                                   tiendoDonhang
                                     ? tiendoDonhang.hodanTDHT
@@ -391,7 +518,21 @@ const Tiendo = (props) => {
         </Content>
       </Container>
 
-      <CustomModal open={open} setOpen={setOpen} phanquyen={selectedPQ} />
+      <CustomModal
+        open={open}
+        setOpen={setOpen}
+        phanquyen={selectedPQ}
+        singleDonhang={singleDonhang}
+      />
+
+      <DialogMaterial
+        open={dlOpen}
+        onClose={handleCloseDL}
+        title="Chưa có đơn hàng"
+        content={alertMsg}
+        text2="OK"
+        onClick2={handleCloseDL}
+      />
     </>
   );
 };

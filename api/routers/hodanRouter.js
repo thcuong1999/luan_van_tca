@@ -867,7 +867,15 @@ hodanRouter.put("/baocao", upload.single("hinhanh"), async (req, res) => {
 // Tổng hợp số liệu tổng quát của tiến độ đơn hàng
 hodanRouter.get("/tiendodonhang/:hodanId/:maDH", async (req, res) => {
   try {
-    const hodan = await Hodan.findById(req.params.hodanId).populate("donhang");
+    const hodan = await Hodan.findById(req.params.hodanId).populate({
+      path: "donhang",
+      populate: {
+        path: "from to dssanpham dscongcu dsvattu dsnguyenlieu",
+        populate: {
+          path: "daily2 hodan sanpham congcu vattu nguyenlieu",
+        },
+      },
+    });
     // don hang tong hop cua daily1:
     const hodanDonhang = hodan.donhang.find((dh) => dh.ma === req.params.maDH);
     // tong so luong sp cua dh goc (trường hợp này đơn hàng gốc là HD)
@@ -882,10 +890,10 @@ hodanRouter.get("/tiendodonhang/:hodanId/:maDH", async (req, res) => {
         100
     );
     //-------------------------------
-
     res.send({
       hodanNhandon: hodanDonhang.xacnhan,
       hodanTDHT,
+      hodanDSDonhang: [hodanDonhang],
       success: true,
     });
   } catch (error) {

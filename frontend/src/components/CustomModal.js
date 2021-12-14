@@ -14,6 +14,10 @@ import TableVattuDonhang from "../phanquyen/giamsatvung/tables/TableVattuDonhang
 import {
   BoxInfo,
   BoxInfoTitle,
+  DetailsInfo,
+  DetailsInfoContent,
+  DetailsInfoTexts,
+  DetailsInfoTitle,
   MaDonhang,
   TableSection,
   TableTitle,
@@ -30,9 +34,11 @@ import email from "../assets/icons/email.png";
 import cmnd from "../assets/icons/cmnd.png";
 import diachi from "../assets/icons/diachi.png";
 
-const CustomModal = ({ open, setOpen, phanquyen }) => {
-  const { subdh, type } = phanquyen;
+const CustomModal = ({ open, setOpen, phanquyen, singleDonhang }) => {
+  const { dsDonhang, type, type2 } = phanquyen;
   const [value, setValue] = React.useState("1");
+  const [tinhtrangTiendo, setTinhtrangTiendo] = React.useState(null);
+  const [tinhtrangNhandon, setTinhtrangNhandon] = React.useState(null);
   const modalRef = useRef();
 
   const animation = useSpring({
@@ -46,6 +52,43 @@ const CustomModal = ({ open, setOpen, phanquyen }) => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    getTinhtrangTiendo(newValue);
+    getTinhtrangNhandon(newValue);
+  };
+
+  const getTinhtrangTiendo = (newValue) => {
+    const tongSLDonhangGoc = singleDonhang?.tongsanpham;
+    const selectedDonhang = dsDonhang.find((dh) => dh._id === newValue);
+    let tongDanhan = 0;
+    if (type === "hodan" || type === "hodanOnly") {
+      tongDanhan = selectedDonhang?.dssanpham.reduce(
+        (acc, sp) => acc + sp.soluonghoanthanh,
+        0
+      );
+    } else {
+      tongDanhan = selectedDonhang?.dssanpham.reduce(
+        (acc, sp) => acc + (sp.danhan ? sp.danhan : 0),
+        0
+      );
+    }
+    let dl = {
+      hoanthanh: `${tongDanhan}/${tongSLDonhangGoc}`,
+      tile: ((tongDanhan / tongSLDonhangGoc) * 100).toFixed(2),
+    };
+    setTinhtrangTiendo(dl);
+  };
+
+  const getTinhtrangNhandon = (newValue) => {
+    const tongSLDonhangGoc = singleDonhang?.tongsanpham;
+    const selectedDonhang = dsDonhang.find((dh) => dh._id === newValue);
+    const tile = selectedDonhang?.xacnhan
+      ? ((selectedDonhang?.tongsanpham / tongSLDonhangGoc) * 100).toFixed(2)
+      : 0;
+    let dl = {
+      xacnhan: selectedDonhang?.xacnhan,
+      tile,
+    };
+    setTinhtrangNhandon(dl);
   };
 
   const closeModal = (e) => {
@@ -55,9 +98,11 @@ const CustomModal = ({ open, setOpen, phanquyen }) => {
   };
 
   useEffect(() => {
-    setValue(subdh[0]?._id);
+    setValue(dsDonhang[0]?._id);
+    getTinhtrangTiendo(dsDonhang[0]?._id);
+    getTinhtrangNhandon(dsDonhang[0]?._id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subdh]);
+  }, [dsDonhang]);
 
   return (
     <>
@@ -78,21 +123,27 @@ const CustomModal = ({ open, setOpen, phanquyen }) => {
                         onChange={handleChange}
                         aria-label="lab API tabs example"
                       >
-                        {subdh.map((dh) => (
+                        {dsDonhang.map((dh) => (
                           <Tab
                             label={
-                              type === "daily1"
+                              type === "gsv"
+                                ? dh?.to.giamsatvung.ten
+                                : type === "daily1" || type === "daily1Only"
                                 ? dh?.to.daily1.ten
-                                : type === "daily2"
+                                : type === "daily2" || type === "daily2Only"
                                 ? dh?.to.daily2.ten
+                                : type === "bpkd"
+                                ? dh?.from.bophankd.ten
+                                : type === "gsvOnly"
+                                ? dh?.to.giamsatvung.ten
                                 : dh?.to.hodan.daidien
                             }
-                            value={dh?._id}
+                            value={dh._id}
                           />
                         ))}
                       </TabList>
                     </Box>
-                    {subdh.map((dh) => (
+                    {dsDonhang.map((dh) => (
                       <TabPanel value={dh._id}>
                         <div>
                           <MaDonhang>
@@ -100,228 +151,346 @@ const CustomModal = ({ open, setOpen, phanquyen }) => {
                             <span>{dh?.ma}</span>
                           </MaDonhang>
 
-                          <div className="d-flex justify-content-center">
-                            <BoxInfo className="mr-5">
-                              <BoxInfoTitle>
-                                {type === "daily1"
-                                  ? "Giám sát vùng"
-                                  : type === "daily2"
-                                  ? "Đại lý cấp 1"
-                                  : "Đại lý cấp 2"}
-                              </BoxInfoTitle>
+                          {type !== "bpkd" ||
+                            type !== "gsvOnly" ||
+                            type !== "daily1TDHT" ||
+                            type !== "hodanOnly" ||
+                            (type !== "daily2Only" && (
+                              <div className="d-flex justify-content-center">
+                                <BoxInfo className="mr-5">
+                                  <BoxInfoTitle>
+                                    {type === "gsv"
+                                      ? "Từ bộ phận kinh doanh"
+                                      : type === "daily1"
+                                      ? "Từ giám sát vùng"
+                                      : type === "daily2"
+                                      ? "Từ đại lý 1"
+                                      : "Từ đại lý 2"}
+                                  </BoxInfoTitle>
 
-                              <table>
-                                {type === "daily1" ? (
-                                  <>
+                                  <table>
+                                    {type === "daily1" ? (
+                                      <>
+                                        <tr>
+                                          <td>
+                                            <img src={ten} alt="ten" />
+                                            <span>Tên:</span>
+                                          </td>
+                                          <td>{dh?.from.giamsatvung.ten}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={sdt} alt="sdt" />
+                                            <span>SĐT:</span>
+                                          </td>
+                                          <td>{dh?.from.giamsatvung.sdt}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={email} alt="email" />
+                                            <span>Email:</span>
+                                          </td>
+                                          <td>{dh?.from.giamsatvung.email}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={diachi} alt="diachi" />
+                                            <span>Địa chỉ:</span>
+                                          </td>
+                                          <td>{`${dh?.from.giamsatvung.xa}, ${dh?.from.giamsatvung.huyen}, ${dh?.from.giamsatvung.tinh}`}</td>
+                                        </tr>
+                                      </>
+                                    ) : type === "daily2" ? (
+                                      <>
+                                        <tr>
+                                          <td>
+                                            <img src={ten} alt="ten" />
+                                            <span>Tên:</span>
+                                          </td>
+                                          <td>{dh?.from.daily1.ten}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={sdt} alt="sdt" />
+                                            <span>SĐT:</span>
+                                          </td>
+                                          <td>{dh?.from.daily1.sdt}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={email} alt="email" />
+                                            <span>Email:</span>
+                                          </td>
+                                          <td>{dh?.from.daily1.email}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={diachi} alt="diachi" />
+                                            <span>Địa chỉ:</span>
+                                          </td>
+                                          <td>{`${dh?.from.daily1.xa}, ${dh?.from.daily1.huyen}, ${dh?.from.daily1.tinh}`}</td>
+                                        </tr>
+                                      </>
+                                    ) : type === "gsv" ? (
+                                      <>
+                                        <tr>
+                                          <td>
+                                            <img src={ten} alt="ten" />
+                                            <span>Tên:</span>
+                                          </td>
+                                          <td>{dh?.from.bophankd.ten}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={sdt} alt="sdt" />
+                                            <span>SĐT:</span>
+                                          </td>
+                                          <td>{dh?.from.bophankd.sdt}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={email} alt="email" />
+                                            <span>Email:</span>
+                                          </td>
+                                          <td>{dh?.from.bophankd.email}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={diachi} alt="diachi" />
+                                            <span>Địa chỉ:</span>
+                                          </td>
+                                          <td>{`${dh?.from.bophankd.xa}, ${dh?.from.bophankd.huyen}, ${dh?.from.bophankd.tinh}`}</td>
+                                        </tr>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <tr>
+                                          <td>
+                                            <img src={ten} alt="ten" />
+                                            <span>Tên:</span>
+                                          </td>
+                                          <td>{dh?.from.daily2.ten}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={sdt} alt="sdt" />
+                                            <span>SĐT:</span>
+                                          </td>
+                                          <td>{dh?.from.daily2.sdt}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={email} alt="email" />
+                                            <span>Email:</span>
+                                          </td>
+                                          <td>{dh?.from.daily2.email}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={diachi} alt="diachi" />
+                                            <span>Địa chỉ:</span>
+                                          </td>
+                                          <td>{`${dh?.from.daily2.xa}, ${dh?.from.daily2.huyen}, ${dh?.from.daily2.tinh}`}</td>
+                                        </tr>
+                                      </>
+                                    )}
+                                  </table>
+                                </BoxInfo>
+
+                                <BoxInfo className="ml-5">
+                                  <BoxInfoTitle>
+                                    {type === "gsv"
+                                      ? "Tới giám sát vùng"
+                                      : type === "daily1"
+                                      ? "Tới đại lý cấp 1"
+                                      : type === "daily2"
+                                      ? "Tới đại lý cấp 2"
+                                      : "Tới hộ dân"}
+                                  </BoxInfoTitle>
+
+                                  <table>
+                                    {type === "daily1" ? (
+                                      <>
+                                        <tr>
+                                          <td>
+                                            <img src={ten} alt="ten" />
+                                            <span>Tên:</span>
+                                          </td>
+                                          <td>{dh?.to.daily1.ten}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={sdt} alt="sdt" />
+                                            <span>SĐT:</span>
+                                          </td>
+                                          <td>{dh?.to.daily1.sdt}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={email} alt="email" />
+                                            <span>Email:</span>
+                                          </td>
+                                          <td>{dh?.to.daily1.email}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={diachi} alt="diachi" />
+                                            <span>Địa chỉ:</span>
+                                          </td>
+                                          <td>{`${dh?.to.daily1.xa}, ${dh?.to.daily1.huyen}, ${dh?.to.daily1.tinh}`}</td>
+                                        </tr>
+                                      </>
+                                    ) : type === "daily2" ? (
+                                      <>
+                                        <tr>
+                                          <td>
+                                            <img src={ten} alt="ten" />
+                                            <span>Tên:</span>
+                                          </td>
+                                          <td>{dh?.to.daily2.ten}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={sdt} alt="sdt" />
+                                            <span>SĐT:</span>
+                                          </td>
+                                          <td>{dh?.to.daily2.sdt}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={email} alt="email" />
+                                            <span>Email:</span>
+                                          </td>
+                                          <td>{dh?.to.daily2.email}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={diachi} alt="diachi" />
+                                            <span>Địa chỉ:</span>
+                                          </td>
+                                          <td>{`${dh?.to.daily2.xa}, ${dh?.to.daily2.huyen}, ${dh?.to.daily2.tinh}`}</td>
+                                        </tr>
+                                      </>
+                                    ) : type === "gsv" ? (
+                                      <>
+                                        <tr>
+                                          <td>
+                                            <img src={ten} alt="ten" />
+                                            <span>Tên:</span>
+                                          </td>
+                                          <td>{dh?.to.giamsatvung.ten}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={sdt} alt="sdt" />
+                                            <span>SĐT:</span>
+                                          </td>
+                                          <td>{dh?.to.giamsatvung.sdt}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={email} alt="email" />
+                                            <span>Email:</span>
+                                          </td>
+                                          <td>{dh?.to.giamsatvung.email}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={diachi} alt="diachi" />
+                                            <span>Địa chỉ:</span>
+                                          </td>
+                                          <td>{`${dh?.to.giamsatvung.xa}, ${dh?.to.giamsatvung.huyen}, ${dh?.to.giamsatvung.tinh}`}</td>
+                                        </tr>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <tr>
+                                          <td>
+                                            <img src={ten} alt="ten" />
+                                            <span>Tên:</span>
+                                          </td>
+                                          <td>{dh?.to.hodan.daidien}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={sdt} alt="sdt" />
+                                            <span>SĐT:</span>
+                                          </td>
+                                          <td>{dh?.to.hodan.sdt}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={cmnd} alt="cmnd" />
+                                            <span>CMND:</span>
+                                          </td>
+                                          <td>{dh?.to.hodan.cmnd}</td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <img src={diachi} alt="diachi" />
+                                            <span>Địa chỉ:</span>
+                                          </td>
+                                          <td>{`${dh?.to.hodan.xa}, ${dh?.to.hodan.huyen}, ${dh?.to.hodan.tinh}`}</td>
+                                        </tr>
+                                      </>
+                                    )}
+                                  </table>
+                                </BoxInfo>
+                              </div>
+                            ))}
+
+                          <DetailsInfo className="mb-5">
+                            <DetailsInfoTitle>
+                              {/* <img src={anh} alt="anh" /> */}
+                              <h5>
+                                {type2 === "TDHT"
+                                  ? "Tình trạng tiến độ"
+                                  : "Tình trạng nhận đơn"}
+                              </h5>
+                            </DetailsInfoTitle>
+
+                            <DetailsInfoContent>
+                              <DetailsInfoTexts>
+                                {type2 === "TDHT" ? (
+                                  <table>
                                     <tr>
                                       <td>
-                                        <img src={ten} alt="ten" />
-                                        <span>Tên:</span>
+                                        <span>Hoàn thành:</span>
                                       </td>
-                                      <td>{dh?.from.giamsatvung.ten}</td>
+                                      <td>
+                                        {tinhtrangTiendo?.hoanthanh} sản phẩm
+                                      </td>
                                     </tr>
                                     <tr>
                                       <td>
-                                        <img src={sdt} alt="sdt" />
-                                        <span>SĐT:</span>
+                                        <span>Chiếm tỉ lệ:</span>
                                       </td>
-                                      <td>{dh?.from.giamsatvung.sdt}</td>
+                                      <td>{tinhtrangTiendo?.tile} %</td>
                                     </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={email} alt="email" />
-                                        <span>Email:</span>
-                                      </td>
-                                      <td>{dh?.from.giamsatvung.email}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={cmnd} alt="cmnd" />
-                                        <span>CMND:</span>
-                                      </td>
-                                      <td>{dh?.from.giamsatvung.cmnd}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={diachi} alt="diachi" />
-                                        <span>Địa chỉ:</span>
-                                      </td>
-                                      <td>{`${dh?.from.giamsatvung.xa}, ${dh?.from.giamsatvung.huyen}, ${dh?.from.giamsatvung.tinh}`}</td>
-                                    </tr>
-                                  </>
-                                ) : type === "daily2" ? (
-                                  <>
-                                    <tr>
-                                      <td>
-                                        <img src={ten} alt="ten" />
-                                        <span>Tên:</span>
-                                      </td>
-                                      <td>{dh?.from.daily1.ten}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={sdt} alt="sdt" />
-                                        <span>SĐT:</span>
-                                      </td>
-                                      <td>{dh?.from.daily1.sdt}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={email} alt="email" />
-                                        <span>Email:</span>
-                                      </td>
-                                      <td>{dh?.from.daily1.email}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={diachi} alt="diachi" />
-                                        <span>Địa chỉ:</span>
-                                      </td>
-                                      <td>{`${dh?.from.daily1.xa}, ${dh?.from.daily1.huyen}, ${dh?.from.daily1.tinh}`}</td>
-                                    </tr>
-                                  </>
+                                  </table>
                                 ) : (
-                                  <>
+                                  <table>
                                     <tr>
                                       <td>
-                                        <img src={ten} alt="ten" />
-                                        <span>Tên:</span>
+                                        <span>Xác nhận đơn hàng:</span>
                                       </td>
-                                      <td>{dh?.from.daily2.ten}</td>
+                                      <td>
+                                        {tinhtrangNhandon?.xacnhan
+                                          ? "Đã xác nhận"
+                                          : "Chưa"}
+                                      </td>
                                     </tr>
                                     <tr>
                                       <td>
-                                        <img src={sdt} alt="sdt" />
-                                        <span>SĐT:</span>
+                                        <span>Chiếm tỉ lệ:</span>
                                       </td>
-                                      <td>{dh?.from.daily2.sdt}</td>
+                                      <td>{tinhtrangNhandon?.tile} %</td>
                                     </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={email} alt="email" />
-                                        <span>Email:</span>
-                                      </td>
-                                      <td>{dh?.from.daily2.email}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={diachi} alt="diachi" />
-                                        <span>Địa chỉ:</span>
-                                      </td>
-                                      <td>{`${dh?.from.daily2.xa}, ${dh?.from.daily2.huyen}, ${dh?.from.daily2.tinh}`}</td>
-                                    </tr>
-                                  </>
+                                  </table>
                                 )}
-                              </table>
-                            </BoxInfo>
-
-                            <BoxInfo className="ml-5">
-                              <BoxInfoTitle>
-                                {type === "daily1"
-                                  ? "Đại lý cấp 1"
-                                  : type === "daily2"
-                                  ? "Đại lý cấp 2"
-                                  : "Hộ dân"}
-                              </BoxInfoTitle>
-
-                              <table>
-                                {type === "daily1" ? (
-                                  <>
-                                    <tr>
-                                      <td>
-                                        <img src={ten} alt="ten" />
-                                        <span>Tên:</span>
-                                      </td>
-                                      <td>{dh?.to.daily1.ten}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={sdt} alt="sdt" />
-                                        <span>SĐT:</span>
-                                      </td>
-                                      <td>{dh?.to.daily1.sdt}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={email} alt="email" />
-                                        <span>Email:</span>
-                                      </td>
-                                      <td>{dh?.to.daily1.email}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={diachi} alt="diachi" />
-                                        <span>Địa chỉ:</span>
-                                      </td>
-                                      <td>{`${dh?.to.daily1.xa}, ${dh?.to.daily1.huyen}, ${dh?.to.daily1.tinh}`}</td>
-                                    </tr>
-                                  </>
-                                ) : type === "daily2" ? (
-                                  <>
-                                    <tr>
-                                      <td>
-                                        <img src={ten} alt="ten" />
-                                        <span>Tên:</span>
-                                      </td>
-                                      <td>{dh?.to.daily2.ten}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={sdt} alt="sdt" />
-                                        <span>SĐT:</span>
-                                      </td>
-                                      <td>{dh?.to.daily2.sdt}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={email} alt="email" />
-                                        <span>Email:</span>
-                                      </td>
-                                      <td>{dh?.to.daily2.email}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={diachi} alt="diachi" />
-                                        <span>Địa chỉ:</span>
-                                      </td>
-                                      <td>{`${dh?.to.daily2.xa}, ${dh?.to.daily2.huyen}, ${dh?.to.daily2.tinh}`}</td>
-                                    </tr>
-                                  </>
-                                ) : (
-                                  <>
-                                    <tr>
-                                      <td>
-                                        <img src={ten} alt="ten" />
-                                        <span>Tên:</span>
-                                      </td>
-                                      <td>{dh?.to.hodan.daidien}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={sdt} alt="sdt" />
-                                        <span>SĐT:</span>
-                                      </td>
-                                      <td>{dh?.to.hodan.sdt}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={cmnd} alt="cmnd" />
-                                        <span>CMND:</span>
-                                      </td>
-                                      <td>{dh?.to.hodan.cmnd}</td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <img src={diachi} alt="diachi" />
-                                        <span>Địa chỉ:</span>
-                                      </td>
-                                      <td>{`${dh?.to.hodan.xa}, ${dh?.to.hodan.huyen}, ${dh?.to.hodan.tinh}`}</td>
-                                    </tr>
-                                  </>
-                                )}
-                              </table>
-                            </BoxInfo>
-                          </div>
+                              </DetailsInfoTexts>
+                            </DetailsInfoContent>
+                          </DetailsInfo>
                         </div>
 
                         <TableSection className="noCheckbox">
@@ -334,6 +503,11 @@ const CustomModal = ({ open, setOpen, phanquyen }) => {
                               ...sp.sanpham,
                               ...sp,
                             }))}
+                            hodan={
+                              type === "hodan" || type === "hodanOnly"
+                                ? true
+                                : false
+                            }
                           />
                           <div className="text-right mb-5">
                             <Total>Tổng đơn giá: </Total>

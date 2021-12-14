@@ -12,9 +12,12 @@ import img_placeholder from "../../../assets/images/img_placeholder.png";
 import EnhancedTableHead from "../../../components/table/EnhancedTableHead";
 import { formatMoney, getComparator } from "../../../utils";
 import TablePaginationActions from "@mui/material/TablePagination/TablePaginationActions";
-import { headCellsSanphamDonhangChitiet } from "./headCells";
+import {
+  headCellsSanphamDonhangChitiet,
+  headCellsSanphamDonhangChitiet2,
+} from "./headCells";
 
-const TableSanphamDonhangChitiet = ({ dsSanpham = [] }) => {
+const TableSanphamDonhangChitiet = ({ dsSanpham = [], hodan }) => {
   console.log({ dsSanpham });
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -90,7 +93,11 @@ const TableSanphamDonhangChitiet = ({ dsSanpham = [] }) => {
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={dsSanpham.length}
-                headCells={headCellsSanphamDonhangChitiet}
+                headCells={
+                  hodan
+                    ? headCellsSanphamDonhangChitiet2
+                    : headCellsSanphamDonhangChitiet
+                }
               />
               <TableBody>
                 {dsSanpham
@@ -143,17 +150,27 @@ const TableSanphamDonhangChitiet = ({ dsSanpham = [] }) => {
                         <TableCell align="right">
                           {row?.soluonghoanthanh}
                         </TableCell>
-                        <TableCell align="right">
-                          {row?.danhan ? row?.danhan : 0}
-                        </TableCell>
+                        {!hodan && (
+                          <TableCell align="right">
+                            {row?.danhan ? row?.danhan : 0}
+                          </TableCell>
+                        )}
                         <TableCell align="right">
                           {row?.dagiao ? row?.dagiao : 0}
                         </TableCell>
-                        <TableCell align="right">
-                          {row?.danhan && row?.dagiao
-                            ? row?.danhan - row?.dagiao
-                            : 0}
-                        </TableCell>
+                        {!hodan ? (
+                          <TableCell align="right">
+                            {row?.danhan && row?.dagiao
+                              ? row?.danhan - row?.dagiao
+                              : 0}
+                          </TableCell>
+                        ) : (
+                          <TableCell align="right">
+                            {row?.soluonghoanthanh && row?.dagiao
+                              ? row?.soluonghoanthanh - row?.dagiao
+                              : 0}
+                          </TableCell>
+                        )}
                         <TableCell align="right">
                           {formatMoney(row?.soluong * row?.gia)} vnđ
                         </TableCell>

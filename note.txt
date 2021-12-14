@@ -125,6 +125,9 @@ db.sanphams.find({"createdAt":{ $gte:ISODate("2021-11-10"), $lt:ISODate("2021-11
 
 *** ham xoa ho dan => update loaisp
 *** validate admin nhap ma sp
+*** giao dien thong tin ca nhan
+*** ngan sua field 
+*** don hang chi tiet -> thay hinh vuong = chu nhat
 
 
 ==================================================
@@ -162,5 +165,6 @@ DL2A: 5
 DL2B: 5 -> xac nhan: TTND_DL2: 5%
 
 ======================
+
 
 

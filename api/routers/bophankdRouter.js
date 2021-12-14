@@ -987,37 +987,52 @@ bophankdRouter.get("/tiendodonhang/:bpkdId/:maDH", async (req, res) => {
     const tongSLSPDonhangGoc = donhangGoc.tongsanpham;
 
     const bpkd = await Bophankd.findById(req.params.bpkdId)
-      .populate("donhang")
+      .populate({
+        path: "donhang",
+        populate: {
+          path: "from dssanpham dscongcu dsvattu dsnguyenlieu",
+          populate: {
+            path: "bophankd sanpham congcu vattu nguyenlieu",
+          },
+        },
+      })
       .populate("subdonhang");
     const bpkdDonhangTonghop = bpkd.donhang.find(
       (dh) => dh.ma === req.params.maDH
     );
     const dssanpham = [...bpkdDonhangTonghop.dssanpham];
-    let TDHTBophankd =
-      (dssanpham.reduce((acc, sp) => acc + (sp.danhan ? sp.danhan : 0), 0) *
-        100) /
-      tongSLSPDonhangGoc;
-    // bpkd tien do don hang
-    bophankdTDHT = Math.round(TDHTBophankd);
+
     //----------------------
     const bpkdSubdonhang = bpkd.subdonhang.filter(
       (dh) => dh.ma === req.params.maDH
     );
-    // gsv tinh trang nhan don
-    const gsvTTND = getTinhtrangNhandon(bpkdSubdonhang, tongSLSPDonhangGoc);
 
     let dsGSV = [];
     let dsDonhangTonghopGSV = [];
     for (const item of bpkdSubdonhang) {
       let gsv = await Giamsatvung.findById(item.to.giamsatvung)
-        .populate("donhang")
-        .populate("subdonhang");
+        .populate({
+          path: "donhang",
+          populate: {
+            path: "from to dssanpham dscongcu dsvattu dsnguyenlieu",
+            populate: {
+              path: "bophankd giamsatvung sanpham congcu vattu nguyenlieu",
+            },
+          },
+        })
+        .populate({
+          path: "subdonhang",
+          populate: {
+            path: "from to dssanpham dscongcu dsvattu dsnguyenlieu",
+            populate: {
+              path: "giamsatvung daily1 sanpham congcu vattu nguyenlieu",
+            },
+          },
+        });
       let gsvDonhang = gsv.donhang.find((dh) => dh.ma === req.params.maDH);
       dsDonhangTonghopGSV = [gsvDonhang, ...dsDonhangTonghopGSV];
       dsGSV = [gsv, ...dsGSV];
     }
-    // gsv tien do hoan thanh
-    const gsvTDHT = getTiendoHoanthanh(dsDonhangTonghopGSV, tongSLSPDonhangGoc);
 
     //-------------------------------
     let gsvSubdonhang = [];
@@ -1026,26 +1041,35 @@ bophankdRouter.get("/tiendodonhang/:bpkdId/:maDH", async (req, res) => {
     });
     gsvSubdonhang = gsvSubdonhang.filter((dh) => dh.ma === req.params.maDH);
 
-    // daily 1 tinh trang nhan don
-    const daily1TTND = getTinhtrangNhandon(gsvSubdonhang, tongSLSPDonhangGoc);
-
     let dsDaily1 = [];
     let dsDonhangTonghopDaily1 = [];
     for (const item of gsvSubdonhang) {
       let daily1 = await Daily1.findById(item.to.daily1)
-        .populate("donhang")
-        .populate("subdonhang");
+        .populate({
+          path: "donhang",
+          populate: {
+            path: "from to dssanpham dscongcu dsvattu dsnguyenlieu",
+            populate: {
+              path: "giamsatvung daily1 sanpham congcu vattu nguyenlieu",
+            },
+          },
+        })
+        .populate({
+          path: "subdonhang",
+          populate: {
+            path: "from to dssanpham dscongcu dsvattu dsnguyenlieu",
+            populate: {
+              path: "daily1 daily2 sanpham congcu vattu nguyenlieu",
+            },
+          },
+        });
       let daily1Donhang = daily1.donhang.find(
         (dh) => dh.ma === req.params.maDH
       );
       dsDonhangTonghopDaily1 = [daily1Donhang, ...dsDonhangTonghopDaily1];
       dsDaily1 = [daily1, ...dsDaily1];
     }
-    // dai ly 1 tien do hoan thanh
-    const daily1TDHT = getTiendoHoanthanh(
-      dsDonhangTonghopDaily1,
-      tongSLSPDonhangGoc
-    );
+
     //---------------------------------
     let daily1Subdonhang = [];
     dsDaily1.forEach((dl1) => {
@@ -1055,29 +1079,35 @@ bophankdRouter.get("/tiendodonhang/:bpkdId/:maDH", async (req, res) => {
       (dh) => dh.ma === req.params.maDH
     );
 
-    // daily 2 tinh trang nhan don
-    const daily2TTND = getTinhtrangNhandon(
-      daily1Subdonhang,
-      tongSLSPDonhangGoc
-    );
-
     let dsDaily2 = [];
     let dsDonhangTonghopDaily2 = [];
     for (const item of daily1Subdonhang) {
       let daily2 = await Daily2.findById(item.to.daily2)
-        .populate("donhang")
-        .populate("subdonhang");
+        .populate({
+          path: "donhang",
+          populate: {
+            path: "from to dssanpham dscongcu dsvattu dsnguyenlieu",
+            populate: {
+              path: "daily1 daily2 sanpham congcu vattu nguyenlieu",
+            },
+          },
+        })
+        .populate({
+          path: "subdonhang",
+          populate: {
+            path: "from to dssanpham dscongcu dsvattu dsnguyenlieu",
+            populate: {
+              path: "daily2 hodan sanpham congcu vattu nguyenlieu",
+            },
+          },
+        });
       let daily2Donhang = daily2.donhang.find(
         (dh) => dh.ma === req.params.maDH
       );
       dsDonhangTonghopDaily2 = [daily2Donhang, ...dsDonhangTonghopDaily2];
       dsDaily2 = [daily2, ...dsDaily2];
     }
-    // dai ly 2 tien do hoan thanh
-    const daily2TDHT = getTiendoHoanthanh(
-      dsDonhangTonghopDaily2,
-      tongSLSPDonhangGoc
-    );
+
     //---------------------------------
     let daily2Subdonhang = [];
     dsDaily2.forEach((dl2) => {
@@ -1087,20 +1117,73 @@ bophankdRouter.get("/tiendodonhang/:bpkdId/:maDH", async (req, res) => {
       (dh) => dh.ma === req.params.maDH
     );
 
-    // ho dan tinh trang nhan don
-    const hodanTTND = getTinhtrangNhandon(daily2Subdonhang, tongSLSPDonhangGoc);
-
     let dsDonhangTonghopHodan = [];
+    let dsHodan = [];
     for (const item of daily2Subdonhang) {
-      let hodan = await Hodan.findById(item.to.hodan).populate("donhang");
+      let hodan = await Hodan.findById(item.to.hodan).populate({
+        path: "donhang",
+        populate: {
+          path: "from to dssanpham dscongcu dsvattu dsnguyenlieu",
+          populate: {
+            path: "daily2 hodan sanpham congcu vattu nguyenlieu",
+          },
+        },
+      });
       let hodanDonhang = hodan.donhang.find((dh) => dh.ma === req.params.maDH);
       dsDonhangTonghopHodan = [hodanDonhang, ...dsDonhangTonghopHodan];
+      dsHodan = [hodan, ...dsHodan];
     }
+
+    //==================================================
+    let gsvDSDonhang = [];
+    dsGSV.forEach((gsv) => {
+      gsvDSDonhang = [...gsv.donhang, ...gsvDSDonhang];
+    });
+    gsvDSDonhang = gsvDSDonhang.filter((dh) => dh.ma === req.params.maDH);
+    //-------------------
+    let daily1DSDonhang = [];
+    dsDaily1.forEach((daily1) => {
+      daily1DSDonhang = [...daily1.donhang, ...daily1DSDonhang];
+    });
+    daily1DSDonhang = daily1DSDonhang.filter((dh) => dh.ma === req.params.maDH);
+    //-------------------
+    let daily2DSDonhang = [];
+    dsDaily2.forEach((daily2) => {
+      daily2DSDonhang = [...daily2.donhang, ...daily2DSDonhang];
+    });
+    daily2DSDonhang = daily2DSDonhang.filter((dh) => dh.ma === req.params.maDH);
+    //-------------------
+    let hodanDSDonhang = [];
+    dsHodan.forEach((hd) => {
+      hodanDSDonhang = [...hd.donhang, ...hodanDSDonhang];
+    });
+    hodanDSDonhang = hodanDSDonhang.filter((dh) => dh.ma === req.params.maDH);
+    //====================================================================================================================
+    // bpkd tien do don hang
+    bophankdTDHT = Math.round(
+      (dssanpham.reduce((acc, sp) => acc + (sp.danhan ? sp.danhan : 0), 0) *
+        100) /
+        tongSLSPDonhangGoc
+    );
+    // gsv tinh trang nhan don
+    const gsvTTND = getTinhtrangNhandon(gsvDSDonhang, tongSLSPDonhangGoc);
+    // gsv tien do hoan thanh
+    const gsvTDHT = getTiendoHoanthanh(gsvDSDonhang, tongSLSPDonhangGoc);
+    // daily 1 tinh trang nhan don
+    const daily1TTND = getTinhtrangNhandon(daily1DSDonhang, tongSLSPDonhangGoc);
+    // dai ly 1 tien do hoan thanh
+    const daily1TDHT = getTiendoHoanthanh(daily1DSDonhang, tongSLSPDonhangGoc);
+    // daily 2 tinh trang nhan don
+    const daily2TTND = getTinhtrangNhandon(daily2DSDonhang, tongSLSPDonhangGoc);
+    // dai ly 2 tien do hoan thanh
+    const daily2TDHT = getTiendoHoanthanh(daily2DSDonhang, tongSLSPDonhangGoc);
+    // ho dan tinh trang nhan don
+    const hodanTTND = getTinhtrangNhandon(hodanDSDonhang, tongSLSPDonhangGoc);
     // hodan tien do hoan thanh
     const hodanTDHT = getTiendoHoanthanh(
-      dsDonhangTonghopHodan,
+      hodanDSDonhang,
       tongSLSPDonhangGoc,
-      (pq = "hodan")
+      "hodan"
     );
 
     res.send({
@@ -1113,6 +1196,11 @@ bophankdRouter.get("/tiendodonhang/:bpkdId/:maDH", async (req, res) => {
       daily2TDHT,
       hodanTTND,
       hodanTDHT,
+      bpkdDSDonhang: [bpkdDonhangTonghop],
+      gsvDSDonhang,
+      daily1DSDonhang,
+      daily2DSDonhang,
+      hodanDSDonhang,
       success: true,
     });
   } catch (error) {
