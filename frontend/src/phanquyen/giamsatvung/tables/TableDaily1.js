@@ -215,7 +215,13 @@ const TableDaily1 = ({ dsDaily1 = [], setRowsRemoved, readOnly }) => {
                           />
                         </TableCell>
                         <TableCell align="right">
-                          <Link to={`/giamsatvung/daily1/chitiet/${row._id}`}>{row.ten}</Link>
+                          {readOnly ? (
+                            row.ten
+                          ) : (
+                            <Link to={`/giamsatvung/daily1/chitiet/${row._id}`}>
+                              {row.ten}
+                            </Link>
+                          )}
                         </TableCell>
                         <TableCell align="right">{row.sdt}</TableCell>
                         <TableCell align="right">{row.email}</TableCell>

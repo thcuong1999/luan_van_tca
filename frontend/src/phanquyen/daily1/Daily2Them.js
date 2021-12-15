@@ -36,6 +36,26 @@ const Daily2Them = (props) => {
   });
   const [errMsg, setErrMsg] = useState("");
   const { userInfo } = useSelector((state) => state.user);
+  const [dsTaikhoan, setDsTaikhoan] = useState([]);
+  const [taikhoanErr, setTaikhoanErr] = useState("");
+
+  const handleChangeTaikhoan = (e) => {
+    var format = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/;
+    const val = e.target.value.toLowerCase();
+    setDaily2({ ...daily2, taikhoan: val });
+    // check white space
+    if (val.indexOf(" ") >= 0) {
+      setTaikhoanErr("Tài khoản không có khoảng trắng");
+    } else if (dsTaikhoan.includes(val)) {
+      // check maSP exist
+      setTaikhoanErr("Tài khoản đã tồn tại");
+    } else if (format.test(val)) {
+      // check contains special chars
+      setTaikhoanErr("Tài khoản không được chứa kí tự đặc biệt");
+    } else {
+      setTaikhoanErr("");
+    }
+  };
 
   const [tinh, setTinh] = useState(null);
   const [huyen, sethuyen] = useState(null);
@@ -56,25 +76,27 @@ const Daily2Them = (props) => {
     });
   };
 
-  const emptyFields = () => {
-    // thong tin ko dc de trong
-    if (
-      !daily2.ten ||
-      !tinh ||
-      !huyen ||
-      !xa ||
-      !daily2.taikhoan ||
-      !daily2.sdt ||
-      !daily2.email
-    ) {
-      setErrMsg("Thông tin không được để trống");
-      return true;
+  const validateFields = () => {
+    if (taikhoanErr) {
+      return false;
     }
-    return false;
+    if (!daily2.taikhoan) {
+      setTaikhoanErr("Thông tin không được để trống");
+      return false;
+    }
+    if (daily2.taikhoan.length < 6) {
+      setTaikhoanErr("Tài khoản có ít nhất 6 kí tự");
+      return false;
+    }
+    if (!daily2.ten || !tinh || !huyen || !xa || !daily2.sdt || !daily2.email) {
+      setErrMsg("Thông tin không được để trống");
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async () => {
-    if (!emptyFields()) {
+    if (validateFields()) {
       const dl = {
         ten: daily2.ten,
         sdt: daily2.sdt,
@@ -111,6 +133,8 @@ const Daily2Them = (props) => {
   const fetchDaily1Info = async () => {
     setLoading(true);
     const { daily1 } = await apiDaily1.singleDaily1BasedUser(userInfo._id);
+    const { daily2 } = await apiDaily2.dsDaily2();
+    setDsTaikhoan(daily2.map((dl2) => dl2.taikhoan));
     setDaily1Info(daily1);
     setLoading(false);
   };
@@ -268,9 +292,9 @@ const Daily2Them = (props) => {
                   type="text"
                   name="taikhoan"
                   value={daily2.taikhoan}
-                  onChange={handleChangeDaily2}
-                />{" "}
-                {!daily2.taikhoan && <ErrMsg>{errMsg}</ErrMsg>}
+                  onChange={handleChangeTaikhoan}
+                />
+                {<ErrMsg>{taikhoanErr}</ErrMsg>}
               </FormGroup>
             </FormContent>
           </Form>

@@ -93,29 +93,13 @@ sanphamRouter.get("/single/:id", async (req, res) => {
 
 // sua thong tin 1 sp
 sanphamRouter.put("/single/:id", upload.single("hinhanh"), async (req, res) => {
-  const {
-    ma,
-    ten,
-    mota,
-    loaisanpham,
-    thuoctinh,
-    dscongcu,
-    dsvattu,
-    dsnguyenlieu,
-    gia,
-  } = req.body;
+  const { ten, mota, thuoctinh } = req.body;
   try {
     const sanpham = await Sanpham.findById(req.params.id);
-    sanpham.ma = ma;
     sanpham.ten = ten;
     sanpham.mota = mota;
     sanpham.hinhanh = req.file ? req.file.filename : sanpham.hinhanh;
-    sanpham.loaisanpham = loaisanpham;
     sanpham.thuoctinh = JSON.parse(thuoctinh);
-    sanpham.dscongcu = JSON.parse(dscongcu);
-    sanpham.dsvattu = JSON.parse(dsvattu);
-    sanpham.dsnguyenlieu = JSON.parse(dsnguyenlieu);
-    sanpham.gia = gia;
     const updatedSanpham = await sanpham.save();
 
     res.send({ updatedSanpham, success: true });

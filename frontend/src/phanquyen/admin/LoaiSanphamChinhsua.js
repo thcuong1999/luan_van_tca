@@ -95,13 +95,7 @@ const LoaiSanphamChinhsua = (props) => {
                   <img src={ma} alt="ma" />
                   <span>Mã loại:</span>
                 </Label>
-                <Input
-                  placeholder="Nhập mã"
-                  type="text"
-                  name="ma"
-                  value={spLangnghe?.ma}
-                  onChange={handleChange}
-                />
+                <Input type="text" value={spLangnghe?.ma} disabled />
               </FormGroup>
 
               <FormGroup>

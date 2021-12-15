@@ -3,10 +3,12 @@ import apiGiaohang from "../../axios/apiGiaohang";
 import BackdropMaterial from "../../components/BackdropMaterial";
 import Header from "../../components/Header";
 import {
-  BoxInfo,
-  BoxInfoTitle,
   Container,
   Content,
+  DetailsInfo,
+  DetailsInfoContent,
+  DetailsInfoTexts,
+  DetailsInfoTitle,
   Form,
   FormContent,
   FormGroup,
@@ -104,46 +106,50 @@ const HanggiaodenChitiet = (props) => {
               </FormGroup>
             </FormContent>
 
-            <div className="px-3 pt-5">
+            <div className="px-3 pt-5 pb-5 mb-5">
               <TableSection className="noCheckbox">
                 <TableHanggiaodenChitiet dsGiaohang={singleGH?.dssanpham} />
               </TableSection>
 
-              <div className="text-right">
-                <BoxInfo style={{ boxShadow: "none" }}>
-                  <BoxInfoTitle>Từ giám sát vùng</BoxInfoTitle>
-                  <table>
-                    <tr>
-                      <td>
-                        <img src={ten} alt="ten" />
-                        <span>Tên:</span>
-                      </td>
-                      <td>{singleGH?.giamsatvung.ten}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={sdt} alt="sdt" />
-                        <span>SĐT:</span>
-                      </td>
-                      <td>{singleGH?.giamsatvung.sdt}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={email} alt="email" />
-                        <span>E-mail</span>
-                      </td>
-                      <td>{singleGH?.giamsatvung.email}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={diachi} alt="diachi" />
-                        <span>Địa chỉ:</span>
-                      </td>
-                      <td>{`${singleGH?.giamsatvung.xa}, ${singleGH?.giamsatvung.huyen}, ${singleGH?.giamsatvung.tinh}`}</td>
-                    </tr>
-                  </table>
-                </BoxInfo>
-              </div>
+              <DetailsInfo>
+                <DetailsInfoTitle>
+                  <h5>Từ giám sát vùng</h5>
+                </DetailsInfoTitle>
+                <DetailsInfoContent>
+                  <DetailsInfoTexts>
+                    <table>
+                      <tr>
+                        <td>
+                          <img src={ten} alt="ten" />
+                          <span>Tên:</span>
+                        </td>
+                        <td>{singleGH?.giamsatvung.ten}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <img src={sdt} alt="sdt" />
+                          <span>SĐT:</span>
+                        </td>
+                        <td>{singleGH?.giamsatvung.sdt}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <img src={email} alt="email" />
+                          <span>E-mail</span>
+                        </td>
+                        <td>{singleGH?.giamsatvung.email}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <img src={diachi} alt="diachi" />
+                          <span>Địa chỉ:</span>
+                        </td>
+                        <td>{`${singleGH?.giamsatvung.xa}, ${singleGH?.giamsatvung.huyen}, ${singleGH?.giamsatvung.tinh}`}</td>
+                      </tr>
+                    </table>
+                  </DetailsInfoTexts>
+                </DetailsInfoContent>
+              </DetailsInfo>
             </div>
           </Form>
         </Content>

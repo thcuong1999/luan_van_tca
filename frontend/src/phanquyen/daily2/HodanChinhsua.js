@@ -13,7 +13,7 @@ import {
 import Header from "../../components/Header";
 import { apiTinhThanh } from "../../apiTinhThanh";
 import apiHodan from "../../axios/apiHodan";
-import apiLangnghe from "../../axios/apiLangnghe";
+// import apiLangnghe from "../../axios/apiLangnghe";
 import BackdropMaterial from "../../components/BackdropMaterial";
 import { toast } from "react-toastify";
 import DropdownMaterial2 from "../../components/DropdownMaterial2";
@@ -31,14 +31,14 @@ import _matkhau from "../../assets/icons/matkhau.png";
 
 const HodanChinhsua = (props) => {
   const [hodan, setHodan] = useState(null);
-  const [dsLangnghe, setDsLangnghe] = useState([]);
+  // const [dsLangnghe, setDsLangnghe] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedLangnghe, setSelectedLangnghe] = useState(null);
   const [tinh, setTinh] = useState(null);
   const [huyen, sethuyen] = useState(null);
   const [xa, setXa] = useState(null);
   const [errMsg, setErrMsg] = useState("");
-  const [dsLoaiSP, setdsLoaiSP] = useState([]);
+  // const [dsLoaiSP, setdsLoaiSP] = useState([]);
   const [selectedLoaiSP, setselectedLoaiSP] = useState(null);
   const [matkhau, setMatkhau] = useState("");
   const [xnMatkhau, setXnMatkhau] = useState("");
@@ -103,18 +103,18 @@ const HodanChinhsua = (props) => {
   const fetchDsLangnghe = async () => {
     setLoading(true);
     const { hodan } = await apiHodan.singleHodan(hodanId);
-    const { langnghe } = await apiLangnghe.dsLangnghe();
-    const { loaisanpham } = langnghe.find(
-      (item) => item._id === hodan.langnghe
-    );
+    // const { langnghe } = await apiLangnghe.dsLangnghe();
+    // const { loaisanpham } = langnghe.find(
+    //   (item) => item._id === hodan.langnghe._id
+    // );
     setHodan(hodan);
-    setDsLangnghe(langnghe);
+    // setDsLangnghe(langnghe);
     setSelectedLangnghe(hodan.langnghe);
     setselectedLoaiSP(hodan.loaisanpham);
     setTinh(hodan.tinh);
     sethuyen(hodan.huyen);
     setXa(hodan.xa);
-    setdsLoaiSP(loaisanpham);
+    // setdsLoaiSP(loaisanpham);
     setLoading(false);
   };
 
@@ -220,7 +220,8 @@ const HodanChinhsua = (props) => {
                     <img src={langnghe} alt="langnghe" />
                     <span>Làng nghề:</span>
                   </Label>
-                  {dsLangnghe && dsLangnghe.length ? (
+                  <Input type="text" value={hodan?.langnghe.ten} disabled />
+                  {/* {dsLangnghe && dsLangnghe.length ? (
                     <DropdownMaterial2
                       label="Chọn Làng nghề"
                       value={selectedLangnghe}
@@ -245,7 +246,7 @@ const HodanChinhsua = (props) => {
                   ) : (
                     <DropdownMaterial2 label="Chọn làng nghề" />
                   )}
-                  {!selectedLangnghe && <ErrMsg>{errMsg}</ErrMsg>}
+                  {!selectedLangnghe && <ErrMsg>{errMsg}</ErrMsg>} */}
                 </FormGroup>
               </div>
 
@@ -278,7 +279,8 @@ const HodanChinhsua = (props) => {
                 <img src={loai} alt="loai" />
                 <span>Loại sản phẩm:</span>
               </Label>
-              {dsLoaiSP && dsLoaiSP.length ? (
+              <Input type="text" value={hodan?.loaisanpham.ten} disabled />
+              {/* {dsLoaiSP && dsLoaiSP.length ? (
                 <DropdownMaterial2
                   label="Chọn loại sản phẩm"
                   value={selectedLoaiSP}
@@ -291,7 +293,7 @@ const HodanChinhsua = (props) => {
               ) : (
                 <DropdownMaterial2 label="Chọn loại sản phẩm" />
               )}
-              {!selectedLoaiSP && <ErrMsg>{errMsg}</ErrMsg>}
+              {!selectedLoaiSP && <ErrMsg>{errMsg}</ErrMsg>} */}
             </FormGroup>
 
             <FormGroup>
@@ -299,7 +301,7 @@ const HodanChinhsua = (props) => {
                 <img src={taikhoan} alt="taikhoan" />
                 <span>Tên tài khoản:</span>
               </Label>
-              <Input type="text" value={hodan?.taikhoan} />
+              <Input type="text" value={hodan?.taikhoan} disabled />
             </FormGroup>
 
             {hodan?.active && (

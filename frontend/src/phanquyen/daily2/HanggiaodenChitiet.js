@@ -7,6 +7,10 @@ import {
   BoxInfoTitle,
   Container,
   Content,
+  DetailsInfo,
+  DetailsInfoContent,
+  DetailsInfoTexts,
+  DetailsInfoTitle,
   Form,
   FormContent,
   FormGroup,
@@ -106,46 +110,50 @@ const HanggiaodenChitiet = (props) => {
               </FormGroup>
             </FormContent>
 
-            <div className="px-3 pt-5">
+            <div className="px-3 pt-5 pb-5 mb-5">
               <TableSection className="noCheckbox">
                 <TableHanggiaodenChitiet dsGiaohang={singleGH?.dssanpham} />
               </TableSection>
 
-              <div className="text-right">
-                <BoxInfo style={{ boxShadow: "none" }}>
-                  <BoxInfoTitle>Từ hộ dân</BoxInfoTitle>
-                  <table>
-                    <tr>
-                      <td>
-                        <img src={ten} alt="ten" />
-                        <span>Tên:</span>
-                      </td>
-                      <td>{singleGH?.hodan.daidien}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={sdt} alt="sdt" />
-                        <span>SĐT:</span>
-                      </td>
-                      <td>{singleGH?.hodan.sdt}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={cmnd} alt="cmnd" />
-                        <span>CMND</span>
-                      </td>
-                      <td>{singleGH?.hodan.cmnd}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={diachi} alt="diachi" />
-                        <span>Địa chỉ:</span>
-                      </td>
-                      <td>{`${singleGH?.hodan.xa}, ${singleGH?.hodan.huyen}, ${singleGH?.hodan.tinh}`}</td>
-                    </tr>
-                  </table>
-                </BoxInfo>
-              </div>
+              <DetailsInfo>
+                <DetailsInfoTitle>
+                  <h5>Từ hộ dân</h5>
+                </DetailsInfoTitle>
+                <DetailsInfoContent>
+                  <DetailsInfoTexts>
+                    <table>
+                      <tr>
+                        <td>
+                          <img src={ten} alt="ten" />
+                          <span>Tên:</span>
+                        </td>
+                        <td>{singleGH?.hodan.daidien}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <img src={sdt} alt="sdt" />
+                          <span>SĐT:</span>
+                        </td>
+                        <td>{singleGH?.hodan.sdt}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <img src={cmnd} alt="cmnd" />
+                          <span>CMND</span>
+                        </td>
+                        <td>{singleGH?.hodan.cmnd}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <img src={diachi} alt="diachi" />
+                          <span>Địa chỉ:</span>
+                        </td>
+                        <td>{`${singleGH?.hodan.xa}, ${singleGH?.hodan.huyen}, ${singleGH?.hodan.tinh}`}</td>
+                      </tr>
+                    </table>
+                  </DetailsInfoTexts>
+                </DetailsInfoContent>
+              </DetailsInfo>
             </div>
           </Form>
         </Content>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { apiTinhThanh } from "../../apiTinhThanh";
 import { toast } from "react-toastify";
@@ -10,7 +10,6 @@ import sdt from "../../assets/icons/sdt.png";
 import email from "../../assets/icons/email.png";
 import diachi from "../../assets/icons/diachi.png";
 import taikhoan from "../../assets/icons/taikhoan.png";
-import them from "../../assets/icons/them.png";
 import cmnd from "../../assets/icons/cmnd.png";
 import {
   Container,
@@ -23,6 +22,7 @@ import {
   Input,
   Label,
 } from "./styledComponents";
+import BackdropMaterial from "../../components/BackdropMaterial";
 
 const GSVThem = (props) => {
   const [gsv, setGsv] = useState({
@@ -36,6 +36,27 @@ const GSVThem = (props) => {
   const [tinh, setTinh] = useState(null);
   const [huyen, sethuyen] = useState(null);
   const [xa, setXa] = useState(null);
+  const [loading, setLoading] = useState(null);
+  const [dsTaikhoan, setDsTaikhoan] = useState([]);
+  const [taikhoanErr, setTaikhoanErr] = useState("");
+
+  const handleChangeTaikhoan = (e) => {
+    var format = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/;
+    const val = e.target.value.toLowerCase();
+    setGsv({ ...gsv, taikhoan: val });
+    // check white space
+    if (val.indexOf(" ") >= 0) {
+      setTaikhoanErr("Tài khoản không có khoảng trắng");
+    } else if (dsTaikhoan.includes(val)) {
+      // check maSP exist
+      setTaikhoanErr("Tài khoản đã tồn tại");
+    } else if (format.test(val)) {
+      // check contains special chars
+      setTaikhoanErr("Tài khoản không được chứa kí tự đặc biệt");
+    } else {
+      setTaikhoanErr("");
+    }
+  };
 
   const dsTinh = apiTinhThanh.map((item) => item.name);
   const dsHuyen = apiTinhThanh
@@ -53,26 +74,37 @@ const GSVThem = (props) => {
     });
   };
 
-  const emptyFields = () => {
+  const validateFields = () => {
+    if (taikhoanErr) {
+      return false;
+    }
+    if (!gsv.taikhoan) {
+      setTaikhoanErr("Thông tin không được để trống");
+      return false;
+    }
+    if (gsv.taikhoan.length < 6) {
+      setTaikhoanErr("Tài khoản có ít nhất 6 kí tự");
+      return false;
+    }
     // thong tin ko dc de trong
     if (
       !gsv.ten ||
       !tinh ||
       !huyen ||
       !xa ||
-      !gsv.taikhoan ||
       !gsv.sdt ||
       !gsv.cmnd ||
       !gsv.email
     ) {
       setErrMsg("Thông tin không được để trống");
-      return true;
+
+      return false;
     }
-    return false;
+    return true;
   };
 
   const handleSubmit = async () => {
-    if (!emptyFields()) {
+    if (validateFields()) {
       const dl = {
         ten: gsv.ten,
         taikhoan: gsv.taikhoan,
@@ -105,6 +137,22 @@ const GSVThem = (props) => {
     sethuyen(null);
     setXa(null);
   };
+
+  const fetchDsGsv = async () => {
+    setLoading(true);
+    const { gsv } = await apiGSV.dsGsv();
+    setDsTaikhoan(gsv.map((item) => item.user.taikhoan));
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchDsGsv();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (loading) {
+    return <BackdropMaterial />;
+  }
 
   return (
     <>
@@ -271,9 +319,9 @@ const GSVThem = (props) => {
                   type="text"
                   name="taikhoan"
                   value={gsv.taikhoan}
-                  onChange={handleChangeGsv}
+                  onChange={handleChangeTaikhoan}
                 />
-                {!gsv.taikhoan && <ErrMsg>{errMsg}</ErrMsg>}
+                {<ErrMsg>{taikhoanErr}</ErrMsg>}
               </FormGroup>
             </FormContent>
           </Form>

@@ -9,6 +9,7 @@ import {
   FormContent,
   FormGroup,
   FormTitle,
+  ImageToDisplay,
   Input,
   Label,
   PlusButton,
@@ -21,12 +22,14 @@ import _mota from "../../assets/icons/mota.png";
 import anh from "../../assets/icons/anh.png";
 import tt from "../../assets/icons/thuoctinh.png";
 import cd from "../../assets/icons/congdung.png";
+import UploadButton from "../../components/UploadButton";
 
 const NguyenlieuThem = (props) => {
   const [thuoctinh, setThuoctinh] = useState([{ ten: "", giatri: "" }]);
   const [ten, setTen] = useState("");
   const [mota, setMota] = useState("");
   const [hinhanh, sethinhanh] = useState(null);
+  const [imgToDisplay, setImgToDisplay] = useState(null);
   const [congdung, setCongdung] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const ref = useRef();
@@ -74,7 +77,8 @@ const NguyenlieuThem = (props) => {
     setTen("");
     setMota("");
     setCongdung("");
-    ref.current.value = "";
+    sethinhanh(null);
+    setImgToDisplay(null);
     setThuoctinh([{ ten: "", giatri: "" }]);
   };
 
@@ -151,12 +155,20 @@ const NguyenlieuThem = (props) => {
                   <img src={anh} alt="anh" />
                   <span>Chọn ảnh:</span>
                 </Label>
-                <input
+                <UploadButton
                   ref={ref}
-                  type="file"
-                  onChange={(e) => sethinhanh(e.target.files[0])}
-                  style={{ border: "none", paddingLeft: 0 }}
+                  onChange={(e) => {
+                    sethinhanh(e.target.files[0]);
+                    if (e.target.files.length !== 0) {
+                      setImgToDisplay(URL.createObjectURL(e.target.files[0]));
+                    }
+                  }}
                 />
+                {imgToDisplay && (
+                  <ImageToDisplay>
+                    <img src={imgToDisplay} alt="congcuImg" />
+                  </ImageToDisplay>
+                )}
               </FormGroup>
 
               <FormGroup>

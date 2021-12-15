@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import BackdropMaterial from "../../components/BackdropMaterial";
 import img_placeholder from "../../assets/images/img_placeholder.png";
 import DialogMaterial from "../../components/DialogMaterial";
-import styled from "styled-components";
 import Header from "../../components/Header";
 import apiNguyenlieu from "../../axios/apiNguyenlieu";
 import { toast } from "react-toastify";
@@ -13,6 +12,7 @@ import {
   FormContent,
   FormGroup,
   FormTitle,
+  ImageToDisplay,
   Input,
   Label,
   TextArea,
@@ -112,15 +112,17 @@ const NguyenlieuChitiet = (props) => {
                   <img src={anh} alt="anh" />
                   <span>Hình ảnh:</span>
                 </Label>
-                <Image
-                  src={
-                    nguyenlieu?.hinhanh
-                      ? `/uploads/${nguyenlieu?.hinhanh}`
-                      : img_placeholder
-                  }
-                  alt="anhcongcu"
-                  className={!nguyenlieu?.hinhanh && "noImage"}
-                />
+                <ImageToDisplay>
+                  <img
+                    src={
+                      nguyenlieu?.hinhanh
+                        ? `/uploads/${nguyenlieu?.hinhanh}`
+                        : img_placeholder
+                    }
+                    alt="nguyenlieuImg"
+                    className={!nguyenlieu?.hinhanh && "noImage"}
+                  />
+                </ImageToDisplay>
               </FormGroup>
 
               <FormGroup>
@@ -183,12 +185,5 @@ const NguyenlieuChitiet = (props) => {
     </>
   );
 };
-
-const Image = styled.img`
-  width: 100px;
-  &.noImage {
-    opacity: 0.15;
-  }
-`;
 
 export default NguyenlieuChitiet;

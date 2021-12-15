@@ -3,10 +3,12 @@ import apiGiaohang from "../../axios/apiGiaohang";
 import BackdropMaterial from "../../components/BackdropMaterial";
 import Header from "../../components/Header";
 import {
-  BoxInfo,
-  BoxInfoTitle,
   Container,
   Content,
+  DetailsInfo,
+  DetailsInfoContent,
+  DetailsInfoTexts,
+  DetailsInfoTitle,
   Form,
   FormContent,
   FormGroup,
@@ -95,46 +97,50 @@ const HanggiaodiChitiet = (props) => {
               </FormGroup>
             </FormContent>
 
-            <div className="px-3 pt-5">
+            <div className="px-3 pt-5 pb-5 mb-5">
               <TableSection className="noCheckbox">
                 <TableHanggiaodiChitiet dsGiaohang={singleGH?.dssanpham} />
               </TableSection>
 
-              <div className="text-right">
-                <BoxInfo style={{ boxShadow: "none" }}>
-                  <BoxInfoTitle>Tới bộ phận kinh doanh</BoxInfoTitle>
-                  <table>
-                    <tr>
-                      <td>
-                        <img src={ten} alt="ten" />
-                        <span>Tên:</span>
-                      </td>
-                      <td>{singleGH?.donhang.from.bophankd.ten}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={sdt} alt="sdt" />
-                        <span>SĐT:</span>
-                      </td>
-                      <td>{singleGH?.donhang.from.bophankd.sdt}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={email} alt="cmnd" />
-                        <span>E-mail</span>
-                      </td>
-                      <td>{singleGH?.donhang.from.bophankd.email}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={diachi} alt="diachi" />
-                        <span>Địa chỉ:</span>
-                      </td>
-                      <td>{`${singleGH?.donhang.from.bophankd.xa}, ${singleGH?.donhang.from.bophankd.huyen}, ${singleGH?.donhang.from.bophankd.tinh}`}</td>
-                    </tr>
-                  </table>
-                </BoxInfo>
-              </div>
+              <DetailsInfo>
+                <DetailsInfoTitle>
+                  <h5>Tới bộ phận kinh doanh</h5>
+                </DetailsInfoTitle>
+                <DetailsInfoContent>
+                  <DetailsInfoTexts>
+                    <table>
+                      <tr>
+                        <td>
+                          <img src={ten} alt="ten" />
+                          <span>Tên:</span>
+                        </td>
+                        <td>{singleGH?.donhang.from.bophankd.ten}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <img src={sdt} alt="sdt" />
+                          <span>SĐT:</span>
+                        </td>
+                        <td>{singleGH?.donhang.from.bophankd.sdt}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <img src={email} alt="cmnd" />
+                          <span>E-mail</span>
+                        </td>
+                        <td>{singleGH?.donhang.from.bophankd.email}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <img src={diachi} alt="diachi" />
+                          <span>Địa chỉ:</span>
+                        </td>
+                        <td>{`${singleGH?.donhang.from.bophankd.xa}, ${singleGH?.donhang.from.bophankd.huyen}, ${singleGH?.donhang.from.bophankd.tinh}`}</td>
+                      </tr>
+                    </table>
+                  </DetailsInfoTexts>
+                </DetailsInfoContent>
+              </DetailsInfo>
             </div>
           </Form>
         </Content>

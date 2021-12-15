@@ -124,47 +124,7 @@ db.sanphams.find({"createdAt":{ $gte:ISODate("2021-11-10"), $lt:ISODate("2021-11
 
 
 *** ham xoa ho dan => update loaisp
-*** validate admin nhap ma sp
 *** giao dien thong tin ca nhan
-*** ngan sua field 
-*** don hang chi tiet -> thay hinh vuong = chu nhat
-
-
-==================================================
-const tongsl = tongsl of dh goc
-
-- Bophankd
-    bophankd
-        -> tien do hoan thanh: (donhang tong hop cua 
-            bophankd, field: danhan / tongsl)
-    gsv
-        -> tinh trang nhan don: subdonhang bpkd
-            if(xacnhan == true) -> tong
-        
-        -> tien do hoan thanh: (donhang tong hop cua 
-            cac gsv, field: danhan)
-    dl1
-        -> tinh trang nhan don: (subdonhang gsv, 
-            field: xacnhan)
-        -> tien do hoan thanh: (donhang tong hop cua 
-            cac dl1, field: danhan)
-    dl2
-        -> tinh trang nhan don: (subdonhang dl1, field: 
-            xacnhan)
-        -> tien do hoan thanh: (donhang tong hop cua 
-            cac dl2, field: danhan)
-
-gsvA: 70
-gsvB: 30 -> xac nhan: TTND_GSV: 30%
-
-dl1B: 10
-dl1A: 10 -> xac nhan: TTND_DL1: 20%
-dl1C: 10 -> xac nhan: TTND_DL1: 20%
-
-DL2A: 5
-DL2B: 5 -> xac nhan: TTND_DL2: 5%
-
-======================
-
-
-
+*** searchbox
+*** hang giao den notification
+*** check validate giao hang

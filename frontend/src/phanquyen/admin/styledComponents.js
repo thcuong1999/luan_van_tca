@@ -239,14 +239,26 @@ export const TableTitle = styled.div`
     opacity: 0.6;
   }
 `;
+
 export const Total = styled.span`
   font-size: 14px;
   margin-right: 10px;
   font-weight: 400;
   font-family: "Montserrat", sans-serif;
 `;
+
 export const TotalValue = styled.span`
   font-size: 15px;
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
+`;
+
+export const ImageToDisplay = styled.div`
+  img {
+    width: 250px;
+    padding-top: 16px;
+    &.noImage {
+      opacity: 0.15;
+    }
+  }
 `;

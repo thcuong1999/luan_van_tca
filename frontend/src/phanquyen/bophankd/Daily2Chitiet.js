@@ -202,13 +202,16 @@ const Daily2Chitiet = (props) => {
 
           <DetailsSubComponents>
             {active.code === 1 ? (
-              <TableSanpham dsSanpham={singleDaily2?.dssanpham} />
+              <TableSanpham dsSanpham={singleDaily2?.dssanpham} readOnly />
             ) : active.code === 2 ? (
-              <TableCongcu dsCongcu={singleDaily2?.dscongcu} />
+              <TableCongcu dsCongcu={singleDaily2?.dscongcu} readOnly />
             ) : active.code === 3 ? (
-              <TableVattu dsVattu={singleDaily2?.dsvattu} />
+              <TableVattu dsVattu={singleDaily2?.dsvattu} readOnly />
             ) : active.code === 4 ? (
-              <TableNguyenlieu dsNguyenlieu={singleDaily2?.dsnguyenlieu} />
+              <TableNguyenlieu
+                dsNguyenlieu={singleDaily2?.dsnguyenlieu}
+                readOnly
+              />
             ) : active.code === 5 ? (
               <TableHodan dsHodan={singleDaily2?.hodan} readOnly />
             ) : (

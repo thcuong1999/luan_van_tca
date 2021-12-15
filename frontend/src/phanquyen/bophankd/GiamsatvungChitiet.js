@@ -217,7 +217,6 @@ const GiamsatvungChitiet = (props) => {
 
           <DetailsInfo>
             <DetailsInfoTitle>
-              {/* <img src={anh} alt="anh" /> */}
               <h5>Thông tin giám sát vùng</h5>
             </DetailsInfoTitle>
             <DetailsInfoContent>
@@ -258,13 +257,16 @@ const GiamsatvungChitiet = (props) => {
 
           <DetailsSubComponents>
             {active.code === 1 ? (
-              <TableSanpham dsSanpham={singleGSV?.dssanpham} />
+              <TableSanpham dsSanpham={singleGSV?.dssanpham} readOnly />
             ) : active.code === 2 ? (
-              <TableCongcu dsCongcu={singleGSV?.dscongcu} />
+              <TableCongcu dsCongcu={singleGSV?.dscongcu} readOnly />
             ) : active.code === 3 ? (
-              <TableVattu dsVattu={singleGSV?.dsvattu} />
+              <TableVattu dsVattu={singleGSV?.dsvattu} readOnly />
             ) : active.code === 4 ? (
-              <TableNguyenlieu dsNguyenlieu={singleGSV?.dsnguyenlieu} />
+              <TableNguyenlieu
+                dsNguyenlieu={singleGSV?.dsnguyenlieu}
+                readOnly
+              />
             ) : active.code === 5 ? (
               <TableDaily1 dsDaily1={singleGSV?.daily1} readOnly />
             ) : active.code === 6 ? (

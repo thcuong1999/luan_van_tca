@@ -23,7 +23,7 @@ function Home(props) {
   const [listHoDan, setListHoDan] = useState();
   const [hoDan, setHoDan] = useState();
   const [idAccount, setIdAccount] = useState();
- 
+
   useEffect(() => {
     (async () => {
       //get info hodan
@@ -34,6 +34,7 @@ function Home(props) {
         return dataAccount.includes(item.user._id);
       });
       setHoDan(findHoDan);
+      LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     })();
   }, []);
   // console.log(hoDan)
@@ -67,10 +68,9 @@ function Home(props) {
   const handleRedirectKhoLoi = () => {
     navigation.navigate("ScreenKhoLoi", { idHodan: `${hoDan._id}` });
   };
-  const handleRedirectSanPham = ()=>{
+  const handleRedirectSanPham = () => {
     navigation.navigate("ScreenSanPham", { idHodan: `${hoDan._id}` });
-
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -191,11 +191,7 @@ function Home(props) {
                     <View style={{ marginRight: 20 }}>
                       <Text onPress={handleRedirectSanPham}>
                         <View style={styles.containerRedirectKho}>
-                          <Ionicons
-                            name="leaf"
-                            size={60}
-                            color="#0000b3"
-                          />
+                          <Ionicons name="leaf" size={60} color="#0000b3" />
                         </View>
                       </Text>
                       <Text style={[{ marginTop: 10, textAlign: "center" }]}>
@@ -205,14 +201,17 @@ function Home(props) {
                     <View style={{ marginRight: 30 }}>
                       <Text onPress={handleRedirectKhoLoi}>
                         <View style={styles.containerRedirectKho}>
-                          <Ionicons name="close-circle" size={60} color="#0000b3" />
+                          <Ionicons
+                            name="close-circle"
+                            size={60}
+                            color="#0000b3"
+                          />
                         </View>
                       </Text>
                       <Text style={[{ marginTop: 10, textAlign: "center" }]}>
                         Hư hỏng
                       </Text>
                     </View>
-                   
                   </View>
                 </>
               ) : (

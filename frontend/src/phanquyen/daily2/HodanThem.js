@@ -48,6 +48,26 @@ const HodanThem = (props) => {
   const [dsLoaiSP, setdsLoaiSP] = useState([]);
   const [selectedLoaiSP, setselectedLoaiSP] = useState(null);
   const { userInfo } = useSelector((state) => state.user);
+  const [dsTaikhoan, setDsTaikhoan] = useState([]);
+  const [taikhoanErr, setTaikhoanErr] = useState("");
+
+  const handleChangeTaikhoan = (e) => {
+    var format = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/;
+    const val = e.target.value.toLowerCase();
+    setHodan({ ...hodan, taikhoan: val });
+    // check white space
+    if (val.indexOf(" ") >= 0) {
+      setTaikhoanErr("Tài khoản không có khoảng trắng");
+    } else if (dsTaikhoan.includes(val)) {
+      // check maSP exist
+      setTaikhoanErr("Tài khoản đã tồn tại");
+    } else if (format.test(val)) {
+      // check contains special chars
+      setTaikhoanErr("Tài khoản không được chứa kí tự đặc biệt");
+    } else {
+      setTaikhoanErr("");
+    }
+  };
 
   const dsXa = apiTinhThanh
     .find((item) => item.name === tinh)
@@ -61,8 +81,18 @@ const HodanThem = (props) => {
     });
   };
 
-  const emptyFields = () => {
-    // thong tin ko dc de trong
+  const validateFields = () => {
+    if (taikhoanErr) {
+      return false;
+    }
+    if (!hodan.taikhoan) {
+      setTaikhoanErr("Thông tin không được để trống");
+      return false;
+    }
+    if (hodan.taikhoan.length < 6) {
+      setTaikhoanErr("Tài khoản có ít nhất 6 kí tự");
+      return false;
+    }
     if (
       !hodan.daidien ||
       !hodan.sdt ||
@@ -70,17 +100,16 @@ const HodanThem = (props) => {
       !hodan.namsinh ||
       !selectedLangnghe ||
       !xa ||
-      !selectedLoaiSP ||
-      !hodan.taikhoan
+      !selectedLoaiSP
     ) {
       setErrMsg("Thông tin không được để trống");
-      return true;
+      return false;
     }
-    return false;
+    return true;
   };
 
   const handleSubmit = async () => {
-    if (!emptyFields()) {
+    if (validateFields()) {
       const dl = {
         daidien: hodan.daidien,
         xa,
@@ -125,6 +154,8 @@ const HodanThem = (props) => {
     setLoading(true);
     const { langnghe } = await apiLangnghe.dsLangnghe();
     const { daily2 } = await apiDaily2.singleDaily2BasedUser(userInfo._id);
+    const { hodan } = await apiHodan.dsHodan();
+    setDsTaikhoan(hodan.map((hodan) => hodan.taikhoan));
     setDsLangnghe(langnghe);
     setDaily2Info(daily2);
     setLoading(false);
@@ -318,11 +349,9 @@ const HodanThem = (props) => {
                 type="text"
                 name="taikhoan"
                 value={hodan.taikhoan}
-                onChange={(e) => {
-                  handleChangeHodan(e);
-                }}
+                onChange={handleChangeTaikhoan}
               />
-              {!hodan.taikhoan && <ErrMsg>{errMsg}</ErrMsg>}
+              {<ErrMsg>{taikhoanErr}</ErrMsg>}
             </FormGroup>
           </FormContent>
         </Form>

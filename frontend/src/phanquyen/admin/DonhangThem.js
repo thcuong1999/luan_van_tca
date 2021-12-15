@@ -44,15 +44,47 @@ const DonhangThem = (props) => {
   const [dsSanpham, setDsSanpham] = useState([]);
   const [dsSP, setDsSP] = useState([]);
   const [selectedSP, setSelectedSP] = useState([]);
+  const [dsMaDH, setDsMaDH] = useState([]);
+  const [maDHErr, setMaDHErr] = useState("");
   const { danhsachcongcu, danhsachvattu, danhsachnguyenlieu, tongdongia } =
     getDsNguyenVatlieu(dsSP);
 
-  const emptyFields = () => {
-    if (!ma || !selectedSP.length) {
-      setErrMsg("Thông tin không được để trống");
-      return true;
+  const handleChangeMaDH = (e) => {
+    var format = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/;
+    const val = e.target.value;
+    setMa(val);
+    // check white space
+    if (val.indexOf(" ") >= 0) {
+      setMaDHErr("Mã không có khoảng trắng");
+    } else if (dsMaDH.includes(val.toLowerCase())) {
+      // check maDH exist
+      setMaDHErr("Mã đã tồn tại");
+    } else if (format.test(val)) {
+      // check contains special chars
+      setMaDHErr("Mã không được chứa kí tự đặc biệt");
+    } else {
+      setMaDHErr("");
     }
-    return false;
+  };
+
+  const validationFields = () => {
+    if (maDHErr) {
+      return false;
+    }
+    if (!ma) {
+      setMaDHErr("Thông tin không được để trống");
+      return false;
+    }
+    if (ma.length < 3) {
+      setMaDHErr("Mã có ít nhất 3 kí tự");
+      return false;
+    }
+    // check empty
+    if (!selectedSP.length) {
+      setErrMsg("Thông tin không được để trống");
+      return false;
+    }
+    return true;
   };
 
   const handleChangeSP = (e) => {
@@ -64,7 +96,7 @@ const DonhangThem = (props) => {
   };
 
   const handleSubmit = async () => {
-    if (!emptyFields()) {
+    if (validationFields()) {
       const dl = {
         ma,
         dssanpham: dsSP.map((item) => ({
@@ -108,11 +140,13 @@ const DonhangThem = (props) => {
 
   const fetchDsSanpham = async () => {
     setLoading(true);
+    const { donhang } = await apiDonhang.allDsDonhang();
     let { sanpham } = await apiSanpham.dsSanpham();
     sanpham = sanpham.map((item) => ({
       ...item,
       soluong: 1,
     }));
+    setDsMaDH(donhang.map((dh) => dh.ma.toLowerCase()));
     setDsSanpham(sanpham);
     setLoading(false);
   };
@@ -156,9 +190,9 @@ const DonhangThem = (props) => {
                   type="text"
                   name="ma"
                   value={ma}
-                  onChange={(e) => setMa(e.target.value)}
+                  onChange={handleChangeMaDH}
                 />
-                {!ma && <ErrMsg>{errMsg}</ErrMsg>}
+                {<ErrMsg>{maDHErr}</ErrMsg>}
               </FormGroup>
 
               <FormGroup>
@@ -174,7 +208,7 @@ const DonhangThem = (props) => {
                   >
                     {dsSanpham.map((item) => (
                       <MenuItem key={item._id} value={item._id}>
-                        {item.ten}
+                        {`${item.ma} - ${item.ten}`}
                       </MenuItem>
                     ))}
                   </MultipleSelect>

@@ -8,6 +8,7 @@ import {
   FormContent,
   FormGroup,
   FormTitle,
+  ImageToDisplay,
   Input,
   Label,
   PlusButton,
@@ -21,12 +22,15 @@ import cd from "../../assets/icons/congdung.png";
 import mota from "../../assets/icons/mota.png";
 import anh from "../../assets/icons/anh.png";
 import tt from "../../assets/icons/thuoctinh.png";
+import img_placeholder from "../../assets/images/img_placeholder.png";
+import UploadButton from "../../components/UploadButton";
 
 const CongcuChinhsua = (props) => {
   const [thuoctinh, setThuoctinh] = useState([{ ten: "", giatri: "" }]);
   const [loading, setLoading] = useState(false);
   const [congcu, setCongcu] = useState({});
   const { id: congcuId } = props.match.params;
+  const [imgToDisplay, setImgToDisplay] = useState(null);
 
   const fetchCongcu = async () => {
     setLoading(true);
@@ -155,17 +159,31 @@ const CongcuChinhsua = (props) => {
                   <img src={anh} alt="anh" />
                   <span>Hình ảnh:</span>
                 </Label>
-                <input
-                  type="file"
-                  onChange={(e) =>
+                <UploadButton
+                  onChange={(e) => {
                     setCongcu({
                       ...congcu,
                       hinhanh: e.target.files[0],
-                    })
-                  }
+                    });
+                    if (e.target.files.length !== 0) {
+                      setImgToDisplay(URL.createObjectURL(e.target.files[0]));
+                    }
+                  }}
                 />
+                <ImageToDisplay>
+                  <img
+                    src={
+                      imgToDisplay
+                        ? imgToDisplay
+                        : congcu?.hinhanh
+                        ? `/uploads/${congcu?.hinhanh}`
+                        : img_placeholder
+                    }
+                    alt="congcuImg"
+                    className={!congcu?.hinhanh && "noImage"}
+                  />
+                </ImageToDisplay>
               </FormGroup>
-
               <FormGroup>
                 <Label>
                   <img src={cd} alt="congdung" />

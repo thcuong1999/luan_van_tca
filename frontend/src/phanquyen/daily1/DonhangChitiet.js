@@ -8,12 +8,13 @@ import dssanpham from "../../assets/icons/dssanpham.png";
 import dscongcu from "../../assets/icons/dscongcu.png";
 import dsvattu from "../../assets/icons/dsvattu.png";
 import dsnglieu from "../../assets/icons/dsnglieu.png";
-import cmnd from "../../assets/icons/cmnd.png";
 import {
-  BoxInfo,
-  BoxInfoTitle,
   Container,
   Content,
+  DetailsInfo,
+  DetailsInfoContent,
+  DetailsInfoTexts,
+  DetailsInfoTitle,
   Form,
   TableSection,
   TableTitle,
@@ -345,47 +346,46 @@ const DonhangChitiet = (props) => {
                   <span>{singleDonhang?.ma}</span>
                 </MaDonhang>
 
-                <BoxInfo>
-                  <BoxInfoTitle>Giám sát vùng</BoxInfoTitle>
+                <DetailsInfo className="mb-5 mt-0">
+                  <DetailsInfoTitle>
+                    <h5>Từ giám sát vùng</h5>
+                  </DetailsInfoTitle>
 
-                  <table>
-                    <tr>
-                      <td>
-                        <img src={ten} alt="ten" />
-                        <span>Tên:</span>
-                      </td>
-                      <td>{singleDonhang?.from.giamsatvung.ten}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={sdt} alt="sdt" />
-                        <span>SĐT:</span>
-                      </td>
-                      <td>{singleDonhang?.from.giamsatvung.sdt}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={email} alt="email" />
-                        <span>E-mail:</span>
-                      </td>
-                      <td>{singleDonhang?.from.giamsatvung.email}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={cmnd} alt="cmnd" />
-                        <span>CMND:</span>
-                      </td>
-                      <td>{singleDonhang?.from.giamsatvung.cmnd}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={diachi} alt="diachi" />
-                        <span>Địa chỉ:</span>
-                      </td>
-                      <td>{`${singleDonhang?.from.giamsatvung.xa}, ${singleDonhang?.from.giamsatvung.huyen}, ${singleDonhang?.from.giamsatvung.tinh}`}</td>
-                    </tr>
-                  </table>
-                </BoxInfo>
+                  <DetailsInfoContent>
+                    <DetailsInfoTexts>
+                      <table>
+                        <tr>
+                          <td>
+                            <img src={ten} alt="ten" />
+                            <span>Tên:</span>
+                          </td>
+                          <td>{singleDonhang?.from.giamsatvung.ten}</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <img src={sdt} alt="sdt" />
+                            <span>SĐT:</span>
+                          </td>
+                          <td>{singleDonhang?.from.giamsatvung.sdt}</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <img src={email} alt="email" />
+                            <span>E-mail:</span>
+                          </td>
+                          <td>{singleDonhang?.from.giamsatvung.email}</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <img src={diachi} alt="diachi" />
+                            <span>Địa chỉ:</span>
+                          </td>
+                          <td>{`${singleDonhang?.from.giamsatvung.xa}, ${singleDonhang?.from.giamsatvung.huyen}, ${singleDonhang?.from.giamsatvung.tinh}`}</td>
+                        </tr>
+                      </table>
+                    </DetailsInfoTexts>
+                  </DetailsInfoContent>
+                </DetailsInfo>
               </div>
             )}
 

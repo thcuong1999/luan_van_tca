@@ -7,10 +7,7 @@ import { toast } from "react-toastify";
 import apiCongcu from "../../axios/apiCongcu";
 import apiVattu from "../../axios/apiVattu";
 import apiNguyenlieu from "../../axios/apiNguyenlieu";
-import apiLoaiSanpham from "../../axios/apiLoaiSanpham";
 import MaterialCard from "./MaterialCard";
-import DropdownMaterial2 from "../../components/DropdownMaterial2";
-import MenuItem from "@mui/material/MenuItem";
 import MultipleSelect from "../../components/MultipleSelect";
 import overall from "../../assets/icons/overall.png";
 import congcu from "../../assets/icons/congcu.png";
@@ -20,39 +17,36 @@ import _loai from "../../assets/icons/loai.png";
 import anh from "../../assets/icons/anh.png";
 import tt from "../../assets/icons/thuoctinh.png";
 import _gia from "../../assets/icons/gia.png";
+import { formatMoney } from "../../utils";
+import UploadButton from "../../components/UploadButton";
+import img_placeholder from "../../assets/images/img_placeholder.png";
+import { ImageToDisplay } from "./styledComponents";
 
 const SanphamChinhsua = (props) => {
   const [thuoctinh, setThuoctinh] = useState([{ ten: "", giatri: "" }]);
   const [hinhanh, setHinhAnh] = useState(null);
   const [imgToDisplay, setImgToDisplay] = useState(null);
-  const [loai, setLoai] = useState(null);
-  const [dsloai, setDsloai] = useState([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errMsg, setErrMsg] = useState(false);
   const [dsCongcu, setDsCongcu] = useState([]);
-  const [selectedCongcu, setSelectedCongcu] = useState([]);
   const [multipleCongcu, setMultipleCongcu] = useState([]);
   const [dsVattu, setDsVattu] = useState([]);
   const [multipleVattu, setMultipleVattu] = useState([]);
   const [selectedVattu, setSelectedVattu] = useState([]);
   const [dsNguyenlieu, setDsNguyenlieu] = useState([]);
   const [multipleNguyenlieu, setMultipleNguyenlieu] = useState([]);
-  const [selectedNguyenlieu, setSelectedNguyenlieu] = useState([]);
   const [singleSanpham, setSingleSanpham] = useState(null);
   const { id: sanphamId } = props.match.params;
 
   const fetchData = async () => {
     setLoading(true);
     const { sanpham } = await apiSanpham.singleSanpham(sanphamId);
-    const { loaiSanpham } = await apiLoaiSanpham.dsLoaiSanpham();
     const { congcu } = await apiCongcu.dsCongcu();
     const { vattu } = await apiVattu.dsVattu();
     const { nguyenlieu } = await apiNguyenlieu.dsNguyenlieu();
     setSingleSanpham(sanpham);
-    setDsloai(loaiSanpham);
     setDsCongcu(congcu);
-    setSelectedCongcu(sanpham.dscongcu.map((item) => item.congcu._id));
     setMultipleCongcu(
       sanpham.dscongcu.map((item) => ({
         congcu: item.congcu._id,
@@ -68,9 +62,7 @@ const SanphamChinhsua = (props) => {
       }))
     );
     setDsNguyenlieu(nguyenlieu);
-    setSelectedNguyenlieu(
-      sanpham.dsnguyenlieu.map((item) => item.nguyenlieu._id)
-    );
+
     setMultipleNguyenlieu(
       sanpham.dsnguyenlieu.map((item) => ({
         nguyenlieu: item.nguyenlieu._id,
@@ -79,7 +71,6 @@ const SanphamChinhsua = (props) => {
       }))
     );
     setThuoctinh(sanpham.thuoctinh.length ? sanpham.thuoctinh : thuoctinh);
-    setLoai(sanpham.loaisanpham._id);
     setImgToDisplay(`/uploads/${sanpham.hinhanh}`);
     setLoading(false);
   };
@@ -104,13 +95,10 @@ const SanphamChinhsua = (props) => {
 
   const emptyFields = () => {
     if (
-      !singleSanpham.ma ||
       !singleSanpham.ten ||
       !multipleCongcu.length ||
       !multipleVattu.length ||
-      !multipleNguyenlieu.length ||
-      !loai ||
-      !singleSanpham.gia
+      !multipleNguyenlieu.length
     ) {
       setErrMsg("Thông tin không được để trống");
       return true;
@@ -122,30 +110,11 @@ const SanphamChinhsua = (props) => {
 
   const submitForm = async () => {
     if (!emptyFields()) {
-      // console.log({
-      //   ma,
-      //   ten,
-      //   mota,
-      //   hinhanh,
-      //   loai,
-      //   thuoctinh: getThuocTinh(),
-      //   dscongcu: multipleCongcu,
-      //   dsvattu: multipleVattu,
-      //   dsnguyenlieu: multipleNguyenlieu,
-      //   gia,
-      // });
-
       const formData = new FormData();
-      formData.append("ma", singleSanpham.ma);
       formData.append("ten", singleSanpham.ten);
       formData.append("mota", singleSanpham.mota);
       formData.append("hinhanh", hinhanh);
-      formData.append("loaisanpham", loai);
       formData.append("thuoctinh", JSON.stringify(getThuocTinh()));
-      formData.append("dscongcu", JSON.stringify(multipleCongcu));
-      formData.append("dsvattu", JSON.stringify(multipleVattu));
-      formData.append("dsnguyenlieu", JSON.stringify(multipleNguyenlieu));
-      formData.append("gia", singleSanpham.gia);
 
       const { success } = await apiSanpham.suaSanpham(sanphamId, formData);
       if (success) {
@@ -173,67 +142,6 @@ const SanphamChinhsua = (props) => {
   // handle click event of the Add button
   const handleAddClick = () => {
     setThuoctinh([...thuoctinh, { ten: "", giatri: "" }]);
-  };
-
-  // handle select cong cu
-  const handleSelectCongcu = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setSelectedCongcu(typeof value === "string" ? value.split(",") : value);
-    setMultipleCongcu((prev) => {
-      let temp = prev.map((item) => item.congcu);
-      let arr = [];
-      for (let x of value) {
-        if (temp.includes(x)) {
-          arr.push(prev.find((y) => y.congcu === x));
-        } else {
-          arr.push({ congcu: x, soluong: 1 });
-        }
-      }
-      return arr;
-    });
-    console.log({ value });
-  };
-
-  // handle select vattu
-  const handleSelectVattu = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setSelectedVattu(typeof value === "string" ? value.split(",") : value);
-    setMultipleVattu((prev) => {
-      let temp = prev.map((item) => item.vattu);
-      let arr = [];
-      for (let x of value) {
-        if (temp.includes(x)) {
-          arr.push(prev.find((y) => y.vattu === x));
-        } else {
-          arr.push({ vattu: x, soluong: 1 });
-        }
-      }
-      return arr;
-    });
-  };
-
-  // handle select nglieu
-  const handleSelectNguyenlieu = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setSelectedNguyenlieu(typeof value === "string" ? value.split(",") : value);
-    setMultipleNguyenlieu((prev) => {
-      let temp = prev.map((item) => item.nguyenlieu);
-      let arr = [];
-      for (let x of value) {
-        if (temp.includes(x)) {
-          arr.push(prev.find((y) => y.nguyenlieu === x));
-        } else {
-          arr.push({ nguyenlieu: x, khoiluong: 1, donvitinh: "" });
-        }
-      }
-      return arr;
-    });
   };
 
   // get ten congcu / vattu / nguyenlieu
@@ -275,13 +183,8 @@ const SanphamChinhsua = (props) => {
                       type="text"
                       placeholder="Nhập mã"
                       value={singleSanpham?.ma}
-                      onChange={(e) =>
-                        setSingleSanpham({
-                          ...singleSanpham,
-                          ma: e.target.value,
-                        })
-                      }
                       style={{ width: "50%" }}
+                      disabled
                     />
                     {!singleSanpham?.ma && <ErrMsg>{errMsg}</ErrMsg>}
                   </FormGroup>
@@ -326,17 +229,13 @@ const SanphamChinhsua = (props) => {
                 </BoxTitle>
                 <BoxContent>
                   {dsCongcu && dsCongcu.length ? (
-                    <MultipleSelect
-                      label="Chọn công cụ"
-                      value={selectedCongcu}
-                      onChange={handleSelectCongcu}
-                    >
-                      {dsCongcu.map((item) => (
-                        <MenuItem key={item._id} value={item._id}>
-                          {item.ten}
-                        </MenuItem>
-                      ))}
-                    </MultipleSelect>
+                    <Input
+                      type="text"
+                      value={singleSanpham?.dscongcu
+                        .map((cc) => cc.congcu.ten)
+                        .join(", ")}
+                      disabled
+                    />
                   ) : (
                     <MultipleSelect label="Chọn công cụ" />
                   )}
@@ -348,24 +247,10 @@ const SanphamChinhsua = (props) => {
                       )}`}</CardTitle>
                       <InputSection>
                         <span>Số lượng:</span>
-                        <input
-                          type="number"
-                          min="1"
-                          value={x.soluong}
-                          onChange={(e) =>
-                            setMultipleCongcu(
-                              multipleCongcu.map((y) =>
-                                y.congcu === x.congcu
-                                  ? { ...y, soluong: e.target.value }
-                                  : y
-                              )
-                            )
-                          }
-                        />
+                        <input type="text" value={x.soluong} disabled />
                       </InputSection>
                     </MaterialCard>
                   ))}
-                  {selectedCongcu.length === 0 && <ErrMsg>{errMsg}</ErrMsg>}
                 </BoxContent>
               </Box>
 
@@ -376,17 +261,13 @@ const SanphamChinhsua = (props) => {
                 </BoxTitle>
                 <BoxContent>
                   {dsVattu && dsVattu.length ? (
-                    <MultipleSelect
-                      label="Chọn vật tư"
-                      value={selectedVattu}
-                      onChange={handleSelectVattu}
-                    >
-                      {dsVattu.map((item) => (
-                        <MenuItem key={item._id} value={item._id}>
-                          {item.ten}
-                        </MenuItem>
-                      ))}
-                    </MultipleSelect>
+                    <Input
+                      type="text"
+                      value={singleSanpham?.dsvattu
+                        .map((cc) => cc.vattu.ten)
+                        .join(", ")}
+                      disabled
+                    />
                   ) : (
                     <MultipleSelect label="Chọn vật tư" />
                   )}
@@ -398,20 +279,7 @@ const SanphamChinhsua = (props) => {
                       )}`}</CardTitle>
                       <InputSection>
                         <span>Số lượng:</span>
-                        <input
-                          type="number"
-                          min="1"
-                          value={x.soluong}
-                          onChange={(e) =>
-                            setMultipleVattu(
-                              multipleVattu.map((y) =>
-                                y.vattu === x.vattu
-                                  ? { ...y, soluong: e.target.value }
-                                  : y
-                              )
-                            )
-                          }
-                        />
+                        <input type="text" value={x.soluong} disabled />
                       </InputSection>
                     </MaterialCard>
                   ))}
@@ -426,17 +294,13 @@ const SanphamChinhsua = (props) => {
                 </BoxTitle>
                 <BoxContent>
                   {dsNguyenlieu && dsNguyenlieu.length ? (
-                    <MultipleSelect
-                      label="Chọn nguyên liệu"
-                      value={selectedNguyenlieu}
-                      onChange={handleSelectNguyenlieu}
-                    >
-                      {dsNguyenlieu.map((item) => (
-                        <MenuItem key={item._id} value={item._id}>
-                          {item.ten}
-                        </MenuItem>
-                      ))}
-                    </MultipleSelect>
+                    <Input
+                      type="text"
+                      value={singleSanpham?.dsnguyenlieu
+                        .map((cc) => cc.nguyenlieu.ten)
+                        .join(", ")}
+                      disabled
+                    />
                   ) : (
                     <MultipleSelect label="Chọn nguyên liệu" />
                   )}
@@ -448,20 +312,7 @@ const SanphamChinhsua = (props) => {
                       )}`}</CardTitle>
                       <InputSection>
                         <span>Khối lượng:</span>
-                        <input
-                          type="number"
-                          min="1"
-                          value={x.khoiluong}
-                          onChange={(e) =>
-                            setMultipleNguyenlieu(
-                              multipleNguyenlieu.map((y) =>
-                                y.nguyenlieu === x.nguyenlieu
-                                  ? { ...y, khoiluong: e.target.value }
-                                  : y
-                              )
-                            )
-                          }
-                        />
+                        <input type="text" value={x.khoiluong} disabled />
                       </InputSection>
                       <span>kg</span>
                     </MaterialCard>
@@ -479,20 +330,12 @@ const SanphamChinhsua = (props) => {
                 </BoxTitle>
                 <BoxContent>
                   <FormGroup>
-                    {dsloai && dsloai.length ? (
-                      <DropdownMaterial2
-                        label="Chọn loại sản phẩm"
-                        value={loai}
-                        onChange={(e) => setLoai(e.target.value)}
-                      >
-                        {dsloai.map((item) => (
-                          <MenuItem value={item._id}>{item.ten}</MenuItem>
-                        ))}
-                      </DropdownMaterial2>
-                    ) : (
-                      <DropdownMaterial2 label="Chọn loại sản phẩm" />
-                    )}
-                    {!loai && <ErrMsg>{errMsg}</ErrMsg>}
+                    <Input
+                      type="text"
+                      name="ten"
+                      value={singleSanpham?.loaisanpham.ten}
+                      disabled
+                    />
                   </FormGroup>
                 </BoxContent>
               </Box>
@@ -504,19 +347,29 @@ const SanphamChinhsua = (props) => {
                 </BoxTitle>
                 <BoxContent>
                   <FormGroup>
-                    <input
-                      type="file"
-                      style={{ border: "none" }}
+                    <UploadButton
                       onChange={(e) => {
                         setHinhAnh(e.target.files[0]);
-                        setImgToDisplay(URL.createObjectURL(e.target.files[0]));
+                        if (e.target.files.length !== 0) {
+                          setImgToDisplay(
+                            URL.createObjectURL(e.target.files[0])
+                          );
+                        }
                       }}
                     />
-                    <div className="d-flex justify-content-center">
-                      {imgToDisplay && (
-                        <Image src={imgToDisplay} alt="chosenImage" />
-                      )}
-                    </div>
+                    <ImageToDisplay className="text-center">
+                      <img
+                        src={
+                          imgToDisplay
+                            ? imgToDisplay
+                            : singleSanpham?.hinhanh
+                            ? `/uploads/${singleSanpham?.hinhanh}`
+                            : img_placeholder
+                        }
+                        alt="sanphamImg"
+                        className={!singleSanpham?.hinhanh && "noImage"}
+                      />
+                    </ImageToDisplay>
                   </FormGroup>
                 </BoxContent>
               </Box>
@@ -584,18 +437,10 @@ const SanphamChinhsua = (props) => {
                 <BoxContent>
                   <FormGroup>
                     <Input
-                      type="number"
-                      min="0"
-                      placeholder="Nhập giá"
-                      value={singleSanpham?.gia}
-                      onChange={(e) =>
-                        setSingleSanpham({
-                          ...singleSanpham,
-                          gia: e.target.value,
-                        })
-                      }
+                      type="text"
+                      value={`${formatMoney(singleSanpham?.gia)} vnđ`}
+                      disabled
                     />
-                    {!singleSanpham?.gia && <ErrMsg>{errMsg}</ErrMsg>}
                   </FormGroup>
                 </BoxContent>
               </Box>
@@ -733,11 +578,6 @@ const ErrMsg = styled.span`
   display: block;
   font-size: 15px;
   color: red;
-`;
-const Image = styled.img`
-  width: 150px;
-  display: block;
-  margin-top: 16px;
 `;
 const CardTitle = styled.div`
   font-size: 14px;

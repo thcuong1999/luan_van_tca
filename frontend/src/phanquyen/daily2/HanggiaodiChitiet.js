@@ -7,6 +7,10 @@ import {
   BoxInfoTitle,
   Container,
   Content,
+  DetailsInfo,
+  DetailsInfoContent,
+  DetailsInfoTexts,
+  DetailsInfoTitle,
   Form,
   FormContent,
   FormGroup,
@@ -95,46 +99,50 @@ const HanggiaodiChitiet = (props) => {
               </FormGroup>
             </FormContent>
 
-            <div className="px-3 pt-5">
+            <div className="px-3 pt-5 pb-5 mb-5">
               <TableSection className="noCheckbox">
                 <TableHanggiaodiChitiet dsGiaohang={singleGH?.dssanpham} />
               </TableSection>
 
-              <div className="text-right">
-                <BoxInfo style={{ boxShadow: "none" }}>
-                  <BoxInfoTitle>Tới đại lý 1</BoxInfoTitle>
-                  <table>
-                    <tr>
-                      <td>
-                        <img src={ten} alt="ten" />
-                        <span>Tên:</span>
-                      </td>
-                      <td>{singleGH?.donhang.from.daily1.ten}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={sdt} alt="sdt" />
-                        <span>SĐT:</span>
-                      </td>
-                      <td>{singleGH?.donhang.from.daily1.sdt}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={email} alt="cmnd" />
-                        <span>E-mail</span>
-                      </td>
-                      <td>{singleGH?.donhang.from.daily1.email}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src={diachi} alt="diachi" />
-                        <span>Địa chỉ:</span>
-                      </td>
-                      <td>{`${singleGH?.donhang.from.daily1.xa}, ${singleGH?.donhang.from.daily1.huyen}, ${singleGH?.donhang.from.daily1.tinh}`}</td>
-                    </tr>
-                  </table>
-                </BoxInfo>
-              </div>
+              <DetailsInfo>
+                <DetailsInfoTitle>
+                  <h5>Tới đại lý 1</h5>
+                </DetailsInfoTitle>
+                <DetailsInfoContent>
+                  <DetailsInfoTexts>
+                    <table>
+                      <tr>
+                        <td>
+                          <img src={ten} alt="ten" />
+                          <span>Tên:</span>
+                        </td>
+                        <td>{singleGH?.donhang.from.daily1.ten}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <img src={sdt} alt="sdt" />
+                          <span>SĐT:</span>
+                        </td>
+                        <td>{singleGH?.donhang.from.daily1.sdt}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <img src={email} alt="cmnd" />
+                          <span>E-mail</span>
+                        </td>
+                        <td>{singleGH?.donhang.from.daily1.email}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <img src={diachi} alt="diachi" />
+                          <span>Địa chỉ:</span>
+                        </td>
+                        <td>{`${singleGH?.donhang.from.daily1.xa}, ${singleGH?.donhang.from.daily1.huyen}, ${singleGH?.donhang.from.daily1.tinh}`}</td>
+                      </tr>
+                    </table>
+                  </DetailsInfoTexts>
+                </DetailsInfoContent>
+              </DetailsInfo>
             </div>
           </Form>
         </Content>

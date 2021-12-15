@@ -439,7 +439,7 @@ const CustomModal = ({ open, setOpen, phanquyen, singleDonhang }) => {
                               </div>
                             ))}
 
-                          <DetailsInfo className="mb-5">
+                          <DetailsInfo className="mb-5 mt-0">
                             <DetailsInfoTitle>
                               {/* <img src={anh} alt="anh" /> */}
                               <h5>

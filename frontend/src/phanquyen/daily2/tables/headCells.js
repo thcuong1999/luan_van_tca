@@ -775,6 +775,69 @@ export const headCellsSanpham = [
   // },
 ];
 
+export const headCellsSanpham2 = [
+  {
+    id: "madonhang",
+    numeric: false,
+    disablePadding: true,
+    label: "Mã đơn hàng",
+  },
+  {
+    id: "masanpham",
+    numeric: false,
+    disablePadding: true,
+    label: "Mã sản phẩm",
+  },
+  {
+    id: "ten",
+    numeric: false,
+    disablePadding: false,
+    label: "Tên sản phẩm",
+  },
+  {
+    id: "hinhanh",
+    numeric: false,
+    disablePadding: true,
+    label: "Hình ảnh",
+  },
+  {
+    id: "tongsoluong",
+    numeric: false,
+    disablePadding: false,
+    label: "Tổng số lượng",
+  },
+  {
+    id: "soluonghoanthanh",
+    numeric: false,
+    disablePadding: false,
+    label: "Hộ dân hoàn thành",
+  },
+  {
+    id: "dagiao",
+    numeric: false,
+    disablePadding: false,
+    label: "Đã giao",
+  },
+  {
+    id: "conlai",
+    numeric: false,
+    disablePadding: false,
+    label: "Còn lại",
+  },
+  {
+    id: "tonggia",
+    numeric: false,
+    disablePadding: false,
+    label: "Tổng giá",
+  },
+  // {
+  //   id: "ngaytao",
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: "Ngày tạo",
+  // },
+];
+
 export const headCellsNguyenlieu = [
   {
     id: "madh",

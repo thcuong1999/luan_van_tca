@@ -66,6 +66,7 @@ const EnhancedTableToolbar = ({ numSelected, rowsSelected, onClickBaoloi }) => {
 
 const TableCongcu = ({
   dsCongcu = [],
+  readOnly,
   setOpen,
   setDsCongcuHuloi,
   congcuhuloithem,
@@ -154,7 +155,7 @@ const TableCongcu = ({
     <>
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
-          {dscongcuhuloi || congcuhuloithem ? null : (
+          {dscongcuhuloi || congcuhuloithem || readOnly ? null : (
             <EnhancedTableToolbar
               numSelected={selected.length}
               rowsSelected={selected}
@@ -210,18 +211,26 @@ const TableCongcu = ({
                           />
                         </TableCell>
                         <TableCell align="right">
-                          <Link
-                            to={`/daily2/donhang/chitiet/${row?.donhang._id}`}
-                          >
-                            {row?.donhang.ma}
-                          </Link>
+                          {readOnly ? (
+                            row?.donhang.ma
+                          ) : (
+                            <Link
+                              to={`/daily2/donhang/chitiet/${row?.donhang._id}`}
+                            >
+                              {row?.donhang.ma}
+                            </Link>
+                          )}
                         </TableCell>
                         <TableCell align="right">
-                          <Link
-                            to={`/daily2/congcu/chitiet/${row?.congcu._id}`}
-                          >
-                            {row?.ten}
-                          </Link>
+                          {readOnly ? (
+                            row?.ten
+                          ) : (
+                            <Link
+                              to={`/daily2/congcu/chitiet/${row?.congcu._id}`}
+                            >
+                              {row?.ten}
+                            </Link>
+                          )}
                         </TableCell>
                         <TableCell>
                           <img

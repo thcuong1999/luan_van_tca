@@ -95,7 +95,8 @@ const Daily1Chinhsua = (props) => {
           onClick={() => props.history.push("/giamsatvung/daily1")}
           headerRight={
             <button className="btn btn-primary px-3" onClick={handleSubmit}>
-              Cập nhật
+              <span>Lưu</span>
+              <i class="fas fa-save"></i>
             </button>
           }
         />
@@ -233,7 +234,7 @@ const Daily1Chinhsua = (props) => {
                   <img src={_taikhoan} alt="taikhoan" />
                   <span>Tên tài khoản:</span>
                 </Label>
-                <Input type="text" value={taikhoan} />
+                <Input type="text" value={taikhoan} disabled />
               </FormGroup>
 
               {daily1?.active && (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { toast } from "react-toastify";
 import apiLoaiSanpham from "../../axios/apiLoaiSanpham";
@@ -17,7 +17,7 @@ import {
 import ma from "../../assets/icons/ma.png";
 import ten from "../../assets/icons/ten.png";
 import mota from "../../assets/icons/mota.png";
-import them from "../../assets/icons/them.png";
+import BackdropMaterial from "../../components/BackdropMaterial";
 
 const LoaiSanphamThem = (props) => {
   const [spLangnghe, setSpLangnghe] = useState({
@@ -26,13 +26,45 @@ const LoaiSanphamThem = (props) => {
     mota: "",
   });
   const [errMsg, setErrMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [dsMaLSP, setDsMaLSP] = useState([]);
+  const [maLSPErr, setMaLSPErr] = useState("");
 
-  const emptyFields = () => {
-    if (!spLangnghe.ma || !spLangnghe.ten) {
-      setErrMsg("Thông tin không được để trống");
-      return true;
+  const handleChangeMaSP = (e) => {
+    var format = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/;
+    const val = e.target.value;
+    setSpLangnghe({ ...spLangnghe, ma: val });
+    // check white space
+    if (val.indexOf(" ") >= 0) {
+      setMaLSPErr("Mã không có khoảng trắng");
+    } else if (dsMaLSP.includes(val.toLowerCase())) {
+      // check maSP exist
+      setMaLSPErr("Mã đã tồn tại");
+    } else if (format.test(val)) {
+      // check contains special chars
+      setMaLSPErr("Mã không được chứa kí tự đặc biệt");
+    } else {
+      setMaLSPErr("");
     }
-    return false;
+  };
+
+  const validateFields = () => {
+    if (maLSPErr) {
+      return false;
+    }
+    if (!spLangnghe.ma) {
+      setMaLSPErr("Thông tin không được để trống");
+      return false;
+    }
+    if (spLangnghe.ma.length < 3) {
+      setMaLSPErr("Mã có ít nhất 3 kí tự");
+      return false;
+    }
+    if (!spLangnghe.ten) {
+      setErrMsg("Thông tin không được để trống");
+      return false;
+    }
+    return true;
   };
 
   const handleChange = (e) => {
@@ -43,7 +75,7 @@ const LoaiSanphamThem = (props) => {
   };
 
   const handleSubmit = async () => {
-    if (!emptyFields()) {
+    if (!validateFields()) {
       const { success } = await apiLoaiSanpham.themLoaiSanpham(spLangnghe);
       if (success) {
         toast.success("Thêm thành công!", { theme: "colored" });
@@ -60,6 +92,22 @@ const LoaiSanphamThem = (props) => {
       mota: "",
     });
   };
+
+  const fetchDsLoaiSP = async () => {
+    setLoading(true);
+    const { loaiSanpham } = await apiLoaiSanpham.dsLoaiSanpham();
+    setDsMaLSP(loaiSanpham.map((lsp) => lsp.ma.toLowerCase()));
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchDsLoaiSP();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (loading) {
+    return <BackdropMaterial />;
+  }
 
   return (
     <>
@@ -92,9 +140,9 @@ const LoaiSanphamThem = (props) => {
                   type="text"
                   name="ma"
                   value={spLangnghe.ma}
-                  onChange={handleChange}
+                  onChange={handleChangeMaSP}
                 />
-                {!spLangnghe.ma && <ErrMsg>{errMsg}</ErrMsg>}
+                {<ErrMsg>{maLSPErr}</ErrMsg>}
               </FormGroup>
 
               <FormGroup>

@@ -6,8 +6,12 @@ function ListDonHangBaoCaoTienDo(props) {
   const {
     dataList: { item: data },
     navigation,
-    hodanId
+    hodanId,
   } = props;
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop']);
+  }, []);
 
   // console.log(checkComplelteOrder);
   const handleClickOrder = () => {
@@ -26,7 +30,7 @@ function ListDonHangBaoCaoTienDo(props) {
   //check complete order
   //   console.log(completePercent);
 
-//   console.log(data);
+  //   console.log(data);
   return (
     <>
       {data.xacnhan && (
@@ -57,7 +61,10 @@ function ListDonHangBaoCaoTienDo(props) {
           </View>
 
           <Text
-            style={[styles.btnClass, { backgroundColor: "#ff6600", fontSize: 9 }]}
+            style={[
+              styles.btnClass,
+              { backgroundColor: "#ff6600", fontSize: 9 },
+            ]}
           >
             Hoàn thành : {completePercent} %
           </Text>

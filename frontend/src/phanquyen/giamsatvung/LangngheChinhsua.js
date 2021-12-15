@@ -9,19 +9,15 @@ import {
   FormTitle,
   Input,
   Label,
+  TextArea,
 } from "./styledComponents";
 import Header from "../../components/Header";
-import { apiTinhThanh } from "../../apiTinhThanh";
-import { useSelector } from "react-redux";
-import apiGSV from "../../axios/apiGSV";
 import apiLangnghe from "../../axios/apiLangnghe";
 import BackdropMaterial from "../../components/BackdropMaterial";
 import { toast } from "react-toastify";
 import apiLoaiSanpham from "../../axios/apiLoaiSanpham";
-import DropdownMaterial2 from "../../components/DropdownMaterial2";
 import MultipleSelect from "../../components/MultipleSelect";
 import MenuItem from "@mui/material/MenuItem";
-import capnhat from "../../assets/icons/capnhat.png";
 import _ten from "../../assets/icons/ten.png";
 import _tinh from "../../assets/icons/tinh.png";
 import _huyen from "../../assets/icons/huyen.png";
@@ -29,8 +25,6 @@ import loai from "../../assets/icons/loai.png";
 
 const LangngheChinhsua = (props) => {
   const [loading, setLoading] = useState(false);
-  const [gsvInfo, setGsvInfo] = useState(null);
-  const { userInfo } = useSelector((state) => state.user);
   const [ten, setTen] = useState("");
   const [dsLoaiSp, setDsLoaiSp] = useState([]);
   const [selectedLoaiSP, setSelectedLoaiSP] = React.useState([]);
@@ -38,11 +32,6 @@ const LangngheChinhsua = (props) => {
   const [huyen, sethuyen] = useState(null);
   const [errMsg, setErrMsg] = useState("");
   const { id: langngheId } = props.match.params;
-
-  const dsTinh = apiTinhThanh.map((item) => item.name);
-  const dsHuyen = apiTinhThanh
-    .find((item) => item.name === tinh)
-    ?.districts.map((item) => item.name);
 
   const handleChangeLoaiSP = (e) => {
     const {
@@ -72,25 +61,15 @@ const LangngheChinhsua = (props) => {
       const { success } = await apiLangnghe.chinhsuaLangnghe(langngheId, dl);
       if (success) {
         toast.success("Thêm thành công!", { theme: "colored" });
-        resetFields();
+        props.history.push("/giamsatvung/langnghe");
       }
     }
-  };
-
-  const resetFields = () => {
-    setTen("");
-    setErrMsg("");
-    setTinh(null);
-    sethuyen(null);
-    setSelectedLoaiSP([]);
   };
 
   const fetchData = async () => {
     setLoading(true);
     // fetch single langnghe
     const { langnghe } = await apiLangnghe.singleLangnghe(langngheId);
-    // fetch gsv info
-    const { gsv } = await apiGSV.singleGsvBasedUserId(userInfo._id);
     // fetch sanpham langnghe (loai sp)
     const { loaiSanpham } = await apiLoaiSanpham.dsLoaiSanpham();
     // set data
@@ -98,7 +77,6 @@ const LangngheChinhsua = (props) => {
     setTinh(langnghe.tinh);
     sethuyen(langnghe.huyen);
     setSelectedLoaiSP(langnghe.loaisanpham.map((lsp) => lsp._id));
-    setGsvInfo(gsv);
     setDsLoaiSp(loaiSanpham);
     setLoading(false);
   };
@@ -153,23 +131,7 @@ const LangngheChinhsua = (props) => {
                 <img src={_tinh} alt="tinh" />
                 <span>Tỉnh:</span>
               </Label>
-              {dsTinh && dsTinh.length ? (
-                <DropdownMaterial2
-                  label="Chọn Tỉnh/Thành Phố"
-                  value={tinh}
-                  onChange={(e) => {
-                    setTinh(e.target.value);
-                    sethuyen(null);
-                  }}
-                >
-                  {dsTinh.map((item) => (
-                    <MenuItem value={item}>{item}</MenuItem>
-                  ))}
-                </DropdownMaterial2>
-              ) : (
-                <DropdownMaterial2 label="Chọn Tỉnh/Thành Phố" />
-              )}
-              {!tinh && <ErrMsg>{errMsg}</ErrMsg>}
+              <Input type="text" value={tinh} disabled />
             </FormGroup>
 
             <FormGroup>
@@ -177,22 +139,7 @@ const LangngheChinhsua = (props) => {
                 <img src={_huyen} alt="_huyen" />
                 <span>Huyện:</span>
               </Label>
-              {dsHuyen && dsHuyen.length ? (
-                <DropdownMaterial2
-                  label="Chọn Quận/Huyện"
-                  value={huyen}
-                  onChange={(e) => {
-                    sethuyen(e.target.value);
-                  }}
-                >
-                  {dsHuyen.map((item) => (
-                    <MenuItem value={item}>{item}</MenuItem>
-                  ))}
-                </DropdownMaterial2>
-              ) : (
-                <DropdownMaterial2 label="Chọn Quận/Huyện" />
-              )}
-              {!huyen && <ErrMsg>{errMsg}</ErrMsg>}
+              <Input type="text" value={huyen} disabled />
             </FormGroup>
 
             <FormGroup>
@@ -200,7 +147,12 @@ const LangngheChinhsua = (props) => {
                 <img src={loai} alt="loai" />
                 <span>Loại sản phẩm:</span>
               </Label>
-              {dsLoaiSp && dsLoaiSp.length ? (
+              <TextArea
+                rows="4"
+                value={dsLoaiSp.map((lsp) => lsp.ten).join(", ")}
+                disabled
+              />
+              {/* {dsLoaiSp && dsLoaiSp.length ? (
                 <MultipleSelect
                   label="Chọn loại sản phẩm"
                   value={selectedLoaiSP}
@@ -214,7 +166,7 @@ const LangngheChinhsua = (props) => {
                 </MultipleSelect>
               ) : (
                 <MultipleSelect label="Chọn loại sản phẩm" />
-              )}
+              )} */}
               {selectedLoaiSP.length === 0 && <ErrMsg>{errMsg}</ErrMsg>}
             </FormGroup>
           </FormContent>

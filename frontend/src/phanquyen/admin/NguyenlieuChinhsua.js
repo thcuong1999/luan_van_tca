@@ -16,17 +16,21 @@ import {
   FormContent,
   FormGroup,
   FormTitle,
+  ImageToDisplay,
   Input,
   Label,
   PlusButton,
   TextArea,
 } from "./styledComponents";
+import UploadButton from "../../components/UploadButton";
+import img_placeholder from "../../assets/images/img_placeholder.png";
 
 const NguyenlieuChinhsua = (props) => {
   const [thuoctinh, setThuoctinh] = useState([{ ten: "", giatri: "" }]);
   const [loading, setLoading] = useState(false);
   const [nguyenlieu, setNguyenlieu] = useState(null);
   const { id: nguyenlieuId } = props.match.params;
+  const [imgToDisplay, setImgToDisplay] = useState(null);
 
   const fetchSingleNguyenlieu = async () => {
     setLoading(true);
@@ -161,15 +165,30 @@ const NguyenlieuChinhsua = (props) => {
                   <img src={anh} alt="anh" />
                   <span>Chọn ảnh:</span>
                 </Label>
-                <input
-                  type="file"
-                  onChange={(e) =>
+                <UploadButton
+                  onChange={(e) => {
                     setNguyenlieu({
                       ...nguyenlieu,
                       hinhanh: e.target.files[0],
-                    })
-                  }
+                    });
+                    if (e.target.files.length !== 0) {
+                      setImgToDisplay(URL.createObjectURL(e.target.files[0]));
+                    }
+                  }}
                 />
+                <ImageToDisplay>
+                  <img
+                    src={
+                      imgToDisplay
+                        ? imgToDisplay
+                        : nguyenlieu?.hinhanh
+                        ? `/uploads/${nguyenlieu?.hinhanh}`
+                        : img_placeholder
+                    }
+                    alt="nguyenlieuImg"
+                    className={!nguyenlieu?.hinhanh && "noImage"}
+                  />
+                </ImageToDisplay>
               </FormGroup>
 
               <FormGroup>

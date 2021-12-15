@@ -9,6 +9,7 @@ import {
   FormContent,
   FormGroup,
   FormTitle,
+  ImageToDisplay,
   Input,
   Label,
   TextArea,
@@ -19,7 +20,6 @@ import _mota from "../../assets/icons/mota.png";
 import anh from "../../assets/icons/anh.png";
 import tt from "../../assets/icons/thuoctinh.png";
 import BackdropMaterial from "../../components/BackdropMaterial";
-import styled from "styled-components";
 
 const CongcuChitiet = (props) => {
   const [loading, setLoading] = useState(false);
@@ -78,15 +78,17 @@ const CongcuChitiet = (props) => {
                   <img src={anh} alt="anh" />
                   <span>Hình ảnh:</span>
                 </Label>
-                <Image
-                  src={
-                    congcu?.hinhanh
-                      ? `/uploads/${congcu?.hinhanh}`
-                      : img_placeholder
-                  }
-                  alt="anhcongcu"
-                  className={!congcu?.hinhanh && "noImage"}
-                />
+                <ImageToDisplay>
+                  <img
+                    src={
+                      congcu?.hinhanh
+                        ? `/uploads/${congcu?.hinhanh}`
+                        : img_placeholder
+                    }
+                    alt="congcuImg"
+                    className={!congcu?.hinhanh && "noImage"}
+                  />
+                </ImageToDisplay>
               </FormGroup>
 
               <FormGroup>
@@ -126,12 +128,5 @@ const CongcuChitiet = (props) => {
     </>
   );
 };
-
-const Image = styled.img`
-  width: 200px;
-  &.noImage {
-    opacity: 0.15;
-  }
-`;
 
 export default CongcuChitiet;

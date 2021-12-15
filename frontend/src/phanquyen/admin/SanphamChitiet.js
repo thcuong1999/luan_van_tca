@@ -14,6 +14,7 @@ import _loai from "../../assets/icons/loai.png";
 import anh from "../../assets/icons/anh.png";
 import tt from "../../assets/icons/thuoctinh.png";
 import _gia from "../../assets/icons/gia.png";
+import { ImageToDisplay } from "./styledComponents";
 
 const SanphamChitiet = (props) => {
   const [loading, setLoading] = useState(false);
@@ -161,16 +162,18 @@ const SanphamChitiet = (props) => {
                   <h5>Ảnh sản phẩm</h5>
                 </BoxTitle>
                 <BoxContent>
-                  <FormGroup className="d-flex justify-content-center">
-                    <Image
-                      src={
-                        sanpham?.hinhanh
-                          ? `/uploads/${sanpham?.hinhanh}`
-                          : img_placeholder
-                      }
-                      alt="anhsanpham"
-                      className={!sanpham?.hinhanh && "noImage"}
-                    />
+                  <FormGroup>
+                    <ImageToDisplay className="text-center">
+                      <img
+                        src={
+                          sanpham?.hinhanh
+                            ? `/uploads/${sanpham?.hinhanh}`
+                            : img_placeholder
+                        }
+                        alt="sanphamImg"
+                        className={!sanpham?.hinhanh && "noImage"}
+                      />
+                    </ImageToDisplay>
                   </FormGroup>
                 </BoxContent>
               </Box>
@@ -308,12 +311,6 @@ const TextArea = styled.textarea`
   font-size: 15px;
   &:focus {
     border: 1px solid blue;
-  }
-`;
-const Image = styled.img`
-  width: 200px;
-  &.noImage {
-    opacity: 0.15;
   }
 `;
 const CardTitle = styled.div`

@@ -12,10 +12,10 @@ import img_placeholder from "../../../assets/images/img_placeholder.png";
 import EnhancedTableHead from "../../../components/table/EnhancedTableHead";
 import { formatMoney, getComparator } from "../../../utils";
 import TablePaginationActions from "@mui/material/TablePagination/TablePaginationActions";
-import { headCellsSanpham } from "./headCells";
+import { headCellsSanpham, headCellsSanpham2 } from "./headCells";
 import { Link } from "react-router-dom";
 
-const TableSanpham = ({ dsSanpham = [] }) => {
+const TableSanpham = ({ dsSanpham = [], readOnly, hodan }) => {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -90,7 +90,7 @@ const TableSanpham = ({ dsSanpham = [] }) => {
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={dsSanpham.length}
-                headCells={headCellsSanpham}
+                headCells={hodan ? headCellsSanpham2 : headCellsSanpham}
               />
               <TableBody>
                 {dsSanpham
@@ -121,18 +121,26 @@ const TableSanpham = ({ dsSanpham = [] }) => {
                           />
                         </TableCell>
                         <TableCell align="right">
-                          <Link
-                            to={`/daily2/donhang/chitiet/${row?.donhang._id}`}
-                          >
-                            {row?.donhang.ma}
-                          </Link>
+                          {readOnly ? (
+                            row?.donhang.ma
+                          ) : (
+                            <Link
+                              to={`/daily2/donhang/chitiet/${row?.donhang._id}`}
+                            >
+                              {row?.donhang.ma}
+                            </Link>
+                          )}
                         </TableCell>
                         <TableCell align="right">
-                          <Link
-                            to={`/daily2/sanpham/chitiet/${row?.sanpham._id}`}
-                          >
-                            {row?.ma}
-                          </Link>
+                          {readOnly ? (
+                            row?.ma
+                          ) : (
+                            <Link
+                              to={`/daily2/sanpham/chitiet/${row?.sanpham._id}`}
+                            >
+                              {row?.ma}
+                            </Link>
+                          )}
                         </TableCell>
                         <TableCell align="right">{row?.ten}</TableCell>
                         <TableCell
@@ -156,17 +164,25 @@ const TableSanpham = ({ dsSanpham = [] }) => {
                         <TableCell align="right">
                           {row?.soluonghoanthanh}
                         </TableCell>
-                        <TableCell align="right">
-                          {row.danhan ? row.danhan : 0}
-                        </TableCell>
+                        {!hodan && (
+                          <TableCell align="right">
+                            {row.danhan ? row.danhan : 0}
+                          </TableCell>
+                        )}
                         <TableCell align="right">
                           {row.dagiao ? row.dagiao : 0}
                         </TableCell>
-                        <TableCell align="right">
-                          {row.danhan && row.dagiao
-                            ? row.danhan - row.dagiao
-                            : 0}
-                        </TableCell>
+                        {!hodan ? (
+                          <TableCell align="right">
+                            {row.danhan && row.dagiao
+                              ? row.danhan - row.dagiao
+                              : 0}
+                          </TableCell>
+                        ) : (
+                          <TableCell align="right">
+                            {row.dagiao ? row.soluonghoanthanh - row.dagiao : 0}
+                          </TableCell>
+                        )}
                         <TableCell align="right">
                           {formatMoney(row?.soluong * row?.gia)} vnđ
                         </TableCell>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import BackdropMaterial from "../../components/BackdropMaterial";
 import apiSanpham from "../../axios/apiSanpham";
 import styled from "styled-components";
@@ -20,6 +20,8 @@ import _loai from "../../assets/icons/loai.png";
 import anh from "../../assets/icons/anh.png";
 import tt from "../../assets/icons/thuoctinh.png";
 import _gia from "../../assets/icons/gia.png";
+import UploadButton from "../../components/UploadButton";
+import { ImageToDisplay } from "./styledComponents";
 
 const SanphamThem = (props) => {
   const [thuoctinh, setThuoctinh] = useState([{ ten: "", giatri: "" }]);
@@ -43,6 +45,27 @@ const SanphamThem = (props) => {
   const [multipleNguyenlieu, setMultipleNguyenlieu] = useState([]);
   const [selectedNguyenlieu, setSelectedNguyenlieu] = useState([]);
   const [gia, setGia] = useState("");
+  const [dsMaSP, setDsMaSP] = useState([]);
+  const [maSPErr, setMaSPErr] = useState("");
+  const ref = useRef();
+
+  const handleChangeMaSP = (e) => {
+    var format = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/;
+    const val = e.target.value;
+    setMa(val);
+    // check white space
+    if (val.indexOf(" ") >= 0) {
+      setMaSPErr("Mã không có khoảng trắng");
+    } else if (dsMaSP.includes(val.toLowerCase())) {
+      // check maSP exist
+      setMaSPErr("Mã đã tồn tại");
+    } else if (format.test(val)) {
+      // check contains special chars
+      setMaSPErr("Mã không được chứa kí tự đặc biệt");
+    } else {
+      setMaSPErr("");
+    }
+  };
 
   const fetchData = async () => {
     setLoading(true);
@@ -50,6 +73,8 @@ const SanphamThem = (props) => {
     const { congcu } = await apiCongcu.dsCongcu();
     const { vattu } = await apiVattu.dsVattu();
     const { nguyenlieu } = await apiNguyenlieu.dsNguyenlieu();
+    const { sanpham } = await apiSanpham.dsSanpham();
+    setDsMaSP(sanpham.map((sp) => sp.ma.toLowerCase()));
     setDsloai(loaiSanpham);
     setDsCongcu(congcu);
     setDsVattu(vattu);
@@ -75,7 +100,18 @@ const SanphamThem = (props) => {
     return thuoctinh;
   };
 
-  const emptyFields = () => {
+  const validateFields = () => {
+    if (maSPErr) {
+      return false;
+    }
+    if (!ma) {
+      setMaSPErr("Thông tin không được để trống");
+      return false;
+    }
+    if (ma.length < 3) {
+      setMaSPErr("Mã có ít nhất 3 kí tự");
+      return false;
+    }
     if (
       !ma ||
       !ten ||
@@ -86,28 +122,15 @@ const SanphamThem = (props) => {
       !gia
     ) {
       setErrMsg("Thông tin không được để trống");
-      return true;
+      return false;
     } else {
       setErrMsg("");
-      return false;
+      return true;
     }
   };
 
   const submitForm = async () => {
-    if (!emptyFields()) {
-      // console.log({
-      //   ma,
-      //   ten,
-      //   mota,
-      //   hinhanh,
-      //   loai,
-      //   thuoctinh: getThuocTinh(),
-      //   dscongcu: multipleCongcu,
-      //   dsvattu: multipleVattu,
-      //   dsnguyenlieu: multipleNguyenlieu,
-      //   gia,
-      // });
-
+    if (validateFields()) {
       const formData = new FormData();
       formData.append("ma", ma);
       formData.append("ten", ten);
@@ -136,12 +159,13 @@ const SanphamThem = (props) => {
     setMota("");
     setSelectedCongcu([]);
     setMultipleCongcu([]);
-    setSelectedVattu([]);
+  setSelectedVattu([]);
     setMultipleVattu([]);
     setSelectedNguyenlieu([]);
     setMultipleNguyenlieu([]);
     setLoai(null);
     setHinhAnh(null);
+    setImgToDisplay(null);
     setThuoctinh([{ ten: "", giatri: "" }]);
     setGia("");
   };
@@ -266,10 +290,10 @@ const SanphamThem = (props) => {
                       type="text"
                       placeholder="Nhập mã"
                       value={ma}
-                      onChange={(e) => setMa(e.target.value)}
+                      onChange={handleChangeMaSP}
                       style={{ width: "50%" }}
                     />
-                    {!ma && <ErrMsg>{errMsg}</ErrMsg>}
+                    {<ErrMsg>{maSPErr}</ErrMsg>}
                   </FormGroup>
 
                   <FormGroup>
@@ -497,16 +521,21 @@ const SanphamThem = (props) => {
                 </BoxTitle>
                 <BoxContent>
                   <FormGroup>
-                    <input
-                      type="file"
-                      style={{ border: "none" }}
+                    <UploadButton
+                      ref={ref}
                       onChange={(e) => {
                         setHinhAnh(e.target.files[0]);
-                        setImgToDisplay(URL.createObjectURL(e.target.files[0]));
+                        if (e.target.files.length !== 0) {
+                          setImgToDisplay(
+                            URL.createObjectURL(e.target.files[0])
+                          );
+                        }
                       }}
                     />
                     {imgToDisplay && (
-                      <Image src={imgToDisplay} alt="chosenImage" />
+                      <ImageToDisplay className="text-center">
+                        <img src={imgToDisplay} alt="congcuImg" />
+                      </ImageToDisplay>
                     )}
                   </FormGroup>
                 </BoxContent>

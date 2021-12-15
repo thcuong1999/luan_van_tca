@@ -15,7 +15,7 @@ import TablePaginationActions from "@mui/material/TablePagination/TablePaginatio
 import { headCellsSanpham } from "./headCells";
 import { Link } from "react-router-dom";
 
-const TableSanpham = ({ dsSanpham = [] }) => {
+const TableSanpham = ({ dsSanpham = [], readOnly }) => {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -121,18 +121,26 @@ const TableSanpham = ({ dsSanpham = [] }) => {
                           />
                         </TableCell>
                         <TableCell align="right">
-                          <Link
-                            to={`/giamsatvung/donhang/chitiet/${row?.donhang._id}`}
-                          >
-                            {row?.donhang.ma}
-                          </Link>
+                          {readOnly ? (
+                            row?.donhang.ma
+                          ) : (
+                            <Link
+                              to={`/giamsatvung/donhang/chitiet/${row?.donhang._id}`}
+                            >
+                              {row?.donhang.ma}
+                            </Link>
+                          )}
                         </TableCell>
                         <TableCell align="right">
-                          <Link
-                            to={`/giamsatvung/sanpham/chitiet/${row?.sanpham._id}`}
-                          >
-                            {row?.ma}
-                          </Link>
+                          {readOnly ? (
+                            row?.ma
+                          ) : (
+                            <Link
+                              to={`/giamsatvung/sanpham/chitiet/${row?.sanpham._id}`}
+                            >
+                              {row?.ma}
+                            </Link>
+                          )}
                         </TableCell>
                         <TableCell align="right">{row?.ten}</TableCell>
                         <TableCell

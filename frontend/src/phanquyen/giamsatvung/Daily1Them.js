@@ -19,7 +19,6 @@ import BackdropMaterial from "../../components/BackdropMaterial";
 import { toast } from "react-toastify";
 import DropdownMaterial2 from "../../components/DropdownMaterial2";
 import MenuItem from "@mui/material/MenuItem";
-import them from "../../assets/icons/them.png";
 import ten from "../../assets/icons/ten.png";
 import sdt from "../../assets/icons/sdt.png";
 import email from "../../assets/icons/email.png";
@@ -40,6 +39,26 @@ const Daily1Them = (props) => {
   const [huyen, sethuyen] = useState(null);
   const [xa, setXa] = useState(null);
   const { userInfo } = useSelector((state) => state.user);
+  const [dsTaikhoan, setDsTaikhoan] = useState([]);
+  const [taikhoanErr, setTaikhoanErr] = useState("");
+
+  const handleChangeTaikhoan = (e) => {
+    var format = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/;
+    const val = e.target.value.toLowerCase();
+    setDaily1({ ...daily1, taikhoan: val });
+    // check white space
+    if (val.indexOf(" ") >= 0) {
+      setTaikhoanErr("Tài khoản không có khoảng trắng");
+    } else if (dsTaikhoan.includes(val)) {
+      // check maSP exist
+      setTaikhoanErr("Tài khoản đã tồn tại");
+    } else if (format.test(val)) {
+      // check contains special chars
+      setTaikhoanErr("Tài khoản không được chứa kí tự đặc biệt");
+    } else {
+      setTaikhoanErr("");
+    }
+  };
 
   const dsTinh = apiTinhThanh.map((item) => item.name);
   const dsHuyen = apiTinhThanh
@@ -57,25 +76,27 @@ const Daily1Them = (props) => {
     });
   };
 
-  const emptyFields = () => {
-    // thong tin ko dc de trong
-    if (
-      !daily1.ten ||
-      !tinh ||
-      !huyen ||
-      !xa ||
-      !daily1.taikhoan ||
-      !daily1.sdt ||
-      !daily1.email
-    ) {
-      setErrMsg("Thông tin không được để trống");
-      return true;
+  const validateFields = () => {
+    if (taikhoanErr) {
+      return false;
     }
-    return false;
+    if (!daily1.taikhoan) {
+      setTaikhoanErr("Thông tin không được để trống");
+      return false;
+    }
+    if (daily1.taikhoan.length < 6) {
+      setTaikhoanErr("Tài khoản có ít nhất 6 kí tự");
+      return false;
+    }
+    if (!daily1.ten || !tinh || !huyen || !xa || !daily1.sdt || !daily1.email) {
+      setErrMsg("Thông tin không được để trống");
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async () => {
-    if (!emptyFields()) {
+    if (validateFields()) {
       const dl = {
         ten: daily1.ten,
         sdt: daily1.sdt,
@@ -113,6 +134,8 @@ const Daily1Them = (props) => {
   const fetchGsvInfo = async () => {
     setLoading(true);
     const { gsv } = await apiGSV.singleGsvBasedUserId(userInfo._id);
+    const { daily1 } = await apiDaily1.dsDaily1();
+    setDsTaikhoan(daily1.map((dl1) => dl1.taikhoan));
     setGsvInfo(gsv);
     setLoading(false);
   };
@@ -270,9 +293,9 @@ const Daily1Them = (props) => {
                   type="text"
                   name="taikhoan"
                   value={daily1.taikhoan}
-                  onChange={handleChangeDaily1}
+                  onChange={handleChangeTaikhoan}
                 />
-                {!daily1.taikhoan && <ErrMsg>{errMsg}</ErrMsg>}
+                {<ErrMsg>{taikhoanErr}</ErrMsg>}
               </FormGroup>
             </FormContent>
           </Form>

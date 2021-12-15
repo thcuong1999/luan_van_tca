@@ -17,6 +17,7 @@ import {
   FormContent,
   FormGroup,
   FormTitle,
+  ImageToDisplay,
   Input,
   Label,
   TextArea,
@@ -108,7 +109,17 @@ const VattuChitiet = (props) => {
                   <img src={anh} alt="anh" />
                   <span>Hình ảnh:</span>
                 </Label>
-                <h4>Image here</h4>
+                <ImageToDisplay>
+                  <img
+                    src={
+                      vattu?.hinhanh
+                        ? `/uploads/${vattu?.hinhanh}`
+                        : img_placeholder
+                    }
+                    alt="vattuImg"
+                    className={!vattu?.hinhanh && "noImage"}
+                  />
+                </ImageToDisplay>
               </FormGroup>
 
               <FormGroup>

@@ -200,13 +200,16 @@ const HodanChitiet = (props) => {
 
           <DetailsSubComponents>
             {active.code === 1 ? (
-              <TableSanpham dsSanpham={singleHodan?.dssanpham} />
+              <TableSanpham dsSanpham={singleHodan?.dssanpham} readOnly hodan />
             ) : active.code === 2 ? (
-              <TableCongcu dsCongcu={singleHodan?.dscongcu} />
+              <TableCongcu dsCongcu={singleHodan?.dscongcu} readOnly />
             ) : active.code === 3 ? (
-              <TableVattu dsVattu={singleHodan?.dsvattu} />
+              <TableVattu dsVattu={singleHodan?.dsvattu} readOnly />
             ) : active.code === 4 ? (
-              <TableNguyenlieu dsNguyenlieu={singleHodan?.dsnguyenlieu} />
+              <TableNguyenlieu
+                dsNguyenlieu={singleHodan?.dsnguyenlieu}
+                readOnly
+              />
             ) : (
               <TableDonhang dsDonhang={singleHodan?.donhang} readOnly />
             )}

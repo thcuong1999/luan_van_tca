@@ -12,7 +12,6 @@ import sdt from "../../assets/icons/sdt.png";
 import email from "../../assets/icons/email.png";
 import diachi from "../../assets/icons/diachi.png";
 import taikhoan from "../../assets/icons/taikhoan.png";
-import capnhat from "../../assets/icons/capnhat.png";
 import cmnd from "../../assets/icons/cmnd.png";
 import mk from "../../assets/icons/matkhau.png";
 import {
@@ -254,7 +253,7 @@ const GSVChinhsua = (props) => {
                   <img src={taikhoan} alt="taikhoan" />
                   <span>Tên tài khoản:</span>
                 </Label>
-                <Input type="text" value={gsv?.user?.taikhoan} />
+                <Input type="text" value={gsv?.user?.taikhoan} disabled />
               </FormGroup>
 
               <div className="row">

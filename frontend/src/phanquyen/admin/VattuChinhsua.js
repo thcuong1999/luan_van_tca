@@ -3,6 +3,7 @@ import BackdropMaterial from "../../components/BackdropMaterial";
 import Header from "../../components/Header";
 import apiVattu from "../../axios/apiVattu";
 import { toast } from "react-toastify";
+import img_placeholder from "../../assets/images/img_placeholder.png";
 import {
   Container,
   Content,
@@ -11,6 +12,7 @@ import {
   FormContent,
   FormGroup,
   FormTitle,
+  ImageToDisplay,
   Input,
   Label,
   PlusButton,
@@ -21,12 +23,14 @@ import _mota from "../../assets/icons/mota.png";
 import anh from "../../assets/icons/anh.png";
 import tt from "../../assets/icons/thuoctinh.png";
 import cd from "../../assets/icons/congdung.png";
+import UploadButton from "../../components/UploadButton";
 
 const VattuChinhsua = (props) => {
   const [thuoctinh, setThuoctinh] = useState([{ ten: "", giatri: "" }]);
   const [loading, setLoading] = useState(false);
   const [vattu, setVattu] = useState({});
   const { id: vattuId } = props.match.params;
+  const [imgToDisplay, setImgToDisplay] = useState(null);
 
   const fetchVattu = async () => {
     setLoading(true);
@@ -155,15 +159,30 @@ const VattuChinhsua = (props) => {
                   <img src={anh} alt="anh" />
                   <span>Chọn ảnh:</span>
                 </Label>
-                <input
-                  type="file"
-                  onChange={(e) =>
+                <UploadButton
+                  onChange={(e) => {
                     setVattu({
                       ...vattu,
                       hinhanh: e.target.files[0],
-                    })
-                  }
+                    });
+                    if (e.target.files.length !== 0) {
+                      setImgToDisplay(URL.createObjectURL(e.target.files[0]));
+                    }
+                  }}
                 />
+                <ImageToDisplay>
+                  <img
+                    src={
+                      imgToDisplay
+                        ? imgToDisplay
+                        : vattu?.hinhanh
+                        ? `/uploads/${vattu?.hinhanh}`
+                        : img_placeholder
+                    }
+                    alt="vattuImg"
+                    className={!vattu?.hinhanh && "noImage"}
+                  />
+                </ImageToDisplay>
               </FormGroup>
 
               <FormGroup>

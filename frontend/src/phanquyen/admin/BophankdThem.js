@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Header from "../../components/Header";
 import { apiTinhThanh } from "../../apiTinhThanh";
@@ -21,6 +21,7 @@ import {
   Input,
   Label,
 } from "./styledComponents";
+import BackdropMaterial from "../../components/BackdropMaterial";
 
 const BophankdThem = (props) => {
   const [bpkd, setBpkd] = useState({
@@ -33,6 +34,27 @@ const BophankdThem = (props) => {
   const [tinh, setTinh] = useState(null);
   const [huyen, sethuyen] = useState(null);
   const [xa, setXa] = useState(null);
+  const [loading, setLoading] = useState(null);
+  const [dsTaikhoan, setDsTaikhoan] = useState([]);
+  const [taikhoanErr, setTaikhoanErr] = useState("");
+
+  const handleChangeTaikhoan = (e) => {
+    var format = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/;
+    const val = e.target.value.toLowerCase();
+    setBpkd({ ...bpkd, taikhoan: val });
+    // check white space
+    if (val.indexOf(" ") >= 0) {
+      setTaikhoanErr("Tài khoản không có khoảng trắng");
+    } else if (dsTaikhoan.includes(val)) {
+      // check maSP exist
+      setTaikhoanErr("Tài khoản đã tồn tại");
+    } else if (format.test(val)) {
+      // check contains special chars
+      setTaikhoanErr("Tài khoản không được chứa kí tự đặc biệt");
+    } else {
+      setTaikhoanErr("");
+    }
+  };
 
   const dsTinh = apiTinhThanh.map((item) => item.name);
   const dsHuyen = apiTinhThanh
@@ -50,24 +72,28 @@ const BophankdThem = (props) => {
     });
   };
 
-  const emptyFields = () => {
-    if (
-      !bpkd.ten ||
-      !tinh ||
-      !huyen ||
-      !xa ||
-      !bpkd.taikhoan ||
-      !bpkd.sdt ||
-      !bpkd.email
-    ) {
-      setErrMsg("Thông tin không được để trống");
-      return true;
+  const validateFields = () => {
+    if (taikhoanErr) {
+      return false;
     }
-    return false;
+    if (!bpkd.taikhoan) {
+      setTaikhoanErr("Thông tin không được để trống");
+      return false;
+    }
+    if (bpkd.taikhoan.length < 6) {
+      setTaikhoanErr("Tài khoản có ít nhất 6 kí tự");
+      return false;
+    }
+    if (!bpkd.ten || !tinh || !huyen || !xa || !bpkd.sdt || !bpkd.email) {
+      setErrMsg("Thông tin không được để trống");
+
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async () => {
-    if (!emptyFields()) {
+    if (validateFields()) {
       const dl = {
         ten: bpkd.ten,
         sdt: bpkd.sdt,
@@ -98,6 +124,22 @@ const BophankdThem = (props) => {
     setXa(null);
     setErrMsg("");
   };
+
+  const fetchDsBpkd = async () => {
+    setLoading(true);
+    const { bophankd } = await apiBophankd.dsBophankd();
+    setDsTaikhoan(bophankd.map((bpkd) => bpkd.user.taikhoan));
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchDsBpkd();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (loading) {
+    return <BackdropMaterial />;
+  }
 
   return (
     <>
@@ -243,9 +285,9 @@ const BophankdThem = (props) => {
                   type="text"
                   name="taikhoan"
                   value={bpkd.taikhoan}
-                  onChange={handleChangeBpkd}
+                  onChange={handleChangeTaikhoan}
                 />
-                {!bpkd.taikhoan && <ErrMsg>{errMsg}</ErrMsg>}
+                {<ErrMsg>{taikhoanErr}</ErrMsg>}
               </FormGroup>
             </FormContent>
           </Form>
