@@ -41,6 +41,7 @@ import NguyenlieuChinhsua from "./NguyenlieuChinhsua";
 import Donhang from "./Donhang";
 import DonhangThem from "./DonhangThem";
 import DonhangChitiet from "./DonhangChitiet";
+import ThongtinCanhan from "../../components/pages/ThongtinCanhan";
 
 const Dashboard = (props) => {
   const dispatch = useDispatch();
@@ -186,6 +187,12 @@ const Dashboard = (props) => {
         <Route exact path="/admin/donhang" component={Donhang} />
         <Route path="/admin/donhang/them" component={DonhangThem} />
         <Route path="/admin/donhang/chitiet/:id" component={DonhangChitiet} />
+
+        <Route
+          exact
+          path="/admin/thongtincanhan"
+          render={(props) => <ThongtinCanhan {...props} type="admin" />}
+        />
       </RightContent>
     </Container>
   );

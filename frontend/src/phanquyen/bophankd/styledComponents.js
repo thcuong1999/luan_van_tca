@@ -191,8 +191,6 @@ export const FormContent = styled.div`
 export const Form = styled.div`
   background: #fff;
   padding: 36px 20px 100px 36px;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
   border-radius: 3px;
 `;
 

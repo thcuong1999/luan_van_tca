@@ -16,6 +16,7 @@ import {
 } from "./styledComponents";
 
 import apiDaily2 from "../../axios/apiDaily2";
+import { links } from "./arrayOfLinks";
 
 const Sanpham = (props) => {
   const [query, setQuery] = React.useState("");
@@ -61,7 +62,7 @@ const Sanpham = (props) => {
   return (
     <>
       <Container>
-        <Header title="Sản phẩm" />
+        <Header title="Sản phẩm" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

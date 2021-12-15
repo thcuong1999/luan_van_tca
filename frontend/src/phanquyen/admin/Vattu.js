@@ -14,6 +14,7 @@ import {
   Title,
   TitleWrapper,
 } from "./styledComponents";
+import { links } from "./arrayOfLinks";
 
 const Vattu = (props) => {
   const [query, setQuery] = useState("");
@@ -54,7 +55,7 @@ const Vattu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Vật tư" />
+        <Header title="Vật tư" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

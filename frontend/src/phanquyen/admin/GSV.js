@@ -14,6 +14,7 @@ import {
   Title,
   TitleWrapper,
 } from "./styledComponents";
+import { links } from "./arrayOfLinks";
 
 const GSV = (props) => {
   const [query, setQuery] = useState("");
@@ -62,7 +63,7 @@ const GSV = (props) => {
   return (
     <>
       <Container>
-        <Header title="Giám sát vùng" />
+        <Header title="Giám sát vùng" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

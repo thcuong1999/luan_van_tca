@@ -16,6 +16,7 @@ import {
 } from "./styledComponents";
 import Header from "../../components/Header";
 import ModalHuloi from "../../components/ModalHuloi";
+import { links } from "./arrayOfLinks";
 
 const Congcu = (props) => {
   const [query, setQuery] = useState("");
@@ -87,7 +88,7 @@ const Congcu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Công cụ" />
+        <Header title="Công cụ" arrOfLinks={links} />
         <Content>
           <div className="text-right mb-3">
             {active.code === 1 ? (

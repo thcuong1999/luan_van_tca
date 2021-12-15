@@ -32,6 +32,7 @@ import SanphamChitiet from "./SanphamChitiet";
 import CongcuChitiet from "./CongcuChitiet";
 import VattuChitiet from "./VattuChitiet";
 import NguyenlieuChitiet from "./NguyenlieuChitiet";
+import ThongtinCanhan from "../../components/pages/ThongtinCanhan";
 
 const Dashboard = (props) => {
   const [loading, setLoading] = useState(false);
@@ -207,6 +208,12 @@ const Dashboard = (props) => {
         <Route
           path="/daily2/hanggiaodi/chitiet/:id"
           component={HanggiaodiChitiet}
+        />
+
+        <Route
+          exact
+          path="/daily2/thongtincanhan"
+          render={(props) => <ThongtinCanhan {...props} type="daily2" />}
         />
       </RightContent>
     </Container>

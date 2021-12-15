@@ -14,6 +14,7 @@ import {
 import TableLangnghe from "./tables/TableLangnghe";
 import apiLangnghe from "../../axios/apiLangnghe";
 import BackdropMaterial from "../../components/BackdropMaterial";
+import { links } from "./arrayOfLinks";
 
 const Langnghe = (props) => {
   const [query, setQuery] = useState("");
@@ -54,7 +55,7 @@ const Langnghe = (props) => {
   return (
     <>
       <Container>
-        <Header title="Làng nghề" />
+        <Header title="Làng nghề" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

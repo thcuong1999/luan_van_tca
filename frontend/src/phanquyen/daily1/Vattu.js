@@ -17,6 +17,7 @@ import Header from "../../components/Header";
 import TableVattu from "./tables/TableVattu";
 import apiDaily1 from "../../axios/apiDaily1";
 import ModalHuloi from "../../components/ModalHuloi";
+import { links } from "./arrayOfLinks";
 
 const Vattu = (props) => {
   const [query, setQuery] = useState("");
@@ -88,7 +89,7 @@ const Vattu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Vật tư" />
+        <Header title="Vật tư" arrOfLinks={links} />
         <Content>
           <div className="text-right mb-3">
             {active.code === 1 ? (

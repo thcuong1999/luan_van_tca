@@ -66,4 +66,14 @@ adminRouter.get("/tongquan", async (req, res) => {
   }
 });
 
+// lay thong tin admin based on userID
+adminRouter.get("/baseduserid/:userId", async (req, res) => {
+  try {
+    const admin = await Admin.findOne({ user: req.params.userId });
+    res.send({ admin, success: true });
+  } catch (error) {
+    res.send({ message: error.message, success: false });
+  }
+});
+
 module.exports = adminRouter;

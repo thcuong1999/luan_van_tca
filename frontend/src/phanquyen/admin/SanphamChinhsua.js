@@ -21,6 +21,7 @@ import { formatMoney } from "../../utils";
 import UploadButton from "../../components/UploadButton";
 import img_placeholder from "../../assets/images/img_placeholder.png";
 import { ImageToDisplay } from "./styledComponents";
+import { links } from "./arrayOfLinks";
 
 const SanphamChinhsua = (props) => {
   const [thuoctinh, setThuoctinh] = useState([{ ten: "", giatri: "" }]);
@@ -166,6 +167,7 @@ const SanphamChinhsua = (props) => {
               <i class="fas fa-save"></i>
             </button>
           }
+          arrOfLinks={links}
         />
 
         <Content>

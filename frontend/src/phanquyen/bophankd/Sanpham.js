@@ -14,6 +14,7 @@ import {
   Title,
   TitleWrapper,
 } from "./styledComponents";
+import { links } from "./arrayOfLinks";
 const Sanpham = (props) => {
   const [query, setQuery] = React.useState("");
   const [searchColumns] = React.useState(["ten", "loai", "nhanhieu"]);
@@ -57,7 +58,7 @@ const Sanpham = (props) => {
   return (
     <>
       <Container>
-        <Header title="Sản phẩm" />
+        <Header title="Sản phẩm" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

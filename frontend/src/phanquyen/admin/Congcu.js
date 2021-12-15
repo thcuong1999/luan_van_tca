@@ -14,6 +14,7 @@ import {
   Title,
   TitleWrapper,
 } from "./styledComponents";
+import { links } from "./arrayOfLinks";
 
 const Congcu = (props) => {
   const [query, setQuery] = useState("");
@@ -54,7 +55,7 @@ const Congcu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Công cụ" />
+        <Header title="Công cụ" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

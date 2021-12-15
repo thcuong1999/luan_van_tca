@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import langngheIcon from "../../assets/icons/langnghe_2.png";
 import apiGSV from "../../axios/apiGSV";
 import hodan from "../../assets/icons/hodan2.png";
+import { links } from "./arrayOfLinks";
 
 const TongQuan = (props) => {
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,7 @@ const TongQuan = (props) => {
 
   return (
     <Wrapper>
-      <Header title="Tổng quan" />
+      <Header title="Tổng quan" arrOfLinks={links} />
       <Content>
         <div className="row  mb-4">
           <div className="col-lg-3">

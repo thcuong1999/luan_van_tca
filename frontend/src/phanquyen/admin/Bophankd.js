@@ -14,6 +14,7 @@ import {
   Title,
   TitleWrapper,
 } from "./styledComponents";
+import { links } from "./arrayOfLinks";
 
 const Bophankd = (props) => {
   const [query, setQuery] = useState("");
@@ -60,7 +61,7 @@ const Bophankd = (props) => {
   return (
     <>
       <Container>
-        <Header title="Bộ phận kinh doanh" />
+        <Header title="Bộ phận kinh doanh" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

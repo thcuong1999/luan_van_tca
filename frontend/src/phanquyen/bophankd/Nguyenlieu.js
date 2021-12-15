@@ -16,6 +16,7 @@ import {
 } from "./styledComponents";
 import Header from "../../components/Header";
 import ModalHuloi from "../../components/ModalHuloi";
+import { links } from "./arrayOfLinks";
 
 const Nguyenlieu = (props) => {
   const [query, setQuery] = useState("");
@@ -89,7 +90,7 @@ const Nguyenlieu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Nguyên liệu" />
+        <Header title="Nguyên liệu" arrOfLinks={links} />
         <Content>
           <div className="text-right mb-3">
             {active.code === 1 ? (

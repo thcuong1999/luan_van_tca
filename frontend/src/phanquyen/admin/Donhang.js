@@ -3,7 +3,6 @@ import BackdropMaterial from "../../components/BackdropMaterial";
 import Header from "../../components/Header";
 import {
   AddButton,
-  BtnRight,
   Container,
   Content,
   Filter,
@@ -16,6 +15,7 @@ import {
 
 import TableDonhang from "./tables/TableDonhang";
 import apiDonhang from "../../axios/apiDonhang";
+import { links } from "./arrayOfLinks";
 
 const Donhang = (props) => {
   const [query, setQuery] = React.useState("");
@@ -56,7 +56,7 @@ const Donhang = (props) => {
   return (
     <>
       <Container>
-        <Header title="Đơn hàng" />
+        <Header title="Đơn hàng" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

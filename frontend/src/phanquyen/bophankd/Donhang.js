@@ -15,6 +15,7 @@ import {
 import TableDonhang from "./tables/TableDonhang";
 import apiBophankd from "../../axios/apiBophankd";
 import { useSelector } from "react-redux";
+import { links } from "./arrayOfLinks";
 
 const Donhang = (props) => {
   const [query, setQuery] = React.useState("");
@@ -57,7 +58,7 @@ const Donhang = (props) => {
   return (
     <>
       <Container>
-        <Header title="Đơn hàng" />
+        <Header title="Đơn hàng" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

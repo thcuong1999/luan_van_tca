@@ -14,6 +14,7 @@ import {
   Title,
   TitleWrapper,
 } from "./styledComponents";
+import { links } from "./arrayOfLinks";
 
 const LoaiSanpham = (props) => {
   const [query, setQuery] = React.useState("");
@@ -54,7 +55,7 @@ const LoaiSanpham = (props) => {
   return (
     <>
       <Container>
-        <Header title="Loại sản phẩm" />
+        <Header title="Loại sản phẩm" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

@@ -15,6 +15,7 @@ import {
   TitleWrapper,
 } from "./styledComponents";
 import TableHanggiaodi from "./tables/TableHanggiaodi";
+import { links } from "./arrayOfLinks";
 
 const Hanggiaodi = () => {
   const [loading, setLoading] = useState(false);
@@ -47,7 +48,7 @@ const Hanggiaodi = () => {
   return (
     <>
       <Container>
-        <Header title="Hàng giao đi" />
+        <Header title="Hàng giao đi" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

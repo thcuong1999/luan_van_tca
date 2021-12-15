@@ -16,6 +16,7 @@ import TableDaily1 from "./tables/TableDaily1";
 import BackdropMaterial from "../../components/BackdropMaterial";
 import apiGSV from "../../axios/apiGSV";
 import { useSelector } from "react-redux";
+import { links } from "./arrayOfLinks";
 
 const Daily1 = (props) => {
   const [query, setQuery] = useState("");
@@ -58,7 +59,7 @@ const Daily1 = (props) => {
   return (
     <>
       <Container>
-        <Header title="Đại lý cấp 1" />
+        <Header title="Đại lý cấp 1" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

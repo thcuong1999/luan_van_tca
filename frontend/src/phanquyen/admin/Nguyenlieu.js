@@ -14,6 +14,7 @@ import {
   Title,
   TitleWrapper,
 } from "./styledComponents";
+import { links } from "./arrayOfLinks";
 
 const Nguyenlieu = (props) => {
   const [query, setQuery] = useState("");
@@ -54,7 +55,7 @@ const Nguyenlieu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Nguyên liệu" />
+        <Header title="Nguyên liệu" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

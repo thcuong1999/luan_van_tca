@@ -6,6 +6,7 @@ import BackdropMaterial from "../../components/BackdropMaterial";
 import gsv from "../../assets/icons/gsv_2.png";
 import spln from "../../assets/icons/spln_2.png";
 import axios from "axios";
+import { links } from "./arrayOfLinks";
 
 const TongQuan = (props) => {
   const [loading, setLoading] = useState(false);
@@ -28,7 +29,7 @@ const TongQuan = (props) => {
 
   return (
     <Wrapper>
-      <Header title="Tổng quan" />
+      <Header title="Tổng quan" arrOfLinks={links} />
       <Content>
         <div className="row mb-4">
           <div className="col-lg-3">

@@ -14,6 +14,7 @@ import {
   Container,
 } from "./styledComponents";
 import Header from "../../components/Header";
+import { links } from "./arrayOfLinks";
 
 const Daily1 = (props) => {
   const [query, setQuery] = React.useState("");
@@ -60,7 +61,7 @@ const Daily1 = (props) => {
   return (
     <>
       <Container>
-        <Header title="Đại lý cấp 1" />
+        <Header title="Đại lý cấp 1" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

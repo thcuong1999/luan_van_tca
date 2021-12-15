@@ -109,6 +109,8 @@ const AvatarWrapper = styled.div`
         text-decoration: none;
         color: rgba(0, 0, 0, 0.45);
         font-family: "Roboto", sans-serif;
+        border-top-left-radius: 36px;
+        background-color: rgba(0, 0, 0, 0.03);
         &:hover {
           background-color: rgba(0, 0, 0, 0.05);
           font-weight: bold;

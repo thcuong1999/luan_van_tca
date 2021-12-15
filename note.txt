@@ -3,6 +3,8 @@ useEffect(() => {},[]) => useEffect chỉ chạy 1 lần khác với state thay 
 
 ham reduce javascript
 
+css: width, height-> lấy tỉ lệ theo cha
+
 *** REACT LIFECYCLE METHOD: TỨC CÁC METHOD(HÀM/PHUONG THỨC DÙNG TRONG LIFECYCLE), quan sát sơ đồ
 *** REACT LIFECYCLE: vòng đời react (mounting: sinh ra tức render vào DOM, updating: phát triển tức update DOM, unmounting: chết, tức bị loại khỏi DOM)
 *** Method: render() -> render component vào DOM/UI (xảy ra ở 2 gđ: mouting, updating). Cách check: console.log trong component react, bên ngoài all hàm
@@ -128,3 +130,8 @@ db.sanphams.find({"createdAt":{ $gte:ISODate("2021-11-10"), $lt:ISODate("2021-11
 *** searchbox
 *** hang giao den notification
 *** check validate giao hang
+
+
+    <EditAvatar>
+        <i class="fas fa-pencil-alt"></i>
+    </EditAvatar>

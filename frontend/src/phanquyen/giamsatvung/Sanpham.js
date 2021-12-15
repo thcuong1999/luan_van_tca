@@ -15,6 +15,7 @@ import {
   TitleWrapper,
 } from "./styledComponents";
 import apiGSV from "../../axios/apiGSV";
+import { links } from "./arrayOfLinks";
 
 const Sanpham = (props) => {
   const [query, setQuery] = React.useState("");
@@ -59,7 +60,7 @@ const Sanpham = (props) => {
   return (
     <>
       <Container>
-        <Header title="Sản phẩm" />
+        <Header title="Sản phẩm" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

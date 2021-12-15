@@ -38,6 +38,7 @@ import Hodan from "./Hodan";
 import HodanChitiet from "./HodanChitiet";
 import Hanggiaoden from "./Hanggiaoden";
 import HanggiaodenChitiet from "./HanggiaodenChitiet";
+import ThongtinCanhan from "../../components/pages/ThongtinCanhan";
 
 const Dashboard = (props) => {
   const [loading, setLoading] = useState(false);
@@ -228,6 +229,12 @@ const Dashboard = (props) => {
         <Route
           path="/bophankd/hanggiaoden/chitiet/:id"
           component={HanggiaodenChitiet}
+        />
+
+        <Route
+          exact
+          path="/bophankd/thongtincanhan"
+          render={(props) => <ThongtinCanhan {...props} type="bophankd" />}
         />
       </RightContent>
     </Container>

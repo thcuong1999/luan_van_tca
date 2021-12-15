@@ -15,6 +15,7 @@ import {
 } from "./styledComponents";
 import Header from "../../components/Header";
 import TableGiamsatvung from "./tables/TableGiamsatvung";
+import { links } from "./arrayOfLinks";
 
 const Giamsatvung = (props) => {
   const [query, setQuery] = React.useState("");
@@ -66,7 +67,7 @@ const Giamsatvung = (props) => {
   return (
     <>
       <Container>
-        <Header title="Giám sát vùng" />
+        <Header title="Giám sát vùng" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>
