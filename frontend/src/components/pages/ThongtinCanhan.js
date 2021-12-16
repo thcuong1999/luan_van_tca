@@ -12,6 +12,12 @@ import {
   Wrapper,
   Button,
   EditAvatar,
+  ButtonBox,
+  ToggleBtn,
+  Btn,
+  FlexRow,
+  FlexCollumn,
+  ButtonsWrapper,
 } from "./styledComponents";
 import { useSelector } from "react-redux";
 import Axios from "axios";
@@ -22,6 +28,7 @@ import apiDaily1 from "../../axios/apiDaily1";
 import apiDaily2 from "../../axios/apiDaily2";
 
 const ThongtinCanhan = ({ type }) => {
+  const [activeTab, setActiveTab] = useState("canhan");
   const [loading, setLoading] = useState(false);
   const [hinhanh, setHinhanh] = useState(null);
   const [imgToDisplay, setImgToDisplay] = useState(null);
@@ -101,78 +108,181 @@ const ThongtinCanhan = ({ type }) => {
           </label>
         </Avatar>
 
-        {type === "admin" && (
-          <Section>
-            <InputBox>
-              <Label>Tên</Label>
-              <Input type="text" value={data?.ten} />
-            </InputBox>
+        {type === "admin" ? (
+          <>
+            <Section
+              className={
+                activeTab === "canhan" ? "canhanActive" : "canhanDeactive"
+              }
+            >
+              <FlexRow>
+                <InputBox>
+                  <Label>Tên</Label>
+                  <Input type="text" value={data?.ten} />
+                </InputBox>
+                <InputBox>
+                  <Label>Số điện thoại</Label>
+                  <Input type="text" value={data?.sdt} />
+                </InputBox>
+              </FlexRow>
 
-            <InputBox>
-              <Label>Số điện thoại</Label>
-              <Input type="text" value={data?.sdt} />
-            </InputBox>
+              <FlexRow>
+                <InputBox>
+                  <Label>E-mail</Label>
+                  <Input type="text" value={data?.email} />
+                </InputBox>
+                <InputBox>
+                  <Label>Xã</Label>
+                  <Input type="text" value={data?.diachi.split(", ")[0]} />
+                </InputBox>
+              </FlexRow>
 
-            <InputBox>
-              <Label>E-mail</Label>
-              <Input type="text" value={data?.email} />
-            </InputBox>
+              <FlexRow>
+                <InputBox>
+                  <Label>Huyện</Label>
+                  <Input type="text" value={data?.diachi.split(", ")[1]} />
+                </InputBox>
+                <InputBox>
+                  <Label>Tỉnh</Label>
+                  <Input type="text" value={data?.diachi.split(", ")[2]} />
+                </InputBox>
+              </FlexRow>
+            </Section>
 
-            <InputBox>
-              <Label>Xã</Label>
-              <Input type="text" value={data?.diachi.split(", ")[0]} />
-            </InputBox>
+            <Section
+              className={
+                activeTab === "taikhoan" ? "taikhoanActive" : "taikhoanDeactive"
+              }
+            >
+              <FlexCollumn>
+                <InputBox>
+                  <Label>Tài khoản</Label>
+                  <Input type="text" value="nguyenvana" />
+                </InputBox>
 
-            <InputBox>
-              <Label>Huyện</Label>
-              <Input type="text" value={data?.diachi.split(", ")[1]} />
-            </InputBox>
+                <InputBox>
+                  <Label>Mật khẩu cũ</Label>
+                  <Input
+                    type="password"
+                    style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
+                  />
+                </InputBox>
 
-            <InputBox>
-              <Label>Tỉnh</Label>
-              <Input type="text" value={data?.diachi.split(", ")[2]} />
-            </InputBox>
-          </Section>
-        )}
+                <InputBox>
+                  <Label>Mật khẩu mới</Label>
+                  <Input
+                    type="password"
+                    style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
+                  />
+                </InputBox>
+
+                <InputBox>
+                  <Label>Xác nhận mật khẩu</Label>
+                  <Input
+                    type="password"
+                    style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
+                  />
+                </InputBox>
+              </FlexCollumn>
+            </Section>
+          </>
+        ) : null}
 
         {type === "bophankd" ||
-          type === "giamsatvung" ||
-          type === "daily1" ||
-          (type === "daily2" && (
-            <Section>
-              <InputBox>
-                <Label>Tên</Label>
-                <Input type="text" value={data?.ten} />
-              </InputBox>
+        type === "giamsatvung" ||
+        type === "daily1" ||
+        type === "daily2" ? (
+          <>
+            <Section
+              className={
+                activeTab === "canhan" ? "canhanActive" : "canhanDeactive"
+              }
+            >
+              <FlexRow>
+                <InputBox>
+                  <Label>Tên</Label>
+                  <Input type="text" value={data?.ten} />
+                </InputBox>
+                <InputBox>
+                  <Label>Số điện thoại</Label>
+                  <Input type="text" value={data?.sdt} />
+                </InputBox>
+              </FlexRow>
 
-              <InputBox>
-                <Label>Số điện thoại</Label>
-                <Input type="text" value={data?.sdt} />
-              </InputBox>
+              <FlexRow>
+                <InputBox>
+                  <Label>E-mail</Label>
+                  <Input type="text" value={data?.email} />
+                </InputBox>
+                <InputBox>
+                  <Label>Xã</Label>
+                  <Input type="text" value={data?.xa} />
+                </InputBox>
+              </FlexRow>
 
-              <InputBox>
-                <Label>E-mail</Label>
-                <Input type="text" value={data?.email} />
-              </InputBox>
-
-              <InputBox>
-                <Label>Xã</Label>
-                <Input type="text" value={data?.xa} />
-              </InputBox>
-
-              <InputBox>
-                <Label>Huyện</Label>
-                <Input type="text" value={data?.tinh} />
-              </InputBox>
-
-              <InputBox>
-                <Label>Tỉnh</Label>
-                <Input type="text" value={data?.huyen} />
-              </InputBox>
+              <FlexRow>
+                <InputBox>
+                  <Label>Huyện</Label>
+                  <Input type="text" value={data?.tinh} />
+                </InputBox>
+                <InputBox>
+                  <Label>Tỉnh</Label>
+                  <Input type="text" value={data?.huyen} />
+                </InputBox>
+              </FlexRow>
             </Section>
-          ))}
 
-        <Button>Lưu</Button>
+            <Section
+              className={
+                activeTab === "taikhoan" ? "taikhoanActive" : "taikhoanDeactive"
+              }
+            >
+              <FlexCollumn>
+                <InputBox>
+                  <Label>Tài khoản</Label>
+                  <Input type="text" value="nguyenvana" />
+                </InputBox>
+
+                <InputBox>
+                  <Label>Mật khẩu cũ</Label>
+                  <Input
+                    type="password"
+                    style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
+                  />
+                </InputBox>
+
+                <InputBox>
+                  <Label>Mật khẩu mới</Label>
+                  <Input
+                    type="password"
+                    style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
+                  />
+                </InputBox>
+
+                <InputBox>
+                  <Label>Xác nhận mật khẩu</Label>
+                  <Input
+                    type="password"
+                    style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
+                  />
+                </InputBox>
+              </FlexCollumn>
+            </Section>
+          </>
+        ) : null}
+
+        <ButtonsWrapper>
+          <Button>Lưu</Button>
+          <ButtonBox>
+            <Btn className={activeTab === "canhan" ? "canhan" : "taikhoan"} />
+            <ToggleBtn onClick={() => setActiveTab("canhan")}>
+              Cá nhân
+            </ToggleBtn>
+            <ToggleBtn onClick={() => setActiveTab("taikhoan")}>
+              Tài khoản
+            </ToggleBtn>
+          </ButtonBox>
+        </ButtonsWrapper>
       </Wrapper>
     </Container>
   );

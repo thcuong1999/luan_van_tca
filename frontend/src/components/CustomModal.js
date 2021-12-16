@@ -152,292 +152,292 @@ const CustomModal = ({ open, setOpen, phanquyen, singleDonhang }) => {
                           </MaDonhang>
 
                           {type !== "bpkd" ||
-                            type !== "gsvOnly" ||
-                            type !== "daily1TDHT" ||
-                            type !== "hodanOnly" ||
-                            (type !== "daily2Only" && (
-                              <div className="d-flex justify-content-center">
-                                <BoxInfo className="mr-5">
-                                  <BoxInfoTitle>
-                                    {type === "gsv"
-                                      ? "Từ bộ phận kinh doanh"
-                                      : type === "daily1"
-                                      ? "Từ giám sát vùng"
-                                      : type === "daily2"
-                                      ? "Từ đại lý 1"
-                                      : "Từ đại lý 2"}
-                                  </BoxInfoTitle>
+                          type !== "gsvOnly" ||
+                          type !== "daily1TDHT" ||
+                          type !== "hodanOnly" ||
+                          type !== "daily2Only" ? (
+                            <div className="d-flex justify-content-center">
+                              <BoxInfo className="mr-5">
+                                <BoxInfoTitle>
+                                  {type === "gsv"
+                                    ? "Từ bộ phận kinh doanh"
+                                    : type === "daily1"
+                                    ? "Từ giám sát vùng"
+                                    : type === "daily2"
+                                    ? "Từ đại lý 1"
+                                    : "Từ đại lý 2"}
+                                </BoxInfoTitle>
 
-                                  <table>
-                                    {type === "daily1" ? (
-                                      <>
-                                        <tr>
-                                          <td>
-                                            <img src={ten} alt="ten" />
-                                            <span>Tên:</span>
-                                          </td>
-                                          <td>{dh?.from.giamsatvung.ten}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={sdt} alt="sdt" />
-                                            <span>SĐT:</span>
-                                          </td>
-                                          <td>{dh?.from.giamsatvung.sdt}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={email} alt="email" />
-                                            <span>Email:</span>
-                                          </td>
-                                          <td>{dh?.from.giamsatvung.email}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={diachi} alt="diachi" />
-                                            <span>Địa chỉ:</span>
-                                          </td>
-                                          <td>{`${dh?.from.giamsatvung.xa}, ${dh?.from.giamsatvung.huyen}, ${dh?.from.giamsatvung.tinh}`}</td>
-                                        </tr>
-                                      </>
-                                    ) : type === "daily2" ? (
-                                      <>
-                                        <tr>
-                                          <td>
-                                            <img src={ten} alt="ten" />
-                                            <span>Tên:</span>
-                                          </td>
-                                          <td>{dh?.from.daily1.ten}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={sdt} alt="sdt" />
-                                            <span>SĐT:</span>
-                                          </td>
-                                          <td>{dh?.from.daily1.sdt}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={email} alt="email" />
-                                            <span>Email:</span>
-                                          </td>
-                                          <td>{dh?.from.daily1.email}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={diachi} alt="diachi" />
-                                            <span>Địa chỉ:</span>
-                                          </td>
-                                          <td>{`${dh?.from.daily1.xa}, ${dh?.from.daily1.huyen}, ${dh?.from.daily1.tinh}`}</td>
-                                        </tr>
-                                      </>
-                                    ) : type === "gsv" ? (
-                                      <>
-                                        <tr>
-                                          <td>
-                                            <img src={ten} alt="ten" />
-                                            <span>Tên:</span>
-                                          </td>
-                                          <td>{dh?.from.bophankd.ten}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={sdt} alt="sdt" />
-                                            <span>SĐT:</span>
-                                          </td>
-                                          <td>{dh?.from.bophankd.sdt}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={email} alt="email" />
-                                            <span>Email:</span>
-                                          </td>
-                                          <td>{dh?.from.bophankd.email}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={diachi} alt="diachi" />
-                                            <span>Địa chỉ:</span>
-                                          </td>
-                                          <td>{`${dh?.from.bophankd.xa}, ${dh?.from.bophankd.huyen}, ${dh?.from.bophankd.tinh}`}</td>
-                                        </tr>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <tr>
-                                          <td>
-                                            <img src={ten} alt="ten" />
-                                            <span>Tên:</span>
-                                          </td>
-                                          <td>{dh?.from.daily2.ten}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={sdt} alt="sdt" />
-                                            <span>SĐT:</span>
-                                          </td>
-                                          <td>{dh?.from.daily2.sdt}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={email} alt="email" />
-                                            <span>Email:</span>
-                                          </td>
-                                          <td>{dh?.from.daily2.email}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={diachi} alt="diachi" />
-                                            <span>Địa chỉ:</span>
-                                          </td>
-                                          <td>{`${dh?.from.daily2.xa}, ${dh?.from.daily2.huyen}, ${dh?.from.daily2.tinh}`}</td>
-                                        </tr>
-                                      </>
-                                    )}
-                                  </table>
-                                </BoxInfo>
+                                <table>
+                                  {type === "daily1" ? (
+                                    <>
+                                      <tr>
+                                        <td>
+                                          <img src={ten} alt="ten" />
+                                          <span>Tên:</span>
+                                        </td>
+                                        <td>{dh?.from.giamsatvung.ten}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={sdt} alt="sdt" />
+                                          <span>SĐT:</span>
+                                        </td>
+                                        <td>{dh?.from.giamsatvung.sdt}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={email} alt="email" />
+                                          <span>Email:</span>
+                                        </td>
+                                        <td>{dh?.from.giamsatvung.email}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={diachi} alt="diachi" />
+                                          <span>Địa chỉ:</span>
+                                        </td>
+                                        <td>{`${dh?.from.giamsatvung.xa}, ${dh?.from.giamsatvung.huyen}, ${dh?.from.giamsatvung.tinh}`}</td>
+                                      </tr>
+                                    </>
+                                  ) : type === "daily2" ? (
+                                    <>
+                                      <tr>
+                                        <td>
+                                          <img src={ten} alt="ten" />
+                                          <span>Tên:</span>
+                                        </td>
+                                        <td>{dh?.from.daily1.ten}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={sdt} alt="sdt" />
+                                          <span>SĐT:</span>
+                                        </td>
+                                        <td>{dh?.from.daily1.sdt}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={email} alt="email" />
+                                          <span>Email:</span>
+                                        </td>
+                                        <td>{dh?.from.daily1.email}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={diachi} alt="diachi" />
+                                          <span>Địa chỉ:</span>
+                                        </td>
+                                        <td>{`${dh?.from.daily1.xa}, ${dh?.from.daily1.huyen}, ${dh?.from.daily1.tinh}`}</td>
+                                      </tr>
+                                    </>
+                                  ) : type === "gsv" ? (
+                                    <>
+                                      <tr>
+                                        <td>
+                                          <img src={ten} alt="ten" />
+                                          <span>Tên:</span>
+                                        </td>
+                                        <td>{dh?.from.bophankd.ten}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={sdt} alt="sdt" />
+                                          <span>SĐT:</span>
+                                        </td>
+                                        <td>{dh?.from.bophankd.sdt}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={email} alt="email" />
+                                          <span>Email:</span>
+                                        </td>
+                                        <td>{dh?.from.bophankd.email}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={diachi} alt="diachi" />
+                                          <span>Địa chỉ:</span>
+                                        </td>
+                                        <td>{`${dh?.from.bophankd.xa}, ${dh?.from.bophankd.huyen}, ${dh?.from.bophankd.tinh}`}</td>
+                                      </tr>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <tr>
+                                        <td>
+                                          <img src={ten} alt="ten" />
+                                          <span>Tên:</span>
+                                        </td>
+                                        <td>{dh?.from.daily2.ten}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={sdt} alt="sdt" />
+                                          <span>SĐT:</span>
+                                        </td>
+                                        <td>{dh?.from.daily2.sdt}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={email} alt="email" />
+                                          <span>Email:</span>
+                                        </td>
+                                        <td>{dh?.from.daily2.email}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={diachi} alt="diachi" />
+                                          <span>Địa chỉ:</span>
+                                        </td>
+                                        <td>{`${dh?.from.daily2.xa}, ${dh?.from.daily2.huyen}, ${dh?.from.daily2.tinh}`}</td>
+                                      </tr>
+                                    </>
+                                  )}
+                                </table>
+                              </BoxInfo>
 
-                                <BoxInfo className="ml-5">
-                                  <BoxInfoTitle>
-                                    {type === "gsv"
-                                      ? "Tới giám sát vùng"
-                                      : type === "daily1"
-                                      ? "Tới đại lý cấp 1"
-                                      : type === "daily2"
-                                      ? "Tới đại lý cấp 2"
-                                      : "Tới hộ dân"}
-                                  </BoxInfoTitle>
+                              <BoxInfo className="ml-5">
+                                <BoxInfoTitle>
+                                  {type === "gsv"
+                                    ? "Tới giám sát vùng"
+                                    : type === "daily1"
+                                    ? "Tới đại lý cấp 1"
+                                    : type === "daily2"
+                                    ? "Tới đại lý cấp 2"
+                                    : "Tới hộ dân"}
+                                </BoxInfoTitle>
 
-                                  <table>
-                                    {type === "daily1" ? (
-                                      <>
-                                        <tr>
-                                          <td>
-                                            <img src={ten} alt="ten" />
-                                            <span>Tên:</span>
-                                          </td>
-                                          <td>{dh?.to.daily1.ten}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={sdt} alt="sdt" />
-                                            <span>SĐT:</span>
-                                          </td>
-                                          <td>{dh?.to.daily1.sdt}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={email} alt="email" />
-                                            <span>Email:</span>
-                                          </td>
-                                          <td>{dh?.to.daily1.email}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={diachi} alt="diachi" />
-                                            <span>Địa chỉ:</span>
-                                          </td>
-                                          <td>{`${dh?.to.daily1.xa}, ${dh?.to.daily1.huyen}, ${dh?.to.daily1.tinh}`}</td>
-                                        </tr>
-                                      </>
-                                    ) : type === "daily2" ? (
-                                      <>
-                                        <tr>
-                                          <td>
-                                            <img src={ten} alt="ten" />
-                                            <span>Tên:</span>
-                                          </td>
-                                          <td>{dh?.to.daily2.ten}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={sdt} alt="sdt" />
-                                            <span>SĐT:</span>
-                                          </td>
-                                          <td>{dh?.to.daily2.sdt}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={email} alt="email" />
-                                            <span>Email:</span>
-                                          </td>
-                                          <td>{dh?.to.daily2.email}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={diachi} alt="diachi" />
-                                            <span>Địa chỉ:</span>
-                                          </td>
-                                          <td>{`${dh?.to.daily2.xa}, ${dh?.to.daily2.huyen}, ${dh?.to.daily2.tinh}`}</td>
-                                        </tr>
-                                      </>
-                                    ) : type === "gsv" ? (
-                                      <>
-                                        <tr>
-                                          <td>
-                                            <img src={ten} alt="ten" />
-                                            <span>Tên:</span>
-                                          </td>
-                                          <td>{dh?.to.giamsatvung.ten}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={sdt} alt="sdt" />
-                                            <span>SĐT:</span>
-                                          </td>
-                                          <td>{dh?.to.giamsatvung.sdt}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={email} alt="email" />
-                                            <span>Email:</span>
-                                          </td>
-                                          <td>{dh?.to.giamsatvung.email}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={diachi} alt="diachi" />
-                                            <span>Địa chỉ:</span>
-                                          </td>
-                                          <td>{`${dh?.to.giamsatvung.xa}, ${dh?.to.giamsatvung.huyen}, ${dh?.to.giamsatvung.tinh}`}</td>
-                                        </tr>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <tr>
-                                          <td>
-                                            <img src={ten} alt="ten" />
-                                            <span>Tên:</span>
-                                          </td>
-                                          <td>{dh?.to.hodan.daidien}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={sdt} alt="sdt" />
-                                            <span>SĐT:</span>
-                                          </td>
-                                          <td>{dh?.to.hodan.sdt}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={cmnd} alt="cmnd" />
-                                            <span>CMND:</span>
-                                          </td>
-                                          <td>{dh?.to.hodan.cmnd}</td>
-                                        </tr>
-                                        <tr>
-                                          <td>
-                                            <img src={diachi} alt="diachi" />
-                                            <span>Địa chỉ:</span>
-                                          </td>
-                                          <td>{`${dh?.to.hodan.xa}, ${dh?.to.hodan.huyen}, ${dh?.to.hodan.tinh}`}</td>
-                                        </tr>
-                                      </>
-                                    )}
-                                  </table>
-                                </BoxInfo>
-                              </div>
-                            ))}
+                                <table>
+                                  {type === "daily1" ? (
+                                    <>
+                                      <tr>
+                                        <td>
+                                          <img src={ten} alt="ten" />
+                                          <span>Tên:</span>
+                                        </td>
+                                        <td>{dh?.to.daily1.ten}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={sdt} alt="sdt" />
+                                          <span>SĐT:</span>
+                                        </td>
+                                        <td>{dh?.to.daily1.sdt}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={email} alt="email" />
+                                          <span>Email:</span>
+                                        </td>
+                                        <td>{dh?.to.daily1.email}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={diachi} alt="diachi" />
+                                          <span>Địa chỉ:</span>
+                                        </td>
+                                        <td>{`${dh?.to.daily1.xa}, ${dh?.to.daily1.huyen}, ${dh?.to.daily1.tinh}`}</td>
+                                      </tr>
+                                    </>
+                                  ) : type === "daily2" ? (
+                                    <>
+                                      <tr>
+                                        <td>
+                                          <img src={ten} alt="ten" />
+                                          <span>Tên:</span>
+                                        </td>
+                                        <td>{dh?.to.daily2.ten}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={sdt} alt="sdt" />
+                                          <span>SĐT:</span>
+                                        </td>
+                                        <td>{dh?.to.daily2.sdt}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={email} alt="email" />
+                                          <span>Email:</span>
+                                        </td>
+                                        <td>{dh?.to.daily2.email}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={diachi} alt="diachi" />
+                                          <span>Địa chỉ:</span>
+                                        </td>
+                                        <td>{`${dh?.to.daily2.xa}, ${dh?.to.daily2.huyen}, ${dh?.to.daily2.tinh}`}</td>
+                                      </tr>
+                                    </>
+                                  ) : type === "gsv" ? (
+                                    <>
+                                      <tr>
+                                        <td>
+                                          <img src={ten} alt="ten" />
+                                          <span>Tên:</span>
+                                        </td>
+                                        <td>{dh?.to.giamsatvung.ten}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={sdt} alt="sdt" />
+                                          <span>SĐT:</span>
+                                        </td>
+                                        <td>{dh?.to.giamsatvung.sdt}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={email} alt="email" />
+                                          <span>Email:</span>
+                                        </td>
+                                        <td>{dh?.to.giamsatvung.email}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={diachi} alt="diachi" />
+                                          <span>Địa chỉ:</span>
+                                        </td>
+                                        <td>{`${dh?.to.giamsatvung.xa}, ${dh?.to.giamsatvung.huyen}, ${dh?.to.giamsatvung.tinh}`}</td>
+                                      </tr>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <tr>
+                                        <td>
+                                          <img src={ten} alt="ten" />
+                                          <span>Tên:</span>
+                                        </td>
+                                        <td>{dh?.to.hodan.daidien}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={sdt} alt="sdt" />
+                                          <span>SĐT:</span>
+                                        </td>
+                                        <td>{dh?.to.hodan.sdt}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={cmnd} alt="cmnd" />
+                                          <span>CMND:</span>
+                                        </td>
+                                        <td>{dh?.to.hodan.cmnd}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <img src={diachi} alt="diachi" />
+                                          <span>Địa chỉ:</span>
+                                        </td>
+                                        <td>{`${dh?.to.hodan.xa}, ${dh?.to.hodan.huyen}, ${dh?.to.hodan.tinh}`}</td>
+                                      </tr>
+                                    </>
+                                  )}
+                                </table>
+                              </BoxInfo>
+                            </div>
+                          ) : null}
 
                           <DetailsInfo className="mb-5 mt-0">
                             <DetailsInfoTitle>
