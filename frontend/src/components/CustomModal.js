@@ -35,6 +35,7 @@ import cmnd from "../assets/icons/cmnd.png";
 import diachi from "../assets/icons/diachi.png";
 
 const CustomModal = ({ open, setOpen, phanquyen, singleDonhang }) => {
+  console.log({ phanquyen });
   const { dsDonhang, type, type2 } = phanquyen;
   const [value, setValue] = React.useState("1");
   const [tinhtrangTiendo, setTinhtrangTiendo] = React.useState(null);
@@ -151,10 +152,11 @@ const CustomModal = ({ open, setOpen, phanquyen, singleDonhang }) => {
                             <span>{dh?.ma}</span>
                           </MaDonhang>
 
-                          {type !== "bpkd" ||
-                          type !== "gsvOnly" ||
-                          type !== "daily1TDHT" ||
-                          type !== "hodanOnly" ||
+                          {type !== "bpkd" &&
+                          type !== "gsvOnly" &&
+                          type !== "daily1TDHT" &&
+                          type !== "hodanOnly" &&
+                          type !== "daily1Only" &&
                           type !== "daily2Only" ? (
                             <div className="d-flex justify-content-center">
                               <BoxInfo className="mr-5">
