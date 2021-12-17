@@ -7,6 +7,7 @@ const Daily1 = require("../models/daily1Model");
 const Hodan = require("../models/hodanModel");
 const Giamsatvung = require("../models/giamsatvungModel");
 const Bophankd = require("../models/bophankdModel");
+const upload = require("../middleware/imageUpload");
 const {
   getCurrentDatetime,
   getTiendoHoanthanh,
@@ -51,6 +52,38 @@ daily2Router.post("/them", async (req, res) => {
     res.send({ message: error.message, success: false });
   }
 });
+
+// cap nhat thong tin ca nhan
+daily2Router.put(
+  "/capnhatthongtincanhan",
+  upload.single("avatar"),
+  async (req, res) => {
+    const { ten, sdt, email, tinh, huyen, xa, matkhau, user } = req.body;
+    // return res.send(req.body);
+    try {
+      // update password
+      if (matkhau) {
+        const _user = await User.findById(user);
+        _user.matkhau = bcrypt.hashSync(matkhau, 8);
+        await _user.save();
+      }
+      // update info
+      const dl2 = await Daily2.findOne({ user });
+      dl2.ten = ten;
+      dl2.sdt = sdt;
+      dl2.email = email;
+      dl2.xa = xa;
+      dl2.huyen = huyen;
+      dl2.tinh = tinh;
+      dl2.avatar = req.file ? req.file.filename : dl2.avatar;
+      const updatedDl2 = await dl2.save();
+
+      res.send({ updatedDl2, success: true });
+    } catch (error) {
+      res.send({ message: error.message, success: false });
+    }
+  }
+);
 
 // chinh sua dai ly 2
 daily2Router.put("/single/:id", async (req, res) => {
@@ -367,7 +400,9 @@ daily2Router.get("/danhsachvattu/:daily2Id", async (req, res) => {
 // get single daily2 based userId
 daily2Router.get("/user/:id", async (req, res) => {
   try {
-    const daily2 = await Daily2.findOne({ user: req.params.id });
+    const daily2 = await Daily2.findOne({ user: req.params.id }).populate(
+      "user"
+    );
     if (!daily2) {
       return res.send({ message: "Không tìm thấy đại lý", success: false });
     }

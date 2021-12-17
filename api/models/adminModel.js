@@ -10,6 +10,10 @@ const adminSchema = new mongoose.Schema(
     email: String,
     cmnd: String,
     diachi: String,
+    xa: String,
+    huyen: String,
+    tinh: String,
+    avatar: String,
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

@@ -41,6 +41,38 @@ bophankdRouter.post("/them", upload.single("hinhanh"), async (req, res) => {
   }
 });
 
+// cap nhat thong tin ca nhan
+bophankdRouter.put(
+  "/capnhatthongtincanhan",
+  upload.single("avatar"),
+  async (req, res) => {
+    const { ten, sdt, email, tinh, huyen, xa, matkhau, user } = req.body;
+    // return res.send(req.body);
+    try {
+      // update password
+      if (matkhau) {
+        const _user = await User.findById(user);
+        _user.matkhau = bcrypt.hashSync(matkhau, 8);
+        await _user.save();
+      }
+      // update info
+      const bpkd = await Bophankd.findOne({ user });
+      bpkd.ten = ten;
+      bpkd.sdt = sdt;
+      bpkd.email = email;
+      bpkd.xa = xa;
+      bpkd.huyen = huyen;
+      bpkd.tinh = tinh;
+      bpkd.avatar = req.file ? req.file.filename : bpkd.avatar;
+      const updatedBpkd = await bpkd.save();
+
+      res.send({ updatedBpkd, success: true });
+    } catch (error) {
+      res.send({ message: error.message, success: false });
+    }
+  }
+);
+
 // chinh sua thong tin 1 bpkd
 bophankdRouter.put("/single/:id", async (req, res) => {
   const { ten, sdt, email, xa, huyen, tinh, matkhau } = req.body;
@@ -131,7 +163,9 @@ bophankdRouter.put("/xoanhieubpkd", async (req, res) => {
 // lay thong tin bpkd based on userID
 bophankdRouter.get("/baseduserid/:userId", async (req, res) => {
   try {
-    const bophankd = await Bophankd.findOne({ user: req.params.userId });
+    const bophankd = await Bophankd.findOne({
+      user: req.params.userId,
+    }).populate("user");
     res.send({ bophankd, success: true });
   } catch (error) {
     res.send({ message: error.message, success: false });

@@ -10,3 +10,6 @@ useContext()
 - thieu
 - hoanthanh
 - ngaytao
+
+
+db.admins.updateMany({email: "cuongb1706790@student.ctu.edu.vn"}, { $set: { diachi: "Xã An Quảng Hữu, Huyện Trà Cú, Tỉnh Trà Vinh" }});

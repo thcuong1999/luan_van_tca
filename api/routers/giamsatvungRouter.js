@@ -5,6 +5,7 @@ const User = require("../models/userModel");
 const Giamsatvung = require("../models/giamsatvungModel");
 const Daily2 = require("../models/daily2Model");
 const Langnghe = require("../models/langngheModel");
+const upload = require("../middleware/imageUpload");
 const {
   getCurrentDatetime,
   getTinhtrangNhandon,
@@ -40,6 +41,38 @@ giamsatvungRouter.post("/them", async (req, res) => {
     res.send({ message: error.message, success: false });
   }
 });
+
+// cap nhat thong tin ca nhan
+giamsatvungRouter.put(
+  "/capnhatthongtincanhan",
+  upload.single("avatar"),
+  async (req, res) => {
+    const { ten, sdt, email, tinh, huyen, xa, matkhau, user } = req.body;
+    // return res.send(req.body);
+    try {
+      // update password
+      if (matkhau) {
+        const _user = await User.findById(user);
+        _user.matkhau = bcrypt.hashSync(matkhau, 8);
+        await _user.save();
+      }
+      // update info
+      const gsv = await Giamsatvung.findOne({ user });
+      gsv.ten = ten;
+      gsv.sdt = sdt;
+      gsv.email = email;
+      gsv.xa = xa;
+      gsv.huyen = huyen;
+      gsv.tinh = tinh;
+      gsv.avatar = req.file ? req.file.filename : gsv.avatar;
+      const updatedGSV = await gsv.save();
+
+      res.send({ updatedGSV, success: true });
+    } catch (error) {
+      res.send({ message: error.message, success: false });
+    }
+  }
+);
 
 // cap nhat gsv
 giamsatvungRouter.put("/single/:id", async (req, res) => {
@@ -110,7 +143,9 @@ giamsatvungRouter.get("/single/:id", async (req, res) => {
 // lay thong tin 1 gsv based UserId
 giamsatvungRouter.get("/baseduserid/:userId", async (req, res) => {
   try {
-    const gsv = await Giamsatvung.findOne({ user: req.params.userId });
+    const gsv = await Giamsatvung.findOne({ user: req.params.userId }).populate(
+      "user"
+    );
     res.send({ gsv, success: true });
   } catch (error) {
     res.send({ message: error.message, success: false });

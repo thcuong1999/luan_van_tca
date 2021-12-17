@@ -193,6 +193,12 @@ const apiDaily2 = {
     const url = `/daily2/tiendodonhang/${dl2Id}/${maDH}`;
     return axiosClient.get(url);
   },
+
+  // cap nhat thong tin ca nhan
+  capnhatThongtinCanhan(payload) {
+    const url = "/daily2/capnhatthongtincanhan";
+    return axiosClient.put(url, payload);
+  },
 };
 
 export default apiDaily2;

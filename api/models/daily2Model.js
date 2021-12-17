@@ -8,6 +8,7 @@ const daily2Schema = new mongoose.Schema(
     xa: String,
     huyen: String,
     tinh: String,
+    avatar: String,
     hodan: [
       {
         type: mongoose.Schema.Types.ObjectId,

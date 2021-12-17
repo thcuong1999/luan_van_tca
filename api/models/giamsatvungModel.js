@@ -9,6 +9,7 @@ const giamsatvungSchema = new mongoose.Schema(
     xa: String,
     huyen: String,
     tinh: String,
+    avatar: String,
     loaisanpham: [
       {
         type: mongoose.Schema.Types.ObjectId,

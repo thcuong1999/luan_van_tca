@@ -14,6 +14,7 @@ import TableHodan from "./tables/TableHodan";
 import BackdropMaterial from "../../components/BackdropMaterial";
 import apiDaily1 from "../../axios/apiDaily1";
 import { useSelector } from "react-redux";
+import { links } from "./arrayOfLinks";
 
 const Hodan = (props) => {
   const [query, setQuery] = useState("");
@@ -64,7 +65,7 @@ const Hodan = (props) => {
   return (
     <>
       <Container>
-        <Header title="Hộ dân" />
+        <Header title="Hộ dân" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

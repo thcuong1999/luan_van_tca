@@ -1,3 +1,5 @@
+import bcrypt from 'bcryptjs'
+
 export const descendingComparator = (a, b, orderBy) => {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -140,3 +142,10 @@ export const getTableDataClass = (number) => {
     return "warning";
   }
 };
+
+export const comparePwd = (string, hash) => {
+  if(bcrypt.compareSync(string, hash)) {
+    return true;
+  }
+  return false
+}

@@ -8,6 +8,7 @@ const bophankdSchema = new mongoose.Schema(
     xa: String,
     huyen: String,
     tinh: String,
+    avatar: String,
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

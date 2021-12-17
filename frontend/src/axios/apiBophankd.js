@@ -268,6 +268,12 @@ const apiBophankd = {
     const url = `/bophankd/tiendodonhang/${bpkdId}/${maDH}`;
     return axiosClient.get(url);
   },
+
+  // cap nhat thong tin ca nhan
+  capnhatThongtinCanhan(payload) {
+    const url = "/bophankd/capnhatthongtincanhan";
+    return axiosClient.put(url, payload);
+  },
 };
 
 export default apiBophankd;

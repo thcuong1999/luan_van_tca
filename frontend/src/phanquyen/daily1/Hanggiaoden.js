@@ -17,6 +17,7 @@ import {
 import { toast } from "react-toastify";
 import TableHanggiaoden from "./tables/TableHanggiaoden";
 import apiDaily1 from "../../axios/apiDaily1";
+import { links } from "./arrayOfLinks";
 
 const Hanggiaoden = () => {
   const [loading, setLoading] = useState(false);
@@ -73,7 +74,7 @@ const Hanggiaoden = () => {
   return (
     <>
       <Container>
-        <Header title="Hàng giao đến" />
+        <Header title="Hàng giao đến" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

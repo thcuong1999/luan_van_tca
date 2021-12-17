@@ -4,6 +4,7 @@ import apiDaily1 from "../../axios/apiDaily1";
 import apiGiaohang from "../../axios/apiGiaohang";
 import BackdropMaterial from "../../components/BackdropMaterial";
 import Header from "../../components/Header";
+import { links } from "./arrayOfLinks";
 import {
   Container,
   Content,
@@ -47,7 +48,7 @@ const Hanggiaodi = () => {
   return (
     <>
       <Container>
-        <Header title="Hàng giao đi" />
+        <Header title="Hàng giao đi" arrOfLinks={links} />
         <Content>
           <FilterSection>
             <TitleWrapper>

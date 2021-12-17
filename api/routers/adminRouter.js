@@ -11,6 +11,7 @@ const Vattu = require("../models/vattuModel");
 const Nguyenlieu = require("../models/nguyenlieuModel");
 const Sanpham = require("../models/sanphamModel");
 const Donhang = require("../models/donhangModel");
+const upload = require("../middleware/imageUpload");
 
 // them admin
 adminRouter.post("/them", async (req, res) => {
@@ -39,6 +40,39 @@ adminRouter.post("/them", async (req, res) => {
   }
 });
 
+// cap nhat thong tin ca nhan
+adminRouter.put(
+  "/capnhatthongtincanhan",
+  upload.single("avatar"),
+  async (req, res) => {
+    const { ten, sdt, email, tinh, huyen, xa, matkhau, user } = req.body;
+    // return res.send(req.body);
+    try {
+      // update password
+      if (matkhau) {
+        const _user = await User.findById(user);
+        _user.matkhau = bcrypt.hashSync(matkhau, 8);
+        await _user.save();
+      }
+      // update info
+      const admin = await Admin.findOne({ user });
+      admin.ten = ten;
+      admin.sdt = sdt;
+      admin.email = email;
+      admin.xa = xa;
+      admin.huyen = huyen;
+      admin.tinh = tinh;
+      admin.avatar = req.file ? req.file.filename : admin.avatar;
+      const updatedAdmin = await admin.save();
+
+      res.send({ updatedAdmin, success: true });
+    } catch (error) {
+      res.send({ message: error.message, success: false });
+    }
+  }
+);
+
+// tong quan admin
 adminRouter.get("/tongquan", async (req, res) => {
   try {
     const bpkd = await Bophankd.find({});
@@ -69,7 +103,9 @@ adminRouter.get("/tongquan", async (req, res) => {
 // lay thong tin admin based on userID
 adminRouter.get("/baseduserid/:userId", async (req, res) => {
   try {
-    const admin = await Admin.findOne({ user: req.params.userId });
+    const admin = await Admin.findOne({ user: req.params.userId }).populate(
+      "user"
+    );
     res.send({ admin, success: true });
   } catch (error) {
     res.send({ message: error.message, success: false });

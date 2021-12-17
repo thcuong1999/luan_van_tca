@@ -105,12 +105,13 @@ const AvatarWrapper = styled.div`
       padding-top: 12px;
       li > a {
         display: block;
-        padding: 10px 0 10px 26px;
+        padding: 10px 0 10px 45px;
         text-decoration: none;
         color: rgba(0, 0, 0, 0.45);
         font-family: "Roboto", sans-serif;
-        border-top-left-radius: 36px;
         background-color: rgba(0, 0, 0, 0.03);
+        border-top-left-radius: 70px;
+        border-bottom-left-radius: 10px;
         &:hover {
           background-color: rgba(0, 0, 0, 0.05);
           font-weight: bold;

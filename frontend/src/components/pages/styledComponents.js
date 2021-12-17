@@ -36,13 +36,13 @@ export const Menus = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
-export const MenuItem = styled.div`
+export const MenusItem = styled.div`
   font-size: 16px;
   color: #ea5388;
   padding-bottom: 15px;
   display: inline-block;
   position: relative;
-  font-family: "Montserrat", sans-serif;
+  font-family: sans-serif;
   font-weight: 600;
   &::after {
     content: "";
@@ -63,11 +63,11 @@ export const Avatar = styled.div`
   border-radius: 50%;
   margin-top: 36px;
   margin-bottom: 12px;
-  box-shadow: 0 7px 30px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 7px 30px 12px rgba(0, 0, 0, 0.075);
   position: relative;
   img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     object-fit: contain;
   }
@@ -95,6 +95,7 @@ export const EditAvatar = styled.div`
 export const FlexRow = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 export const FlexCollumn = styled.div`
@@ -121,6 +122,34 @@ export const Label = styled.label`
 `;
 
 export const Input = styled.input`
+  font-size: 17px;
+  font-weight: 500;
+  display: block;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  color: #555;
+  border: none;
+  outline: none;
+  width: 100%;
+`;
+
+export const Select = styled.select`
+  font-size: 17px;
+  font-weight: 500;
+  display: block;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  color: #555;
+  border: none;
+  outline: none;
+  width: 100%;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  left: -4px;
+`;
+
+export const TaikhoanText = styled.div`
   font-size: 17px;
   font-weight: 500;
   display: block;
@@ -165,6 +194,12 @@ export const Button = styled.button`
   transition: 0.3s;
   &:hover {
     box-shadow: none;
+  }
+  &:active,
+  &:focus {
+    outline: 0;
+    border: none;
+    -moz-outline-style: none;
   }
 `;
 
@@ -212,7 +247,7 @@ export const Btn = styled.div`
 export const ButtonsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   position: absolute;
   bottom: 86px;
   width: 100%;

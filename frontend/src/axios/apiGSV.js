@@ -168,6 +168,12 @@ const apiGSV = {
     const url = `/gsv/tiendodonhang/${gsvId}/${maDH}`;
     return axiosClient.get(url);
   },
+
+  // cap nhat thong tin ca nhan
+  capnhatThongtinCanhan(payload) {
+    const url = "/gsv/capnhatthongtincanhan";
+    return axiosClient.put(url, payload);
+  },
 };
 
 export default apiGSV;

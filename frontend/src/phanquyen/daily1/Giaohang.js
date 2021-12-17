@@ -127,7 +127,7 @@ const Giaohang = (props) => {
         <Header
           title="Quay lại danh sách sản phẩm"
           titleBack
-          onClick={() => props.history.push("/daily2/sanpham")}
+          onClick={() => props.history.push("/daily1/sanpham")}
           headerRight={
             <button className="btn btn-primary px-3" onClick={handleSubmit}>
               Lưu
