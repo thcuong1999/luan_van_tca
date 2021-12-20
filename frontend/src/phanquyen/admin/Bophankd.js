@@ -61,7 +61,7 @@ const Bophankd = (props) => {
   return (
     <>
       <Container>
-        <Header title="Bộ phận kinh doanh" arrOfLinks={links} />
+        <Header title="Bộ phận kinh doanh" arrOfLinks={links} vaitro="admin" />
         <Content>
           <FilterSection>
             <TitleWrapper>

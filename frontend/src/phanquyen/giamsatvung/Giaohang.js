@@ -20,6 +20,7 @@ import {
 import TableGiaohang from "./tables/TableGiaohang";
 import { toast } from "react-toastify";
 import apiGSV from "../../axios/apiGSV";
+import { EmptyGiaohang } from "../daily2/styledComponents";
 
 const Giaohang = (props) => {
   const [loading, setLoading] = useState(false);
@@ -165,12 +166,17 @@ const Giaohang = (props) => {
 
             <div className="px-3 py-5">
               {selectedDonhang ? (
-                <TableSection className="noCheckbox">
-                  <TableGiaohang
-                    dsSanpham={dsSanpham}
-                    handleChangeSL={handleChangeSL}
-                  />
-                </TableSection>
+                <>
+                  <TableSection className="noCheckbox">
+                    <TableGiaohang
+                      dsSanpham={dsSanpham}
+                      handleChangeSL={handleChangeSL}
+                    />
+                  </TableSection>
+                  <EmptyGiaohang>
+                    Không còn hoặc không có hàng để giao
+                  </EmptyGiaohang>
+                </>
               ) : null}
             </div>
           </Form>

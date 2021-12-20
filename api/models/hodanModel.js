@@ -9,6 +9,7 @@ const hodanSchema = new mongoose.Schema(
     sdt: String,
     cmnd: String,
     namsinh: Number,
+    avatar: String,
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

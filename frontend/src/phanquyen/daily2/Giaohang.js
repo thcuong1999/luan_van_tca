@@ -10,6 +10,7 @@ import Header from "../../components/Header";
 import {
   Container,
   Content,
+  EmptyGiaohang,
   ErrMsg,
   Form,
   FormContent,
@@ -164,12 +165,19 @@ const Giaohang = (props) => {
 
             <div className="px-3 py-5">
               {selectedDonhang ? (
-                <TableSection className="noCheckbox">
-                  <TableGiaohang
-                    dsSanpham={dsSanpham}
-                    handleChangeSL={handleChangeSL}
-                  />
-                </TableSection>
+                <>
+                  <TableSection className="noCheckbox">
+                    <TableGiaohang
+                      dsSanpham={dsSanpham}
+                      handleChangeSL={handleChangeSL}
+                    />
+                  </TableSection>
+                  {!dsSanpham.length && (
+                    <EmptyGiaohang>
+                      Không còn hoặc không có hàng để giao
+                    </EmptyGiaohang>
+                  )}
+                </>
               ) : null}
             </div>
           </Form>

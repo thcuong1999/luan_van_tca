@@ -368,8 +368,10 @@ const SanphamChinhsua = (props) => {
                             ? `/uploads/${singleSanpham?.hinhanh}`
                             : img_placeholder
                         }
-                        alt="sanphamImg"
-                        className={!singleSanpham?.hinhanh && "noImage"}
+                        alt=""
+                        className={
+                          !singleSanpham?.hinhanh && !imgToDisplay && "noImage"
+                        }
                       />
                     </ImageToDisplay>
                   </FormGroup>

@@ -36,7 +36,7 @@ const TongQuan = (props) => {
 
   return (
     <Wrapper>
-      <Header title="Tổng quan" arrOfLinks={links} />
+      <Header title="Tổng quan" arrOfLinks={links} vaitro="bophankd" />
       <Content>
         <div className="row mb-4">
           <div className="col-lg-3">

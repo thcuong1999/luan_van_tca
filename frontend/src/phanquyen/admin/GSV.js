@@ -63,7 +63,7 @@ const GSV = (props) => {
   return (
     <>
       <Container>
-        <Header title="Giám sát vùng" arrOfLinks={links} />
+        <Header title="Giám sát vùng" arrOfLinks={links} vaitro="admin" />
         <Content>
           <FilterSection>
             <TitleWrapper>

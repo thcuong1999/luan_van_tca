@@ -20,7 +20,7 @@ import { links } from "./arrayOfLinks";
 
 const Congcu = (props) => {
   const [query, setQuery] = useState("");
-  const [searchColumns] = useState(["ten", "congdung"]);
+  const [searchColumns] = useState(["ten", "madh"]);
   const [loading, setLoading] = useState(false);
   const [dsCongcu, setDsCongcu] = useState([]);
   const { userInfo } = useSelector((state) => state.user);
@@ -52,11 +52,13 @@ const Congcu = (props) => {
     dscongcu = dscongcu.map((cc) => ({
       ...cc.congcu,
       ...cc,
+      madh: cc.donhang.ma,
     }));
     let { dscongcuhuloi } = await apiBophankd.dsCongcuHuloi(bophankd._id);
     dscongcuhuloi = dscongcuhuloi.map((cc) => ({
       ...cc.congcu,
       ...cc,
+      madh: cc.donhang.ma,
     }));
     setBpkdInfo(bophankd);
     setDsCongcuHuloiShow(dscongcuhuloi);
@@ -88,7 +90,7 @@ const Congcu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Công cụ" arrOfLinks={links} />
+        <Header title="Công cụ" arrOfLinks={links} vaitro="bophankd" />
         <Content>
           <div className="text-right mb-3">
             {active.code === 1 ? (

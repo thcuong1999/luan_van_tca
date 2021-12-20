@@ -21,7 +21,7 @@ import { links } from "./arrayOfLinks";
 
 const Vattu = (props) => {
   const [query, setQuery] = useState("");
-  const [searchColumns] = useState(["ten", "congdung"]);
+  const [searchColumns] = useState(["ten", "madh"]);
   const [loading, setLoading] = useState(false);
   const [dsVattu, setDsVattu] = useState([]);
   const { userInfo } = useSelector((state) => state.user);
@@ -53,11 +53,13 @@ const Vattu = (props) => {
     dsvattu = dsvattu.map((vt) => ({
       ...vt.vattu,
       ...vt,
+      madh: vt.donhang.ma,
     }));
     let { dsvattuhuloi } = await apiDaily1.dsVattuHuloi(daily1._id);
     dsvattuhuloi = dsvattuhuloi.map((vt) => ({
       ...vt.vattu,
       ...vt,
+      madh: vt.donhang.ma,
     }));
     setDaily1Info(daily1);
     setDsVattuHuloiShow(dsvattuhuloi);
@@ -89,7 +91,7 @@ const Vattu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Vật tư" arrOfLinks={links} />
+        <Header title="Vật tư" arrOfLinks={links} vaitro="daily1" />
         <Content>
           <div className="text-right mb-3">
             {active.code === 1 ? (
@@ -122,7 +124,7 @@ const Vattu = (props) => {
                 <i class="fas fa-search"></i>
                 <input
                   type="text"
-                  placeholder="Tim vật tư theo tên, công dụng"
+                  placeholder="Tim vật tư theo mã đơn hàng, tên vậ tư"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />

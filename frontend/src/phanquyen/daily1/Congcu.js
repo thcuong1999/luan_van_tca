@@ -21,7 +21,7 @@ import { links } from "./arrayOfLinks";
 
 const Congcu = (props) => {
   const [query, setQuery] = useState("");
-  const [searchColumns] = useState(["ten", "congdung"]);
+  const [searchColumns] = useState(["ten", "madh"]);
   const [loading, setLoading] = useState(false);
   const [dsCongcu, setDsCongcu] = useState([]);
   const { userInfo } = useSelector((state) => state.user);
@@ -53,11 +53,13 @@ const Congcu = (props) => {
     dscongcu = dscongcu.map((cc) => ({
       ...cc.congcu,
       ...cc,
+      madh: cc.donhang.ma,
     }));
     let { dscongcuhuloi } = await apiDaily1.dsCongcuHuloi(daily1._id);
     dscongcuhuloi = dscongcuhuloi.map((cc) => ({
       ...cc.congcu,
       ...cc,
+      madh: cc.donhang.ma,
     }));
     setDaily1Info(daily1);
     setDsCongcuHuloiShow(dscongcuhuloi);
@@ -89,7 +91,7 @@ const Congcu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Công cụ" arrOfLinks={links} />
+        <Header title="Công cụ" arrOfLinks={links} vaitro="daily1" />
         <Content>
           <div className="text-right mb-3">
             {active.code === 1 ? (
@@ -121,7 +123,7 @@ const Congcu = (props) => {
                 <i class="fas fa-search"></i>
                 <input
                   type="text"
-                  placeholder="Tim công cụ theo tên, công dụng"
+                  placeholder="Tim công cụ theo mã đơn hàng, tên công cụ"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />

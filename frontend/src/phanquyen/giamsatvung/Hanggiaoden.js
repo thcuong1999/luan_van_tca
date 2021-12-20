@@ -72,7 +72,7 @@ const Hanggiaoden = () => {
   return (
     <>
       <Container>
-        <Header title="Hàng giao đến" arrOfLinks={links} />
+        <Header title="Hàng giao đến" arrOfLinks={links} vaitro="giamsatvung" />
         <Content>
           <FilterSection>
             <TitleWrapper>

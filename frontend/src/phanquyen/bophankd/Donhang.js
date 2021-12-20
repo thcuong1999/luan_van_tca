@@ -19,7 +19,7 @@ import { links } from "./arrayOfLinks";
 
 const Donhang = (props) => {
   const [query, setQuery] = React.useState("");
-  const [searchColumns] = React.useState(["ma", "ten", "mota"]);
+  const [searchColumns] = React.useState(["ma"]);
   const [loading, setLoading] = React.useState(false);
   const [dsDonhang, setDsDonhang] = React.useState([]);
   const [rowsRemoved, setRowsRemoved] = React.useState(false);
@@ -58,7 +58,7 @@ const Donhang = (props) => {
   return (
     <>
       <Container>
-        <Header title="Đơn hàng" arrOfLinks={links} />
+        <Header title="Đơn hàng" arrOfLinks={links} vaitro="bophankd" />
         <Content>
           <FilterSection>
             <TitleWrapper>
@@ -85,7 +85,7 @@ const Donhang = (props) => {
 
             <TableSection>
               <TableDonhang
-                dsDonhang={dsDonhang}
+                dsDonhang={search(dsDonhang)}
                 setRowsRemoved={setRowsRemoved}
               />
             </TableSection>

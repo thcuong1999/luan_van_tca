@@ -55,7 +55,7 @@ const Vattu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Vật tư" arrOfLinks={links} />
+        <Header title="Vật tư" arrOfLinks={links} vaitro="admin" />
         <Content>
           <FilterSection>
             <TitleWrapper>

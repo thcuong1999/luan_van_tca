@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, LogBox } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 function ListDonHangBaoCaoTienDo(props) {

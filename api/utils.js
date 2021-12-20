@@ -52,3 +52,12 @@ exports.getTiendoHoanthanh = (dsDonhang, tongSLSPDonhangGoc, pq) => {
 
   return Math.round((tongAllDanhan / tongSLSPDonhangGoc) * 100);
 };
+
+//
+exports.includeLSP = (dslsp, lsp) => {
+  const dsLSP = dslsp.map((item) => item.toString());
+  if (dsLSP.includes(lsp.toString())) {
+    return true;
+  }
+  return false;
+};

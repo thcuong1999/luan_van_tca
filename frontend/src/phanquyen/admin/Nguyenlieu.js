@@ -18,7 +18,7 @@ import { links } from "./arrayOfLinks";
 
 const Nguyenlieu = (props) => {
   const [query, setQuery] = useState("");
-  const [searchColumns] = useState(["ten", "donvitinh"]);
+  const [searchColumns] = useState(["ten", "congdung"]);
   const [loading, setLoading] = useState(false);
   const [dsNguyenlieu, setDsNguyenlieu] = useState([]);
   const [rowsRemoved, setRowsRemoved] = useState(false);
@@ -55,7 +55,7 @@ const Nguyenlieu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Nguyên liệu" arrOfLinks={links} />
+        <Header title="Nguyên liệu" arrOfLinks={links} vaitro="admin" />
         <Content>
           <FilterSection>
             <TitleWrapper>

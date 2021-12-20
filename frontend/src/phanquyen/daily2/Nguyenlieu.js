@@ -21,7 +21,7 @@ import { links } from "./arrayOfLinks";
 
 const Nguyenlieu = (props) => {
   const [query, setQuery] = useState("");
-  const [searchColumns] = useState(["ten", "donvitinh"]);
+  const [searchColumns] = useState(["ten", "madh"]);
   const [loading, setLoading] = useState(false);
   const [dsNguyenlieu, setDsNguyenlieu] = useState([]);
   const { userInfo } = useSelector((state) => state.user);
@@ -53,11 +53,13 @@ const Nguyenlieu = (props) => {
     dsnguyenlieu = dsnguyenlieu.map((ngl) => ({
       ...ngl.nguyenlieu,
       ...ngl,
+      madh: ngl.donhang.ma,
     }));
     let { dsnguyenlieuhuloi } = await apiDaily2.dsNguyenlieuHuloi(daily2._id);
     dsnguyenlieuhuloi = dsnguyenlieuhuloi.map((ngl) => ({
       ...ngl.nguyenlieu,
       ...ngl,
+      madh: ngl.donhang.ma,
     }));
     setDaily2Info(daily2);
     setDsNguyenlieuHuloiShow(dsnguyenlieuhuloi);
@@ -89,7 +91,7 @@ const Nguyenlieu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Nguyên liệu" arrOfLinks={links} />
+        <Header title="Nguyên liệu" arrOfLinks={links} vaitro="daily2" />
         <Content>
           <div className="text-right mb-3">
             {active.code === 1 ? (
@@ -124,7 +126,7 @@ const Nguyenlieu = (props) => {
                 <i class="fas fa-search"></i>
                 <input
                   type="text"
-                  placeholder="Tim nguyên liệu theo tên, công dụng"
+                  placeholder="Tim nguyên liệu theo tên, mã đơn hàng"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />

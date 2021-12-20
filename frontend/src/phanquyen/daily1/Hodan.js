@@ -65,7 +65,7 @@ const Hodan = (props) => {
   return (
     <>
       <Container>
-        <Header title="Hộ dân" arrOfLinks={links} />
+        <Header title="Hộ dân" arrOfLinks={links} vaitro="daily1" />
         <Content>
           <FilterSection>
             <TitleWrapper>

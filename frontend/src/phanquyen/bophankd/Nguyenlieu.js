@@ -20,7 +20,7 @@ import { links } from "./arrayOfLinks";
 
 const Nguyenlieu = (props) => {
   const [query, setQuery] = useState("");
-  const [searchColumns] = useState(["ten", "donvitinh"]);
+  const [searchColumns] = useState(["ten", "madh"]);
   const [loading, setLoading] = useState(false);
   const [dsNguyenlieu, setDsNguyenlieu] = useState([]);
   const { userInfo } = useSelector((state) => state.user);
@@ -52,6 +52,7 @@ const Nguyenlieu = (props) => {
     dsnguyenlieu = dsnguyenlieu.map((ngl) => ({
       ...ngl.nguyenlieu,
       ...ngl,
+      madh: ngl.donhang.ma,
     }));
     let { dsnguyenlieuhuloi } = await apiBophankd.dsNguyenlieuHuloi(
       bophankd._id
@@ -59,6 +60,7 @@ const Nguyenlieu = (props) => {
     dsnguyenlieuhuloi = dsnguyenlieuhuloi.map((ngl) => ({
       ...ngl.nguyenlieu,
       ...ngl,
+      madh: ngl.donhang.ma,
     }));
     setBpkdInfo(bophankd);
     setDsNguyenlieuHuloiShow(dsnguyenlieuhuloi);
@@ -90,7 +92,7 @@ const Nguyenlieu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Nguyên liệu" arrOfLinks={links} />
+        <Header title="Nguyên liệu" arrOfLinks={links} vaitro="bophankd" />
         <Content>
           <div className="text-right mb-3">
             {active.code === 1 ? (

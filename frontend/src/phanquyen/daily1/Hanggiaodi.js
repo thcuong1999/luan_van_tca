@@ -48,7 +48,7 @@ const Hanggiaodi = () => {
   return (
     <>
       <Container>
-        <Header title="Hàng giao đi" arrOfLinks={links} />
+        <Header title="Hàng giao đi" arrOfLinks={links} vaitro="daily1" />
         <Content>
           <FilterSection>
             <TitleWrapper>

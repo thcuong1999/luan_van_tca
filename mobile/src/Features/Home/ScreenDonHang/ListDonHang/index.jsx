@@ -6,18 +6,20 @@ function ListDonHang(props) {
   const {
     dataList: { item: data },
     navigation,
-    hodanId
+    hodanId,
   } = props;
-  const checkComplelteOrder = data.dssanpham.find(item=>(item.soluong !== item.soluonghoanthanh))
+  const checkComplelteOrder = data.dssanpham.find(
+    (item) => item.soluong !== item.soluonghoanthanh
+  );
   // console.log(checkComplelteOrder);
   const handleClickOrder = () => {
     navigation.navigate("DonHang", { data });
   };
-  const handleClickSendOrder = ()=>{
-    navigation.navigate('FormGiaoHang',{data , hodanId});
-  }
+  const handleClickSendOrder = () => {
+    navigation.navigate("FormGiaoHang", { data, hodanId });
+  };
 
-  // console.log(data);
+  console.log({ data });
   return (
     <>
       <View

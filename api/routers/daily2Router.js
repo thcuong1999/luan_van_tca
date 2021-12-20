@@ -626,7 +626,9 @@ daily2Router.get("/dscongcu/:daily2Id", async (req, res) => {
 // lay so lieu tong quan
 daily2Router.get("/tongquan/:daily2Id", async (req, res) => {
   try {
-    let daily2 = await Daily2.findById(req.params.daily2Id);
+    let daily2 = await Daily2.findById(req.params.daily2Id).populate(
+      "dssanpham dscongcu dsvattu dsnguyenlieu hodan donhang"
+    );
 
     res.send({
       dssanpham: daily2.dssanpham.length,

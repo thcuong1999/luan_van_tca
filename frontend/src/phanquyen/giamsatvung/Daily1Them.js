@@ -41,6 +41,7 @@ const Daily1Them = (props) => {
   const { userInfo } = useSelector((state) => state.user);
   const [dsTaikhoan, setDsTaikhoan] = useState([]);
   const [taikhoanErr, setTaikhoanErr] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChangeTaikhoan = (e) => {
     var format = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/;
@@ -113,7 +114,7 @@ const Daily1Them = (props) => {
       if (success) {
         toast.success("Thêm thành công!", { theme: "colored" });
         resetFields();
-        setErrMsg("");
+        setSuccess(true);
       }
     }
   };
@@ -125,6 +126,7 @@ const Daily1Them = (props) => {
       sdt: "",
       email: "",
     });
+    setErrMsg("");
     setTinh(null);
     sethuyen(null);
     setXa(null);
@@ -141,9 +143,10 @@ const Daily1Them = (props) => {
   };
 
   React.useEffect(() => {
+    setSuccess(false);
     fetchGsvInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [success]);
 
   if (loading) {
     return <BackdropMaterial />;

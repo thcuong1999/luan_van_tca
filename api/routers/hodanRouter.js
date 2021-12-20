@@ -62,6 +62,38 @@ hodanRouter.post("/them", async (req, res) => {
   }
 });
 
+
+// cap nhat thong tin ca nhan
+hodanRouter.put(
+  "/capnhatthongtincanhan",
+  upload.single("avatar"),
+  async (req, res) => {
+    const { daidien, sdt, cmnd, namsinh, xa, matkhau, user } = req.body;
+    // return res.send(req.body);
+    try {
+      // update password
+      if (matkhau) {
+        const _user = await User.findById(user);
+        _user.matkhau = bcrypt.hashSync(matkhau, 8);
+        await _user.save();
+      }
+      // update info
+      const hodan = await Hodan.findOne({ user });
+      hodan.daidien = daidien;
+      hodan.sdt = sdt;
+      hodan.cmnd = cmnd;
+      hodan.namsinh = namsinh;
+      hodan.xa = xa;
+      hodan.avatar = req.file ? req.file.filename : hodan.avatar;
+      const updatedHodan = await hodan.save();
+
+      res.send({ updatedHodan, success: true });
+    } catch (error) {
+      res.send({ message: error.message, success: false });
+    }
+  }
+);
+
 // chinh sua hodan
 hodanRouter.put("/single/:id", async (req, res) => {
   const {
@@ -196,6 +228,51 @@ hodanRouter.put("/multiple", async (req, res) => {
       }
       // xoa hodan
       await Hodan.findByIdAndDelete(item);
+
+      // đối vs hộ dân đã active => filter lsp cho đl2 trên nó + đl1, gsv
+      if (hodan.active) {
+        // =========================
+        const daily2 = await Daily2.findById(hodan.daily2).populate("hodan");
+        const dsLspHodan = daily2.hodan.map((hd) => hd.loaisanpham.toString());
+        const dsLspDaily2 = daily2.loaisanpham.map((item) => item.toString());
+        // Loc loai sp of daily2
+        const newLspDaily2 = dsLspDaily2.filter((lsp) =>
+          dsLspHodan.includes(lsp)
+        );
+        daily2.loaisanpham = newLspDaily2;
+        await daily2.save();
+        // // =========================
+        const daily1 = await Daily1.findById(daily2.daily1).populate("daily2");
+        // gộp lsp của all dl2 thuộc dl1 này
+        let lspAllDl2 = [];
+        daily1.daily2.forEach((dl2) => {
+          lspAllDl2 = [...dl2.loaisanpham, ...lspAllDl2];
+        });
+        lspAllDl2 = lspAllDl2.map((item) => item.toString());
+        // Loc loai sp of daily1
+        const newLspDaily1 = daily1.loaisanpham.filter((lsp) =>
+          lspAllDl2.includes(lsp.toString())
+        );
+        daily1.loaisanpham = newLspDaily1;
+        await daily1.save();
+
+        // =========================
+        const gsv = await Giamsatvung.findById(daily1.giamsatvung).populate(
+          "daily1"
+        );
+        // gộp lsp của all dl1 thuộc gsv này
+        let lspAllDl1 = [];
+        gsv.daily1.forEach((dl1) => {
+          lspAllDl1 = [...dl1.loaisanpham, ...lspAllDl1];
+        });
+        lspAllDl1 = lspAllDl1.map((item) => item.toString());
+        // Loc loai sp of gsv
+        const newLspGSV = gsv.loaisanpham.filter((lsp) =>
+          lspAllDl1.includes(lsp.toString())
+        );
+        gsv.loaisanpham = newLspGSV;
+        await gsv.save();
+      }
     }
     res.send({ success: true });
   } catch (error) {

@@ -357,7 +357,8 @@ function FormGiaoHang(props) {
                 }}
               >
                 <Text style={{ color: "#ff5500" }}>
-                  Vui lòng xác nhận đơn hàng trước khi gửi báo cáo!
+                  Số lượng giao hàng không hợp lệ! Vui lòng kiểm tra lại số
+                  lượng hoàn thành!
                 </Text>
               </MaterialDialog>
               <View>

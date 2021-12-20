@@ -50,6 +50,7 @@ const HodanThem = (props) => {
   const { userInfo } = useSelector((state) => state.user);
   const [dsTaikhoan, setDsTaikhoan] = useState([]);
   const [taikhoanErr, setTaikhoanErr] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleChangeTaikhoan = (e) => {
     var format = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/;
@@ -129,7 +130,7 @@ const HodanThem = (props) => {
       if (success) {
         toast.success("Thêm hộ dân thành công!", { theme: "colored" });
         resetFields();
-        setErrMsg("");
+        setSuccess(true)
       }
     }
   };
@@ -142,6 +143,7 @@ const HodanThem = (props) => {
       cmnd: "",
       namsinh: "",
     });
+    setErrMsg("");
     setTinh(null);
     sethuyen(null);
     setSelectedLangnghe(null);
@@ -162,9 +164,10 @@ const HodanThem = (props) => {
   };
 
   useEffect(() => {
+    setSuccess(false);
     fetchDsLangnghe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [success]);
 
   if (loading) {
     return <BackdropMaterial />;

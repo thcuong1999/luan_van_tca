@@ -697,8 +697,9 @@ bophankdRouter.get("/dsnguyenlieu/:bophankdId", async (req, res) => {
 // lay so lieu tong quan
 bophankdRouter.get("/tongquan/:bophankdId", async (req, res) => {
   try {
-    const bophankd = await Bophankd.findById(req.params.bophankdId);
-
+    const bophankd = await Bophankd.findById(req.params.bophankdId).populate(
+      "dssanpham dsvattu dsnguyenlieu dscongcu daily1 daily2 donhang giamsatvung"
+    );
     res.send({
       dssanpham: bophankd.dssanpham.length,
       dsvattu: bophankd.dsvattu.length,

@@ -659,7 +659,9 @@ daily1Router.get("/dscongcu/:daily1Id", async (req, res) => {
 // lay so lieu tong quan
 daily1Router.get("/tongquan/:daily1Id", async (req, res) => {
   try {
-    let daily1 = await Daily1.findById(req.params.daily1Id);
+    let daily1 = await Daily1.findById(req.params.daily1Id).populate(
+      "dssanpham dscongcu dsvattu dsnguyenlieu daily2 hodan donhang"
+    );
 
     res.send({
       dssanpham: daily1.dssanpham.length,

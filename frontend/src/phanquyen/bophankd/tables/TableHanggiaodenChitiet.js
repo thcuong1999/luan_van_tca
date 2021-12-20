@@ -12,6 +12,7 @@ import EnhancedTableHead from "../../../components/table/EnhancedTableHead";
 import { getComparator } from "../../../utils";
 import TablePaginationActions from "@mui/material/TablePagination/TablePaginationActions";
 import { headCellsHanggiaodenChitiet } from "./headCells";
+import img_placeholder from "../../../assets/images/img_placeholder.png";
 
 const TableHanggiaodenChitiet = ({ dsGiaohang = [] }) => {
   const [order, setOrder] = React.useState("asc");
@@ -120,7 +121,18 @@ const TableHanggiaodenChitiet = ({ dsGiaohang = [] }) => {
                         </TableCell>
                         <TableCell align="right">{row.ma}</TableCell>
                         <TableCell align="right">{row.ten}</TableCell>
-                        <TableCell align="right">{row.ten}</TableCell>
+                        <TableCell align="right">
+                          <img
+                            src={
+                              row?.hinhanh
+                                ? `/uploads/${row?.hinhanh}`
+                                : img_placeholder
+                            }
+                            alt="anhcongcu"
+                            style={{ width: "30px" }}
+                            className={!row?.hinhanh && "noImage"}
+                          />
+                        </TableCell>
                         <TableCell align="right">{row.soluong}</TableCell>
                         <TableCell align="right">
                           {row.soluonghoanthanh}

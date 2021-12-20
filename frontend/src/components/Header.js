@@ -1,11 +1,63 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Avatar from "@mui/material/Avatar";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Axios from "axios";
+import apiBophankd from "../axios/apiBophankd";
+import apiGSV from "../axios/apiGSV";
+import apiDaily1 from "../axios/apiDaily1";
+import apiDaily2 from "../axios/apiDaily2";
 
-const Header = ({ title, onClick, titleBack, headerRight, arrOfLinks }) => {
+const Header = ({
+  title,
+  onClick,
+  titleBack,
+  headerRight,
+  arrOfLinks,
+  vaitro,
+}) => {
   const [active, setActive] = useState(false);
+  const [data, setData] = useState(null);
+  const { userInfo } = useSelector((state) => state.user);
+
+  const fetchThongtinCanhan = async (vt) => {
+    switch (vt) {
+      case "admin":
+        const {
+          data: { admin },
+        } = await Axios.get(`/api/admin/baseduserid/${userInfo._id}`);
+        setData(admin);
+        break;
+      case "bophankd":
+        const { bophankd } = await apiBophankd.bophankdBasedUserId(
+          userInfo._id
+        );
+        setData(bophankd);
+        break;
+      case "giamsatvung":
+        const { gsv } = await apiGSV.singleGsvBasedUserId(userInfo._id);
+        setData(gsv);
+        break;
+      case "daily1":
+        const { daily1 } = await apiDaily1.singleDaily1BasedUser(userInfo._id);
+        setData(daily1);
+        break;
+      case "daily2":
+        const { daily2 } = await apiDaily2.singleDaily2BasedUser(userInfo._id);
+        setData(daily2);
+        break;
+
+      default:
+        return;
+    }
+  };
+
+  useEffect(() => {
+    fetchThongtinCanhan(vaitro);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vaitro]);
 
   return (
     <Wrapper>
@@ -21,10 +73,14 @@ const Header = ({ title, onClick, titleBack, headerRight, arrOfLinks }) => {
         <AvatarWrapper onClick={() => setActive(!active)}>
           <Avatar
             alt="Remy Sharp"
-            src="/static/images/avatar/1.jpg"
+            src={
+              data?.avatar
+                ? `/uploads/${data?.avatar}`
+                : "/static/images/avatar/1.jpg"
+            }
             sx={{ width: 35, height: 35 }}
           />
-          <span>Hoang Cuong Tran</span>
+          <span>{data?.ten}</span>
           <ExpandMoreIcon style={{ color: "#666" }} />
           <div className={`dropdown ${active && "active"}`}>
             <ul>
@@ -94,9 +150,9 @@ const AvatarWrapper = styled.div`
     right: 0;
     background: #fff;
     top: 38px;
-    left: -30%;
+    right: 0;
     z-index: 1;
-    width: 130%;
+    width: 260px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     ul {
       list-style: none;

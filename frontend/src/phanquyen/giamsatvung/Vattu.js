@@ -21,7 +21,7 @@ import { links } from "./arrayOfLinks";
 
 const Vattu = (props) => {
   const [query, setQuery] = useState("");
-  const [searchColumns] = useState(["ten", "congdung"]);
+  const [searchColumns] = useState(["ten", "madh"]);
   const [loading, setLoading] = useState(false);
   const [dsVattu, setDsVattu] = useState([]);
   const { userInfo } = useSelector((state) => state.user);
@@ -53,11 +53,13 @@ const Vattu = (props) => {
     dsvattu = dsvattu.map((vt) => ({
       ...vt.vattu,
       ...vt,
+      madh: vt.donhang.ma,
     }));
     let { dsvattuhuloi } = await apiGSV.dsVattuHuloi(gsv._id);
     dsvattuhuloi = dsvattuhuloi.map((vt) => ({
       ...vt.vattu,
       ...vt,
+      madh: vt.donhang.ma,
     }));
     setGsvInfo(gsv);
     setDsVattuHuloiShow(dsvattuhuloi);
@@ -89,7 +91,7 @@ const Vattu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Vật tư" arrOfLinks={links} />
+        <Header title="Vật tư" arrOfLinks={links} vaitro="giamsatvung" />
         <Content>
           <div className="text-right mb-3">
             {active.code === 1 ? (

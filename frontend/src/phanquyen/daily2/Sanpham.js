@@ -20,7 +20,7 @@ import { links } from "./arrayOfLinks";
 
 const Sanpham = (props) => {
   const [query, setQuery] = React.useState("");
-  const [searchColumns] = React.useState(["ma"]);
+  const [searchColumns] = React.useState(["ma", "ten", "madh"]);
   const [loading, setLoading] = React.useState(false);
   const [dsSanpham, setDsSanpham] = React.useState([]);
   const { userInfo } = useSelector((state) => state.user);
@@ -32,7 +32,7 @@ const Sanpham = (props) => {
     dssanpham = dssanpham.map((sp) => ({
       ...sp.sanpham,
       ...sp,
-      ma: sp.donhang.ma,
+      madh: sp.donhang.ma,
     }));
     setDsSanpham(dssanpham);
     setLoading(false);
@@ -62,7 +62,7 @@ const Sanpham = (props) => {
   return (
     <>
       <Container>
-        <Header title="Sản phẩm" arrOfLinks={links} />
+        <Header title="Sản phẩm" arrOfLinks={links} vaitro="daily2" />
         <Content>
           <FilterSection>
             <TitleWrapper>
@@ -80,7 +80,7 @@ const Sanpham = (props) => {
                 <i class="fas fa-search"></i>
                 <input
                   type="text"
-                  placeholder="Tìm sản phẩm theo mã"
+                  placeholder="Tìm sản phẩm theo mã đơn hàng, mã sản phẩm, tên sản phẩm"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />

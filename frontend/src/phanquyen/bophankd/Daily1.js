@@ -48,6 +48,8 @@ const Daily1 = (props) => {
     );
   };
 
+  console.log({ dsDaily1 });
+
   React.useEffect(() => {
     setSuccess(false);
     fetchDsDaily1();
@@ -61,7 +63,7 @@ const Daily1 = (props) => {
   return (
     <>
       <Container>
-        <Header title="Đại lý cấp 1" arrOfLinks={links} />
+        <Header title="Đại lý cấp 1" arrOfLinks={links} vaitro="bophankd" />
         <Content>
           <FilterSection>
             <TitleWrapper>

@@ -2,14 +2,18 @@
 useContext()
     => create context xong thì use context này thôi
 
-- old phanphatId -> to update old record
-- items[] -> array of congcu thieu'
-- from,
-- to
-- trangthai
-- thieu
-- hoanthanh
-- ngaytao
+db.giamsatvungs.updateOne({ email: "gsva@gmail.com" }, { $set: { loaisanpham: [
+		ObjectId("618791cd89349f24ba3e3b88"),
+		ObjectId("618791bb89349f24ba3e3b86"),
+		ObjectId("618791b189349f24ba3e3b84")
+] }});
 
+db.daily1.updateOne({ email: "daily1a@gmail.com" }, { $set: { loaisanpham: [
+		ObjectId("618791bb89349f24ba3e3b86"),
+		ObjectId("618791b189349f24ba3e3b84")
+] }});
 
-db.admins.updateMany({email: "cuongb1706790@student.ctu.edu.vn"}, { $set: { diachi: "Xã An Quảng Hữu, Huyện Trà Cú, Tỉnh Trà Vinh" }});
+*** filter theo ngay thang
+*** bo sung loai sp cho chi tiet
+*** searchbox
+*** hang giao den notification

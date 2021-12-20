@@ -533,3 +533,9 @@ export const TiendoDonhang = styled.div`
     }
   }
 `;
+
+export const EmptyGiaohang = styled.div`
+  text-align: center;
+  color: red;
+  font-family: sans-serif;
+`;

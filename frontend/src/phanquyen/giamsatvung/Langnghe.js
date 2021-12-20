@@ -18,7 +18,7 @@ import { links } from "./arrayOfLinks";
 
 const Langnghe = (props) => {
   const [query, setQuery] = useState("");
-  const [searchColumns] = useState(["ten", "tinh", "huyen", "sanphamchinh"]);
+  const [searchColumns] = useState(["ten", "tinh", "huyen"]);
   const [dsLangnghe, setDsLangnghe] = useState([]);
   const [loading, setLoading] = useState(false);
   const [rowsRemoved, setRowsRemoved] = useState(false);
@@ -55,7 +55,7 @@ const Langnghe = (props) => {
   return (
     <>
       <Container>
-        <Header title="Làng nghề" arrOfLinks={links} />
+        <Header title="Làng nghề" arrOfLinks={links} vaitro="giamsatvung" />
         <Content>
           <FilterSection>
             <TitleWrapper>
@@ -73,7 +73,7 @@ const Langnghe = (props) => {
                 <i class="fas fa-search"></i>
                 <input
                   type="text"
-                  placeholder="Tim làng nghề theo tên, tỉnh, huyện, loại sản phẩm"
+                  placeholder="Tim làng nghề theo tên, tỉnh, huyện"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />

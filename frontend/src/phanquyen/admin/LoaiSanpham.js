@@ -55,7 +55,7 @@ const LoaiSanpham = (props) => {
   return (
     <>
       <Container>
-        <Header title="Loại sản phẩm" arrOfLinks={links} />
+        <Header title="Loại sản phẩm" arrOfLinks={links} vaitro="admin" />
         <Content>
           <FilterSection>
             <TitleWrapper>

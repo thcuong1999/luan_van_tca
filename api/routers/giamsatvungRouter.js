@@ -401,7 +401,9 @@ giamsatvungRouter.get("/dscongcu/:gsvId", async (req, res) => {
 // lay so lieu tong quan
 giamsatvungRouter.get("/tongquan/:gsvId", async (req, res) => {
   try {
-    const gsv = await Giamsatvung.findById(req.params.gsvId);
+    const gsv = await Giamsatvung.findById(req.params.gsvId).populate(
+      "daily1 daily2 donhang dssanpham dscongcu dsvattu dsnguyenlieu"
+    );
     const langnghe = await Langnghe.find({});
 
     res.send({

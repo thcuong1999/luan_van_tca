@@ -20,7 +20,7 @@ import { links } from "./arrayOfLinks";
 
 const Vattu = (props) => {
   const [query, setQuery] = useState("");
-  const [searchColumns] = useState(["ten", "congdung"]);
+  const [searchColumns] = useState(["ten", "madh"]);
   const [loading, setLoading] = useState(false);
   const [dsVattu, setDsVattu] = useState([]);
   const { userInfo } = useSelector((state) => state.user);
@@ -52,17 +52,21 @@ const Vattu = (props) => {
     dsvattu = dsvattu.map((vt) => ({
       ...vt.vattu,
       ...vt,
+      madh: vt.donhang.ma,
     }));
     let { dsvattuhuloi } = await apiBophankd.dsVattuHuloi(bophankd._id);
     dsvattuhuloi = dsvattuhuloi.map((vt) => ({
       ...vt.vattu,
       ...vt,
+      madh: vt.donhang.ma,
     }));
     setBpkdInfo(bophankd);
     setDsVattuHuloiShow(dsvattuhuloi);
     setDsVattu(dsvattu);
     setLoading(false);
   };
+
+  console.log({ dsVattu });
 
   const search = (dsVattu) => {
     return (
@@ -88,7 +92,7 @@ const Vattu = (props) => {
   return (
     <>
       <Container>
-        <Header title="Vật tư" arrOfLinks={links} />
+        <Header title="Vật tư" arrOfLinks={links} vaitro="bophankd" />
         <Content>
           <div className="text-right mb-3">
             {active.code === 1 ? (
@@ -120,7 +124,7 @@ const Vattu = (props) => {
                 <i class="fas fa-search"></i>
                 <input
                   type="text"
-                  placeholder="Tim vật tư theo tên, công dụng"
+                  placeholder="Tim vật tư theo tên, mã đơn hàng"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />

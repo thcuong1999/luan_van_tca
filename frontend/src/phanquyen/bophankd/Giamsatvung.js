@@ -67,7 +67,7 @@ const Giamsatvung = (props) => {
   return (
     <>
       <Container>
-        <Header title="Giám sát vùng" arrOfLinks={links} />
+        <Header title="Giám sát vùng" arrOfLinks={links} vaitro="bophankd" />
         <Content>
           <FilterSection>
             <TitleWrapper>

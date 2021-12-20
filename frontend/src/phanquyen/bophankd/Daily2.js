@@ -59,7 +59,7 @@ const Daily2 = (props) => {
   return (
     <>
       <Container>
-        <Header title="Đại lý cấp 2" arrOfLinks={links} />
+        <Header title="Đại lý cấp 2" arrOfLinks={links} vaitro="bophankd" />
         <Content>
           <FilterSection>
             <TitleWrapper>
