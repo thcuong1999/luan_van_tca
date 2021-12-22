@@ -13,7 +13,8 @@ db.daily1.updateOne({ email: "daily1a@gmail.com" }, { $set: { loaisanpham: [
 		ObjectId("618791b189349f24ba3e3b84")
 ] }});
 
-*** filter theo ngay thang
-*** bo sung loai sp cho chi tiet
-*** searchbox
+
 *** hang giao den notification
+
+db.sanphams.find({"createdAt":{ $gte:ISODate("2021-11-19"), $lt:ISODate("2021-12-20") }
+}).pretty();

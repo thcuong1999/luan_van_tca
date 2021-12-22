@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs'
+import bcrypt from "bcryptjs";
 
 export const descendingComparator = (a, b, orderBy) => {
   if (b[orderBy] < a[orderBy]) {
@@ -21,6 +21,30 @@ export const getCurrentDatetime = () => {
   return `${currentdate.getDate()}/${
     currentdate.getMonth() + 1
   }/${currentdate.getFullYear()}`;
+};
+
+export const getCurrentDate = () => {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = today.getFullYear();
+  return `${yyyy}-${mm}-${dd}`;
+};
+
+export const thisMonth = () => {
+  const date = new Date(),
+    y = date.getFullYear(),
+    m = date.getMonth();
+  const firstDay = new Date(y, m, 1);
+  var dd = String(firstDay.getDate()).padStart(2, "0");
+  var mm = String(firstDay.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = firstDay.getFullYear();
+  //=========
+  const lastDay = new Date(y, m + 1, 0);
+  var dd2 = String(lastDay.getDate()).padStart(2, "0");
+  var mm2 = String(lastDay.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy2 = lastDay.getFullYear();
+  return { firstDay: `${yyyy}-${mm}-${dd}`, lastDay: `${yyyy2}-${mm2}-${dd2}` };
 };
 
 export const getXa = (diachi) => {
@@ -144,8 +168,61 @@ export const getTableDataClass = (number) => {
 };
 
 export const comparePwd = (string, hash) => {
-  if(bcrypt.compareSync(string, hash)) {
+  if (bcrypt.compareSync(string, hash)) {
     return true;
   }
-  return false
-}
+  return false;
+};
+
+export const getThongkeSanpham = (dssp) => {
+  const tongDonhang = [...new Set(dssp.map((sp) => sp.donhang.ma))];
+  const tongSanpham = [...new Set(dssp.map((sp) => sp.ma))];
+  const tongSoluong = dssp.reduce((acc, sp) => acc + sp.soluong, 0);
+  const tongGia = dssp.reduce((acc, sp) => acc + sp.soluong * sp.gia, 0);
+
+  return {
+    tongDonhang: tongDonhang.length,
+    tongSanpham: tongSanpham.length,
+    tongSoluong,
+    tongGia,
+  };
+};
+
+export const getThongkeVattu = (dsvattu) => {
+  const tongDonhang = [...new Set(dsvattu.map((vt) => vt.donhang.ma))];
+  const tongSanpham = [...new Set(dsvattu.map((vt) => vt.ten))];
+  const tongSoluong = dsvattu.reduce((acc, vt) => acc + vt.soluong, 0);
+
+  return {
+    tongDonhang: tongDonhang.length,
+    tongSanpham: tongSanpham.length,
+    tongSoluong,
+  };
+};
+
+export const getThongkeNguyenlieu = (dsnguyenlieu) => {
+  const tongDonhang = [...new Set(dsnguyenlieu.map((ngl) => ngl.donhang.ma))];
+  const tongSanpham = [...new Set(dsnguyenlieu.map((ngl) => ngl.ten))];
+  const tongKhoiluong = dsnguyenlieu.reduce(
+    (acc, ngl) => acc + ngl.khoiluong,
+    0
+  );
+
+  return {
+    tongDonhang: tongDonhang.length,
+    tongSanpham: tongSanpham.length,
+    tongKhoiluong,
+  };
+};
+
+export const getThongkeCongcu = (dscongcu) => {
+  const tongDonhang = [...new Set(dscongcu.map((cc) => cc.donhang.ma))];
+  const tongSanpham = [...new Set(dscongcu.map((cc) => cc.ten))];
+  const tongSoluong = dscongcu.reduce((acc, cc) => acc + cc.soluong, 0);
+
+  return {
+    tongDonhang: tongDonhang.length,
+    tongSanpham: tongSanpham.length,
+    tongSoluong,
+  };
+};

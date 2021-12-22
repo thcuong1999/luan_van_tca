@@ -594,3 +594,113 @@ export const TiendoDonhang = styled.div`
     }
   }
 `;
+
+export const ThongkeContainer = styled.div`
+  margin: 36px 0;
+  background: #fff;
+  padding: 36px;
+`;
+
+export const ThongkeTitle = styled.div`
+  font-size: 19px;
+  font-family: "Roboto", sans-serif;
+  color: #1e93e8;
+  display: inline-block;
+  margin-bottom: 26px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #1e93e8;
+  font-weight: 500;
+`;
+
+export const DanhsachTieuchi = styled.div`
+  padding-left: 26px;
+  padding-bottom: 26px;
+`;
+
+export const TieuChi = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  img {
+    width: 24px;
+    opacity: 0.6;
+    margin-right: 10px;
+  }
+  span {
+    margin-right: 16px;
+    color: #444;
+    font-size: 15px;
+  }
+  input[type="date"] {
+    height: 38px;
+    padding: 0 10px;
+    margin-right: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+    color: #444;
+    &:focus,
+    &:active {
+      outline: none;
+    }
+  }
+`;
+
+export const TieuchiBtn = styled.button`
+  width: 110px;
+  outline: none;
+  border-radius: 2px;
+  background: transparent;
+  padding: 6px 0;
+  font-size: 15px;
+  &:focus {
+    outline: none;
+  }
+  &.thang {
+    border: 1px solid #007bff;
+    color: #007bff;
+    &:hover {
+      color: #fff;
+      background: #007bff;
+    }
+    &.active {
+      background: #007bff;
+      color: #fff;
+    }
+  }
+  &.nam {
+    border: 1px solid #17a2b8;
+    color: #17a2b8;
+    &:hover {
+      color: #fff;
+      background: #17a2b8;
+    }
+    &.active {
+      background: #17a2b8;
+      color: #fff;
+    }
+  }
+  &.range {
+    border: 1px solid #28a745;
+    color: #28a745;
+    &:hover {
+      color: #fff;
+      background: #28a745;
+    }
+    &.active {
+      background: #28a745;
+      color: #fff;
+    }
+  }
+`;
+
+export const ThongkeValues = styled.div`
+  padding: 26px 0 26px 26px;
+  img {
+    width: 14px;
+    margin-right: 8px;
+  }
+  td {
+    padding-right: 20px;
+    padding-bottom: 10px;
+  }
+`;
