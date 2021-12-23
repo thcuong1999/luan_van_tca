@@ -62,30 +62,21 @@ hodanRouter.post("/them", async (req, res) => {
   }
 });
 
-
-// cap nhat thong tin ca nhan
+// Doi mat khau
 hodanRouter.put(
   "/capnhatthongtincanhan",
   upload.single("avatar"),
   async (req, res) => {
-    const { daidien, sdt, cmnd, namsinh, xa, matkhau, user } = req.body;
+    const { matkhau, user } = req.body;
     // return res.send(req.body);
     try {
       // update password
+      let updatedHodan;
       if (matkhau) {
         const _user = await User.findById(user);
         _user.matkhau = bcrypt.hashSync(matkhau, 8);
-        await _user.save();
+        updatedHodan = await _user.save();
       }
-      // update info
-      const hodan = await Hodan.findOne({ user });
-      hodan.daidien = daidien;
-      hodan.sdt = sdt;
-      hodan.cmnd = cmnd;
-      hodan.namsinh = namsinh;
-      hodan.xa = xa;
-      hodan.avatar = req.file ? req.file.filename : hodan.avatar;
-      const updatedHodan = await hodan.save();
 
       res.send({ updatedHodan, success: true });
     } catch (error) {
