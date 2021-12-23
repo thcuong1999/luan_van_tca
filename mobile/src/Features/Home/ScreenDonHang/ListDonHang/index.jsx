@@ -19,7 +19,7 @@ function ListDonHang(props) {
     navigation.navigate("FormGiaoHang", { data, hodanId });
   };
 
-  console.log({ data });
+  // console.log({ data });
   return (
     <>
       <View
@@ -39,7 +39,22 @@ function ListDonHang(props) {
         </Text>
         <View style={{ marginRight: 10 }}>
           <Text>Mã đơn hàng : {data.ma}</Text>
-          <Text>Thời gian : {data.ngaytao}</Text>
+          {checkComplelteOrder ? (
+            <>
+              <Text>Ngày nhận: {data.ngaytao}</Text>
+
+              {data.dssanpham.map((item) => (
+                <>
+                  <Text key={item._id}>
+                    <Ionicons name="square" size={5} color="black" />{" "}
+                    {item.sanpham.ten} : {item.soluonghoanthanh}/{item.soluong}
+                  </Text>
+                </>
+              ))}
+            </>
+          ) : (
+            <Text>Ngày nhận: {data.ngaytao}</Text>
+          )}
         </View>
         {!checkComplelteOrder ? (
           <Text

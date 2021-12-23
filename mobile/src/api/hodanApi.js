@@ -32,7 +32,11 @@ const hodanApi = {
     const url = `/api/hodan/single/${hodanId}`;
     return axiosClient.put(url, data);
   },
-
+  //doi mat khau
+  doiMatkhau(data){
+    const url = `/api/hodan/capnhatthongtincanhan`;
+    return axiosClient.put(url,data);
+  },
   // danh sach ho dan
   dsHodan() {
     const url = "/api/hodan/danhsach";

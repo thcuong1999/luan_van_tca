@@ -7,6 +7,7 @@ import {
   View,
   Pressable,
   ScrollView,
+  LogBox,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import hodanApi from "../../api/hodanApi";

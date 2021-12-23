@@ -57,7 +57,7 @@ function NguyenLieu(props) {
             <Text style={{ color: "white" }}>
               Mô tả :{data.nguyenlieu.mota}
             </Text>
-            <Text style={{ color: "white" }}>khối lượng :{data.khoiluong}</Text>
+            <Text style={{ color: "white" }}>khối lượng :{data.khoiluong} kg</Text>
             <Text
               style={{
                 color: "white",

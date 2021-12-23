@@ -13,7 +13,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import hodanApi from "../../../api/hodanApi";
 import { Snackbar } from "react-native-paper";
 function RenderPhanPhat(props) {
-  const { phanphat, hodanId, checkCallBack } = props;
+  const { phanphat, hodanId, checkCallBack, handleCallBackSL } = props;
+  // console.log(props);
   const { item: data } = phanphat;
   // console.log(props);
   const [visible, setVisible] = useState(false);
@@ -24,6 +25,7 @@ function RenderPhanPhat(props) {
     try {
       const sendRequest = await hodanApi.xacnhan(hodanId, data._id);
       checkCallBack("Callback");
+      handleCallBackSL("CallBack");
       setVisible(true);
     } catch (error) {
       console.log(error, RNRestart);
@@ -100,14 +102,14 @@ function RenderPhanPhat(props) {
                     </Text>
                     <Text>
                       <Ionicons name="square" size={5} color="black" /> Số lượng
-                      : {item.soluong}m
+                      : {item.soluong}
                     </Text>
 
                     {/* <Text><Ionicons name="square" size={5} color="black"  />
                     {" "}Đơn vị : {item.donvi}</Text> */}
                     <Text>
                       <Ionicons name="square" size={5} color="black" /> Đơn giá
-                      : {item.sanpham.gia} vnđ/m
+                      : {item.sanpham.gia} VNĐ
                     </Text>
                     <Text>
                       <Ionicons name="square" size={5} color="black" /> Mô tả :{" "}
@@ -200,7 +202,7 @@ function RenderPhanPhat(props) {
                                 Tên nguyên liệu: {item.nguyenlieu.ten}
                               </Text>
                               <Text>
-                                Số lượng: {item.khoiluong} {item.donvitinh}
+                                Khối lượng: {item.khoiluong} {item.donvitinh}
                               </Text>
                               <Text>Mô tả : {item.nguyenlieu.mota}</Text>
                             </View>

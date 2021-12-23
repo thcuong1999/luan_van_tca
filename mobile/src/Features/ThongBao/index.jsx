@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import RenderPhanPhat from "./RenderPhanPhat";
 import { useIsFocused } from '@react-navigation/native';
 function ThongBao(props) {
+  const {handleCallBackSL} = props;
   // const [infoHoDan, setInfoHoDan] = useState();
   const [orderList, setOrderList] = useState();
   const [hoDan, setHoDan] = useState("");
@@ -15,14 +16,15 @@ function ThongBao(props) {
   }
   const isFocused = useIsFocused();
   const checkCallBack = (data)=>{
-    
     if(data)
     {
       setCallBack(!callBack);
       // console.log(callBack);
-
     }
   }
+  // handleCallBackSL = (data)=>{
+  //   console.log(data);
+  // }
   useEffect(() => {
     (async () => {
       //get info hodan
@@ -52,7 +54,7 @@ function ThongBao(props) {
         <FlatList
           data={orderList}
           renderItem={(item, index) => (
-            <RenderPhanPhat phanphat={item} hodanId={hoDan._id} checkCallBack={checkCallBack} />
+            <RenderPhanPhat phanphat={item} hodanId={hoDan._id} checkCallBack={checkCallBack} handleCallBackSL={handleCallBackSL}/>
           )}
           keyExtractor={(item) => item._id}
           refreshControl={

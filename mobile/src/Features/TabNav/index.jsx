@@ -10,7 +10,15 @@ import hodanApi from "../../api/hodanApi";
 const Tab = createBottomTabNavigator();
 function TabNav(props) {
   const [soluongdonhangchuaxacnhan, setSoluongdonhangchuaxacnhan] = useState();
-
+  //call back number order don't confirm
+  const [callback, setCallBack] = useState(false);
+  const handleCallBackSL = (data)=>{
+    if(data)
+    {
+      // console.log(data);
+      setCallBack(!callback);
+    }
+  }
   useEffect(() => {
     (async () => {
       //get info hodan
@@ -21,13 +29,14 @@ function TabNav(props) {
         return dataAccount.includes(item.user._id);
       })._id;
       const dsdonhang = await hodanApi.dsDonhang(findHoDan);
-    setSoluongdonhangchuaxacnhan(dsdonhang.dsdonhang.filter(item=>item.xacnhan === false).length);
+      setSoluongdonhangchuaxacnhan(
+        dsdonhang.dsdonhang.filter((item) => item.xacnhan === false).length
+      );
+    // console.log(dsdonhang.dsdonhang);
 
     })();
-  }, []);
-// console.log(soluongdonhangchuaxacnhan);
+  }, [callback]);
   return (
-   
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
@@ -55,9 +64,12 @@ function TabNav(props) {
       />
       <Tab.Screen
         name="Đơn hàng mới"
-        component={ThongBao}
-        options={ { header: () => null, tabBarBadge: soluongdonhangchuaxacnhan && soluongdonhangchuaxacnhan }}
-        
+        // component={ThongBao}
+        children={()=><ThongBao handleCallBackSL={handleCallBackSL}  />}
+        options={{
+          header: () => null,
+          tabBarBadge: soluongdonhangchuaxacnhan && soluongdonhangchuaxacnhan,
+        }}
       />
       <Tab.Screen
         name="Cá nhân"

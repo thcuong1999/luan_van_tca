@@ -16,7 +16,7 @@ function ScreenDonHang(props) {
       );
     })();
   }, []);
-  console.log(orderList);
+  // console.log(orderList);
 
   return (
     <View>

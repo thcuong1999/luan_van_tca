@@ -1,4 +1,6 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,6 +10,8 @@ import {
   TextInput,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { MaterialDialog } from "react-native-material-dialog";
+import hodanApi from "../../../api/hodanApi";
 
 function SreenDoiMatKhau(props) {
   const [passwordOld, onChangePasswordOld] = useState("");
@@ -16,20 +20,81 @@ function SreenDoiMatKhau(props) {
   const [passwordShown3, setPasswordShown3] = useState(false);
   const [passwordNew, setPasswordNew] = useState();
   const [passwordNew2, setPasswordNew2] = useState();
+  const [user, setUser] = useState();
+  const [visible, setVisible] = useState(false);
+  const [visible2, setVisible2] = useState(false);
   const [errPassword, setErrPassword] = useState(
     "Mật khẩu mới không tương thích "
   );
-//   console.log(props);
-  const {navigation } = props;
-  const handleClickComfirm = () => {
-    navigation.goBack()
-
+  //   console.log(props);
+  const { navigation } = props;
+  useEffect(() => {
+    const fetchData = async () => {
+      const dataAccount = await AsyncStorage.getItem("user");
+      setUser(dataAccount);
+    };
+    fetchData();
+  }, []);
+  const handleClose = () => {
+    setVisible(false);
+  };
+  const handleOpen = () => {
+    setVisible(true);
+  };
+  const handleClose2 = () => {
+    setVisible2(false);
+  };
+  const handleOpen2 = () => {
+    setVisible2(true);
+  };
+  const handleClickComfirm = async () => {
+    try {
+      if (passwordOld) {
+        const dataForm = {
+          user: user.replace(`"`, "").replace(`"`, ""),
+          matkhau: passwordNew2,
+        };
+        const sendRequest = await hodanApi.doiMatkhau(dataForm);
+        handleOpen2();
+        // console.log(sendRequest);
+      } else {
+        handleOpen();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <SafeAreaView style={{ flex: 1, marginTop: 20 }}>
       <View style={styles.headerContainer}>
         <Text style={{ color: "white" }}>Đổi mật khẩu </Text>
       </View>
+      <MaterialDialog
+        title="Cảnh báo"
+        visible={visible}
+        onOk={() => {
+          setVisible(false);
+        }}
+        onCancel={() => {
+          setVisible(false);
+        }}
+      >
+        <Text style={{ color: "red" }}>Vui lòng nhập mật khẩu !</Text>
+      </MaterialDialog>
+      <MaterialDialog
+        title="Cảnh báo"
+        visible={visible2}
+        onOk={() => {
+          setVisible2(false);
+          navigation.goBack();
+        }}
+        onCancel={() => {
+          setVisible2(false);
+          navigation.goBack();
+        }}
+      >
+        <Text style={{ color: "green" }}>Đổi mật khẩu thành công !</Text>
+      </MaterialDialog>
       <ScrollView>
         <View style={{ marginLeft: 40, marginTop: 10 }}>
           <Text>Nhập mật khẩu cũ</Text>
@@ -117,8 +182,8 @@ function SreenDoiMatKhau(props) {
             />
           </View>
           <Text style={{ color: "red" }}>
-                {passwordNew === passwordNew2 ? "" : errPassword}
-              </Text>
+            {passwordNew === passwordNew2 ? "" : errPassword}
+          </Text>
         </View>
       </ScrollView>
       <View
