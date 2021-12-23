@@ -399,10 +399,10 @@ export const headCellsDonhang = [
     label: "Phân phát đến",
   },
   {
-    id: "phanphatdi",
+    id: "xacnhan",
     numeric: false,
     disablePadding: false,
-    label: "Phân phát đi",
+    label: "Xác nhận",
   },
 ];
 

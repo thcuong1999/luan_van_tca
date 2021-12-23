@@ -155,7 +155,9 @@ const Thongke = ({
                     <img src={star} alt="diachi" />
                     <span>Tổng giá:</span>
                   </td>
-                  <td>{formatMoney(tongGia)} vnđ</td>
+                  <td style={{ fontWeight: "bold" }}>
+                    {formatMoney(tongGia)} vnđ
+                  </td>
                 </tr>
               ) : null}
             </table>

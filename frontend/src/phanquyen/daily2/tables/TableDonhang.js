@@ -232,8 +232,10 @@ const TableDonhang = ({ dsDonhang = [], setRowsRemoved, readOnly }) => {
                         </TableCell>
                         <TableCell align="right">{row?.ngaytao}</TableCell>
                         <TableCell align="right">
-                          {row.ngaydathang ? (
-                            <Badge className="success">{row.ngaydathang}</Badge>
+                          {row.xacnhan ? (
+                            <Badge className="success">
+                              <i class="fas fa-check"></i>
+                            </Badge>
                           ) : (
                             <Badge className="danger">Đang chờ</Badge>
                           )}

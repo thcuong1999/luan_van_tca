@@ -630,6 +630,7 @@ export const TieuChi = styled.div`
     margin-right: 16px;
     color: #444;
     font-size: 15px;
+    font-family: "Poppins", sans-serif;
   }
   input[type="date"] {
     height: 38px;
@@ -652,6 +653,7 @@ export const TieuchiBtn = styled.button`
   background: transparent;
   padding: 6px 0;
   font-size: 15px;
+  font-family: "Poppins", sans-serif;
   &:focus {
     outline: none;
   }
@@ -702,5 +704,13 @@ export const ThongkeValues = styled.div`
   td {
     padding-right: 20px;
     padding-bottom: 10px;
+    &:nth-child(1) {
+      font-family: "Poppins", sans-serif;
+      font-size: 15px;
+    }
+    &:nth-child(2) {
+      font-family: "Montserrat", sans-serif;
+      font-size: 15px;
+    }
   }
 `;
