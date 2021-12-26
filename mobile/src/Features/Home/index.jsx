@@ -18,23 +18,16 @@ import ScreenTienDo from "./ScreenTienDo";
 
 function Home(props) {
   const { navigation } = props;
+  // console.log(props);
+  const { user} = props;
+  // console.log(user);
   const [checkTienDo, setCheckTienDo] = useState(true);
   const [checkDonHang, setCheckDonHang] = useState(false);
   const [checkKho, setCheckKho] = useState(false);
-  const [listHoDan, setListHoDan] = useState();
-  const [hoDan, setHoDan] = useState();
   const [idAccount, setIdAccount] = useState();
 
   useEffect(() => {
     (async () => {
-      //get info hodan
-      const dataHodan = await hodanApi.getAll();
-      //get id Account
-      const dataAccount = await AsyncStorage.getItem("user");
-      const findHoDan = dataHodan.hodan.find((item) => {
-        return dataAccount.includes(item.user._id);
-      });
-      setHoDan(findHoDan);
       LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     })();
   }, []);
@@ -55,30 +48,30 @@ function Home(props) {
     setCheckKho(true);
   };
   const handleRedirectBCTienDo = () => {
-    navigation.navigate("FormBCTienDo", { idHodan: `${hoDan._id}` });
+    navigation.navigate("FormBCTienDo", { idHodan: `${user._id}` });
   };
   const handleRedirectCongCu = () => {
-    navigation.navigate("ScreenCongCu", { idHodan: `${hoDan._id}` });
+    navigation.navigate("ScreenCongCu", { idHodan: `${user._id}` });
   };
   const handleRedirectVatTu = () => {
-    navigation.navigate("ScreenVatTu", { idHodan: `${hoDan._id}` });
+    navigation.navigate("ScreenVatTu", { idHodan: `${user._id}` });
   };
   const handleRedirectNguyenLieu = () => {
-    navigation.navigate("ScreenNguyenLieu", { idHodan: `${hoDan._id}` });
+    navigation.navigate("ScreenNguyenLieu", { idHodan: `${user._id}` });
   };
   const handleRedirectKhoLoi = () => {
-    navigation.navigate("ScreenKhoLoi", { idHodan: `${hoDan._id}` });
+    navigation.navigate("ScreenKhoLoi", { idHodan: `${user._id}` });
   };
   const handleRedirectSanPham = () => {
-    navigation.navigate("ScreenSanPham", { idHodan: `${hoDan._id}` });
+    navigation.navigate("ScreenSanPham", { idHodan: `${user._id}` });
   };
 
   return (
     <View style={styles.container}>
-      {hoDan && (
+      {user && (
         <>
           <View style={styles.headerContainer}>
-            <Text style={{ color: "white" }}>Xin chào {hoDan.daidien} </Text>
+            <Text style={{ color: "white" }}>Xin chào {user.daidien} </Text>
           </View>
           <Text>Ứng dụng di động dành cho hộ dân</Text>
 
@@ -147,7 +140,7 @@ function Home(props) {
               {checkTienDo ? (
                 <>
                   <View style={styles.containerRowRedirect}>
-                    <ScreenTienDo navigation={navigation} hodanId={hoDan._id} />
+                    <ScreenTienDo navigation={navigation} hodanId={user._id} />
                   </View>
                 </>
               ) : checkKho ? (
@@ -217,7 +210,7 @@ function Home(props) {
                 </>
               ) : (
                 <>
-                  <ScreenDonHang navigation={navigation} hodanId={hoDan._id} />
+                  <ScreenDonHang navigation={navigation} hodanId={user._id} />
                 </>
               )}
             </View>

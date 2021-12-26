@@ -9,6 +9,7 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+import axiosClient from "../../../../api/axiosClient";
 
 function CongCu(props) {
   const { navigation, idHodan } = props;
@@ -17,6 +18,11 @@ function CongCu(props) {
   const handleClickError = () => {
     navigation.navigate("FormCongCuLoi", { ...data, idHodan });
   };
+  //get link image
+  const getImg = (imgName)=>{
+    return `${axiosClient.defaults.baseURL}uploads/${imgName}`;
+  }
+ 
   return (
     <View style={styles.container}>
       <View style={{ padding: 20 }}>
@@ -34,7 +40,8 @@ function CongCu(props) {
           >
             <Image
               source={{
-                uri: `http://10.3.53.160:5000/uploads/${data.congcu.hinhanh}`,
+                // uri: `http://10.3.53.160:5000/uploads/${data.congcu.hinhanh}`,
+                uri: `${getImg(data.congcu.hinhanh)}`,
               }}
               style={{
                 width: Dimensions.get("window").width - 220,

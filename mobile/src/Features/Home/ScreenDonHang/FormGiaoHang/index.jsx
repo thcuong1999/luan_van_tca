@@ -10,6 +10,8 @@ import {
   Alert,
   Platform,
   Picker,
+  SafeAreaView,
+  ScrollView,
 } from "react-native";
 import { Formik, ErrorMessage, Field } from "formik";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -108,31 +110,6 @@ function FormGiaoHang(props) {
     setVisible3(true);
   };
 
-  // const handleSumitForm = async (values) => {
-  //   try {
-  //     if (image) {
-  //       const dataForm = {
-  //         donhangId: data._id,
-  //         hodanId: hodanId,
-  //         dssanpham: [
-  //           {
-  //             sanpham: data.dssanpham.find(
-  //               (sp) => sp.sanpham.ma === selectedMaSP
-  //             ).sanpham._id,
-  //             dagiao: parseInt(values.soluong),
-  //           },
-  //         ],
-  //       };
-  //       // console.log(dataForm);
-  //       const sendRequest = await apiGiaohang.hodanToDaily2(dataForm);
-  //       // console.log(sendRequest);
-  //       handleOpen2();
-  //     } else {
-  //       handleOpen();
-  //     }
-  //   } catch (error) {}
-  // };
-
   const handleSumitForm = async (values) => {
     try {
       if (image) {
@@ -172,255 +149,237 @@ function FormGiaoHang(props) {
       <View style={styles.headerContainer}>
         <Text style={{ color: "white" }}>Thông tin giao hàng</Text>
       </View>
-      {data && (
-        <Formik
-          initialValues={{ soluong: "" }}
-          onSubmit={handleSumitForm}
-          validationSchema={SignupSchema}
-        >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-          }) => (
-            <View style={styles.containerForm}>
-              <Text style={[styles.text]}>Mã đơn hàng</Text>
-              <View
-                style={{
-                  marginBottom: 12,
-                  marginTop: 12,
-                  borderWidth: 1,
-
-                  borderRadius: 10,
-                  width: 300,
-                  color: "black",
-                  borderColor: "#ccccccf2",
-                }}
-              >
-                <Picker
-                  selectedValue={selectedMaDH}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelectedMaDH(itemValue)
-                  }
-                >
-                  {data && (
-                    <Picker.Item
-                      label={data.ma}
-                      value={data.ma}
-                      key={data._id}
-                    />
-                  )}
-                </Picker>
-              </View>
-              <Text style={[styles.text]}>Tên sản phẩm</Text>
-              <View
-                style={{
-                  marginBottom: 12,
-                  marginTop: 12,
-                  borderWidth: 1,
-                  borderRadius: 10,
-                  width: 300,
-                  color: "black",
-                  borderColor: "#ccccccf2",
-                }}
-              >
-                <Picker
-                  selectedValue={selectedMaSP}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelectedMaSP(itemValue)
-                  }
-                >
-                  {data.dssanpham.map((item) => (
-                    <Picker.Item
-                      label={`${item.sanpham.ma} - ${item.sanpham.ten}`}
-                      value={item.sanpham.ma}
-                      key={item._id}
-                    />
-                  ))}
-                </Picker>
-              </View>
-
-              <Text style={styles.text}>Số lượng sản phẩm đã giao</Text>
-              <TextInput
-                style={[
-                  styles.textInput,
-                  {
-                    borderColor: !touched
-                      ? "#ccccccf2"
-                      : errors.soluong
-                      ? "#FF5A5F"
-                      : "#ccccccf2",
-                  },
-                ]}
-                keyboardType="numeric"
-                onChangeText={handleChange("soluong")}
-                onBlur={handleBlur("soluong")}
-                value={values.soluong}
-                error={errors.soluong}
-                touched={touched.soluong}
-              />
-              {errors.soluong && touched.soluong ? (
-                <>
-                  <Text
-                    style={{
-                      color: !touched
-                        ? "#ccccccf2"
-                        : errors.soluong
-                        ? "#FF5A5F"
-                        : "#ccccccf2",
-                      marginBottom: 5,
-                    }}
-                  >
-                    {errors.soluong}
-                  </Text>
-                </>
-              ) : null}
-              {/* <View style={{ flexDirection: "row" }}>
-                <Text style={styles.text}>Thời gian</Text>
-                <TextInput style={[styles.textInputTime]}>
-                  <Text>{thoigianValue}</Text>
-                </TextInput>
-                <Text onPress={showDatepicker} style={{ marginLeft: 10 }}>
-                  <Ionicons name="calendar" size={30} color="#0000b3" />
-                </Text>
-              </View> */}
-              <Text style={styles.text}>Hình ảnh</Text>
-              <View>
-                <Text
-                  style={{
-                    padding: 10,
-                    marginBottom: 10,
-                    borderRadius: 10,
-                    backgroundColor: "#e6e6e6",
-                    width: 80,
-                  }}
-                  onPress={pickImage}
-                >
-                  Chọn ảnh
-                </Text>
-                {image ? (
-                  <Image
-                    source={{ uri: image }}
-                    style={{ width: 250, height: 150, marginBottom: 10 }}
-                  />
-                ) : (
+      <MaterialDialog
+        title="Thông báo"
+        visible={visible}
+        onOk={() => {
+          setVisible(false);
+        }}
+        onCancel={() => {
+          setVisible(false);
+        }}
+      >
+        <Text style={{color: 'orange'}}>Vui lòng chọn hình ảnh cho sản phẩm!</Text>
+      </MaterialDialog>
+      <MaterialDialog
+        visible={visible2}
+        onOk={() => {
+          setVisible(false);
+          navigation.navigate("TabNav");
+        }}
+        onCancel={() => {
+          setVisible(false);
+          navigation.navigate("TabNav");
+        }}
+      >
+        <Text style={{ color: "green" }}>Đã giao hàng thành công !</Text>
+      </MaterialDialog>
+      <MaterialDialog
+        title="Thông báo"
+        visible={visible3}
+        onOk={() => {
+          setVisible3(false);
+        }}
+        onCancel={() => {
+          setVisible3(false);
+        }}
+      >
+        <Text style={{ color: "#ff5500" }}>
+          Số lượng giao hàng không hợp lệ! Vui lòng kiểm tra lại số lượng hoàn
+          thành!
+        </Text>
+      </MaterialDialog>
+      <SafeAreaView>
+        <ScrollView>
+          {data && (
+            <Formik
+              initialValues={{ soluong: "" }}
+              onSubmit={handleSumitForm}
+              validationSchema={SignupSchema}
+            >
+              {({
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                values,
+                errors,
+                touched,
+              }) => (
+                <View style={styles.containerForm}>
+                  <Text style={[styles.text]}>Mã đơn hàng</Text>
                   <View
                     style={{
-                      borderRadius: 20,
-                      borderColor: "#e6e6e6",
+                      marginBottom: 12,
+                      marginTop: 12,
                       borderWidth: 1,
-                      width: 300,
-                      height: 200,
-                    }}
-                  ></View>
-                )}
-              </View>
-              <MaterialDialog
-                title="Thông báo"
-                visible={visible}
-                onOk={() => {
-                  setVisible(false);
-                }}
-                onCancel={() => {
-                  setVisible(false);
-                }}
-              >
-                <Text>Vui lòng chọn hình ảnh cho sản phẩm!</Text>
-              </MaterialDialog>
 
-              <MaterialDialog
-                visible={visible2}
-                onOk={() => {
-                  setVisible(false);
-                  navigation.navigate("TabNav");
-                }}
-                onCancel={() => {
-                  setVisible(false);
-                  navigation.navigate("TabNav");
-                }}
-              >
-                <Text style={{ color: "green" }}>
-                  Đã giao hàng thành công !
-                </Text>
-              </MaterialDialog>
-              <MaterialDialog
-                title="Thông báo"
-                visible={visible3}
-                onOk={() => {
-                  setVisible3(false);
-                }}
-                onCancel={() => {
-                  setVisible3(false);
-                }}
-              >
-                <Text style={{ color: "#ff5500" }}>
-                  Số lượng giao hàng không hợp lệ! Vui lòng kiểm tra lại số
-                  lượng hoàn thành!
-                </Text>
-              </MaterialDialog>
-              <View>
-                {show && (
-                  <DateTimePicker
-                    testID="dateTimePicker"
-                    value={date}
-                    mode={mode}
-                    is24Hour={true}
-                    display="default"
-                    onChange={onChange}
+                      borderRadius: 10,
+                      width: 300,
+                      color: "black",
+                      borderColor: "#ccccccf2",
+                    }}
+                  >
+                    <Picker
+                      selectedValue={selectedMaDH}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setSelectedMaDH(itemValue)
+                      }
+                    >
+                      {data && (
+                        <Picker.Item
+                          label={data.ma}
+                          value={data.ma}
+                          key={data._id}
+                        />
+                      )}
+                    </Picker>
+                  </View>
+                  <Text style={[styles.text]}>Tên sản phẩm</Text>
+                  <View
+                    style={{
+                      marginBottom: 12,
+                      marginTop: 12,
+                      borderWidth: 1,
+                      borderRadius: 10,
+                      width: 300,
+                      color: "black",
+                      borderColor: "#ccccccf2",
+                    }}
+                  >
+                    <Picker
+                      selectedValue={selectedMaSP}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setSelectedMaSP(itemValue)
+                      }
+                    >
+                      {data.dssanpham.map((item) => (
+                        <Picker.Item
+                          label={`${item.sanpham.ma} - ${item.sanpham.ten}`}
+                          value={item.sanpham.ma}
+                          key={item._id}
+                        />
+                      ))}
+                    </Picker>
+                  </View>
+
+                  <Text style={styles.text}>Số lượng sản phẩm muốn giao</Text>
+                  <TextInput
+                    style={[
+                      styles.textInput,
+                      {
+                        borderColor: !touched
+                          ? "#ccccccf2"
+                          : errors.soluong
+                          ? "#FF5A5F"
+                          : "#ccccccf2",
+                      },
+                    ]}
+                    keyboardType="numeric"
+                    onChangeText={handleChange("soluong")}
+                    onBlur={handleBlur("soluong")}
+                    value={values.soluong}
+                    error={errors.soluong}
+                    touched={touched.soluong}
                   />
-                )}
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  marginTop: 35,
-                  paddingTop: 10,
-                  borderTopColor: "#b3b3b3",
-                  borderWidth: 1,
-                  borderRightWidth: 0,
-                  borderLeftWidth: 0,
-                  borderBottomWidth: 0,
-                }}
-              >
-                <Text
-                  style={{
-                    borderColor: "#0000e6",
-                    borderWidth: 1,
-                    borderRadius: 90,
-                    paddingTop: 8,
-                    width: 50,
-                    textAlign: "center",
-                    marginLeft: 20,
-                  }}
-                  onPress={() => {
-                    navigation.navigate("TabNav");
-                  }}
-                >
-                  <Ionicons name="arrow-back" size={30} color="#0000b3" />
-                </Text>
-                <Text
-                  onPress={handleSubmit}
-                  style={{
-                    padding: 10,
-                    marginBottom: 10,
-                    borderRadius: 10,
-                    backgroundColor: "#0000e6",
-                    width: 200,
-                    textAlign: "center",
-                    color: "white",
-                    marginLeft: 30,
-                  }}
-                >
-                  Gửi báo cáo
-                </Text>
-              </View>
-            </View>
+                  {errors.soluong && touched.soluong ? (
+                    <>
+                      <Text
+                        style={{
+                          color: !touched
+                            ? "#ccccccf2"
+                            : errors.soluong
+                            ? "#FF5A5F"
+                            : "#ccccccf2",
+                          marginBottom: 5,
+                        }}
+                      >
+                        {errors.soluong}
+                      </Text>
+                    </>
+                  ) : null}
+
+                  <Text style={styles.text}>Hình ảnh</Text>
+                  <View>
+                    <Text
+                      style={{
+                        padding: 10,
+                        marginBottom: 10,
+                        borderRadius: 10,
+                        backgroundColor: "#e6e6e6",
+                        width: 100,
+                      }}
+                      onPress={pickImage}
+                    >
+                      Chọn ảnh
+                    </Text>
+                    {image ? (
+                      <Image
+                        source={{ uri: image }}
+                        style={{ width: 250, height: 150, marginBottom: 10 }}
+                      />
+                    ) : (
+                      <View
+                        style={{
+                          borderRadius: 20,
+                          borderColor: "#e6e6e6",
+                          borderWidth: 1,
+                          width: 300,
+                          height: 150,
+                        }}
+                      ></View>
+                    )}
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      marginTop: 35,
+                      paddingTop: 10,
+                      borderTopColor: "#b3b3b3",
+                      borderWidth: 1,
+                      borderRightWidth: 0,
+                      borderLeftWidth: 0,
+                      borderBottomWidth: 0,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        borderColor: "#0000e6",
+                        borderWidth: 1,
+                        borderRadius: 90,
+                        paddingTop: 8,
+                        width: 50,
+                        textAlign: "center",
+                        marginLeft: 20,
+                      }}
+                      onPress={() => {
+                        navigation.navigate("TabNav");
+                      }}
+                    >
+                      <Ionicons name="arrow-back" size={30} color="#0000b3" />
+                    </Text>
+                    <Text
+                      onPress={handleSubmit}
+                      style={{
+                        padding: 10,
+                        marginBottom: 10,
+                        borderRadius: 10,
+                        backgroundColor: "#0000e6",
+                        width: 200,
+                        textAlign: "center",
+                        color: "white",
+                        marginLeft: 30,
+                      }}
+                    >
+                      Gửi báo cáo
+                    </Text>
+                  </View>
+                </View>
+              )}
+            </Formik>
           )}
-        </Formik>
-      )}
+        </ScrollView>
+      </SafeAreaView>
     </View>
   );
 }
@@ -443,6 +402,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingRight: 30,
     borderRadius: 10,
+    marginBottom: 100,
   },
   text: {
     color: "black",

@@ -9,9 +9,11 @@ import hodanApi from "../../api/hodanApi";
 
 const Tab = createBottomTabNavigator();
 function TabNav(props) {
+  const {navigation} = props;
   const [soluongdonhangchuaxacnhan, setSoluongdonhangchuaxacnhan] = useState();
   //call back number order don't confirm
   const [callback, setCallBack] = useState(false);
+  const [user, setUser] = useState();
   const handleCallBackSL = (data)=>{
     if(data)
     {
@@ -25,14 +27,18 @@ function TabNav(props) {
       const dataHodan = await hodanApi.getAll();
       //get id Account
       const dataAccount = await AsyncStorage.getItem("user");
-      const findHoDan = dataHodan.hodan.find((item) => {
+      //filter user list was active
+      const userListActive = dataHodan.hodan.filter((item) => item.user);
+      const user = userListActive.find((item) => {
         return dataAccount.includes(item.user._id);
-      })._id;
-      const dsdonhang = await hodanApi.dsDonhang(findHoDan);
+      });
+      setUser(user);
+      // console.log(user);
+      const dsdonhang = await hodanApi.dsDonhang(user._id);
       setSoluongdonhangchuaxacnhan(
         dsdonhang.dsdonhang.filter((item) => item.xacnhan === false).length
       );
-    // console.log(dsdonhang.dsdonhang);
+    // console.log(user);
 
     })();
   }, [callback]);
@@ -59,13 +65,13 @@ function TabNav(props) {
     >
       <Tab.Screen
         name="Trang chủ"
-        component={Home}
+        children={()=><Home user={user} navigation={navigation}  />}
         options={{ header: () => null }}
       />
       <Tab.Screen
         name="Đơn hàng mới"
         // component={ThongBao}
-        children={()=><ThongBao handleCallBackSL={handleCallBackSL}  />}
+        children={()=><ThongBao handleCallBackSL={handleCallBackSL}  user={user} navigation={navigation} />}
         options={{
           header: () => null,
           tabBarBadge: soluongdonhangchuaxacnhan && soluongdonhangchuaxacnhan,

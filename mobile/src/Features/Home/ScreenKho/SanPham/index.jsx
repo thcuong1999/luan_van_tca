@@ -9,12 +9,17 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+import axiosClient from "../../../../api/axiosClient";
 
 function SanPham(props) {
   const { navigation, idHodan } = props;
   const data = props.sanpham.item;
   // console.log(props);
   // const formatNumber = new Intl.NumberFormat('es');
+  //get link image
+  const getImg = (imgName)=>{
+    return `${axiosClient.defaults.baseURL}uploads/${imgName}`;
+  }
   return (
     <View style={styles.container}>
       <View style={{ padding: 20 }}>
@@ -32,7 +37,7 @@ function SanPham(props) {
           >
             <Image
               source={{
-                uri: `http://10.3.53.160:5000/uploads/${data.sanpham.hinhanh}`,
+                uri: `${getImg(data.sanpham.hinhanh)}`,
               }}
               style={{
                 width: Dimensions.get("window").width - 220,

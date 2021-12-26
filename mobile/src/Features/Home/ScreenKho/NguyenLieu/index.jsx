@@ -9,6 +9,7 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+import axiosClient from "../../../../api/axiosClient";
 
 function NguyenLieu(props) {
   const { navigation, idHodan } = props;
@@ -17,6 +18,10 @@ function NguyenLieu(props) {
   const handleClickError = () => {
     navigation.navigate("FormNguyenLieuLoi", { ...data, idHodan });
   };
+   //get link image
+   const getImg = (imgName)=>{
+    return `${axiosClient.defaults.baseURL}uploads/${imgName}`;
+  }
   return (
     <View style={styles.container}>
       <View style={{ padding: 20 }}>
@@ -34,7 +39,7 @@ function NguyenLieu(props) {
           >
             <Image
               source={{
-                uri: `http://10.3.53.160:5000/uploads/${data.nguyenlieu.hinhanh}`,
+                uri: `${getImg(data.nguyenlieu.hinhanh)}`,
               }}
               style={{
                 width: Dimensions.get("window").width - 220,

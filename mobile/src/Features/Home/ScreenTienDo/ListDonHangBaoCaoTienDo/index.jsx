@@ -52,7 +52,7 @@ function ListDonHangBaoCaoTienDo(props) {
             <Text>Mã đơn hàng : {data.ma}</Text>
             {data.dssanpham.map((item) => (
               <>
-                <Text key={item._id}>
+                <Text key={item.sanpham._id}>
                   <Ionicons name="square" size={5} color="black" />{" "}
                   {item.sanpham.ten} : {item.soluonghoanthanh}/{item.soluong}
                 </Text>

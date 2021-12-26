@@ -1,41 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, StyleSheet, Text, View, SafeAreaView,RefreshControl } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  RefreshControl,
+} from "react-native";
 import hodanApi from "../../api/hodanApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import RenderPhanPhat from "./RenderPhanPhat";
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from "@react-navigation/native";
 function ThongBao(props) {
-  const {handleCallBackSL} = props;
+  const { handleCallBackSL, user} = props;
+  // console.log(user);
   // const [infoHoDan, setInfoHoDan] = useState();
   const [orderList, setOrderList] = useState();
   const [hoDan, setHoDan] = useState("");
   const [callBack, setCallBack] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const wait = (timeout) => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
-  }
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
   const isFocused = useIsFocused();
-  const checkCallBack = (data)=>{
-    if(data)
-    {
+  const checkCallBack = (data) => {
+    if (data) {
       setCallBack(!callBack);
       // console.log(callBack);
     }
-  }
-  // handleCallBackSL = (data)=>{
-  //   console.log(data);
-  // }
+  };
   useEffect(() => {
     (async () => {
-      //get info hodan
-      const dataHodan = await hodanApi.getAll();
-      //get id Account
-      const dataAccount = await AsyncStorage.getItem("user");
-      const findHoDan = dataHodan.hodan.find((item) => {
-        return dataAccount.includes(item.user._id);
-      });
-      setHoDan(findHoDan);
-      const getListOrder = await hodanApi.dsDonhang(findHoDan._id);
+      const getListOrder = await hodanApi.dsDonhang(user._id);
       setOrderList(getListOrder.dsdonhang);
     })();
   }, [callBack]);
@@ -54,14 +50,16 @@ function ThongBao(props) {
         <FlatList
           data={orderList}
           renderItem={(item, index) => (
-            <RenderPhanPhat phanphat={item} hodanId={hoDan._id} checkCallBack={checkCallBack} handleCallBackSL={handleCallBackSL}/>
+            <RenderPhanPhat
+              phanphat={item}
+              hodanId={user._id}
+              checkCallBack={checkCallBack}
+              handleCallBackSL={handleCallBackSL}
+            />
           )}
           keyExtractor={(item) => item._id}
           refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         />
       )}

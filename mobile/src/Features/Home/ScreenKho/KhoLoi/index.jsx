@@ -9,6 +9,7 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+import axiosClient from "../../../../api/axiosClient";
 
 function KhoLoi(props) {
   const { navigation, idHodan } = props;
@@ -23,6 +24,11 @@ function KhoLoi(props) {
       ? setData(dataLoi.vattu)
       : setData(dataLoi.nguyenlieu);
   }, []);
+   //get link image
+   const getImg = (imgName)=>{
+    return `${axiosClient.defaults.baseURL}uploads/${imgName}`;
+  }
+ 
   // console.log(dataLoi, data);
   return (
     <View style={styles.container}>
@@ -42,7 +48,8 @@ function KhoLoi(props) {
             >
               <Image
                 source={{
-                  uri: `http://10.3.53.160:5000/uploads/${data.hinhanh}`,
+                  uri: `${getImg(data.hinhanh)}`,
+                  
                 }}
                 style={{
                   width: Dimensions.get("window").width - 220,
