@@ -75,15 +75,15 @@ const LoaiSanphamThem = (props) => {
   };
 
   const handleSubmit = async () => {
-    if (!validateFields()) {
-      const { success } = await apiLoaiSanpham.themLoaiSanpham(spLangnghe);
-      if (success) {
-        toast.success("Thêm thành công!", { theme: "colored" });
-        resetFields();
-        setErrMsg("");
-      }
+    const { success } = await apiLoaiSanpham.themLoaiSanpham(spLangnghe);
+    if (success) {
+      toast.success("Thêm thành công!", { theme: "colored" });
+      resetFields();
+      setErrMsg("");
     }
   };
+
+  console.log({ spLangnghe });
 
   const resetFields = () => {
     setSpLangnghe({

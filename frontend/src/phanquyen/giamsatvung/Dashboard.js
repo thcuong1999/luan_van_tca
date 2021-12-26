@@ -130,19 +130,6 @@ const Dashboard = (props) => {
           </MenuItem>
 
           <MenuItem>
-            <NavLink to="/giamsatvung/donhang" activeClassName="active">
-              {dsBadge?.donhangBadge > 0 ? (
-                <Badge badgeContent={dsBadge?.donhangBadge} color="secondary">
-                  <i class="far fa-newspaper"></i>
-                </Badge>
-              ) : (
-                <i class="far fa-newspaper"></i>
-              )}
-              <span className="ml-3">Đơn hàng</span>
-            </NavLink>
-          </MenuItem>
-
-          <MenuItem>
             <NavLink to="/giamsatvung/sanpham" activeClassName="active">
               <Image src={splnIcon} alt="splangnghe" />
               <span className="ml-3">Sản phẩm</span>
@@ -167,6 +154,19 @@ const Dashboard = (props) => {
             <NavLink to="/giamsatvung/nguyenlieu" activeClassName="active">
               <i class="fab fa-bandcamp"></i>
               <span className="ml-3">Nguyên liệu</span>
+            </NavLink>
+          </MenuItem>
+
+          <MenuItem>
+            <NavLink to="/giamsatvung/donhang" activeClassName="active">
+              {dsBadge?.donhangBadge > 0 ? (
+                <Badge badgeContent={dsBadge?.donhangBadge} color="secondary">
+                  <i class="far fa-newspaper"></i>
+                </Badge>
+              ) : (
+                <i class="far fa-newspaper"></i>
+              )}
+              <span className="ml-3">Đơn hàng</span>
             </NavLink>
           </MenuItem>
 

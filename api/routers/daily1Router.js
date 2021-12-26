@@ -16,7 +16,7 @@ const {
 
 // them dai ly
 daily1Router.post("/them", async (req, res) => {
-  const { ten, sdt, email, xa, huyen, tinh, taikhoan, bophankdId, dl1Id } =
+  const { ten, sdt, email, xa, huyen, tinh, taikhoan, bophankdId, gsvId } =
     req.body;
   try {
     // create daily 1
@@ -28,13 +28,13 @@ daily1Router.post("/them", async (req, res) => {
       huyen,
       tinh,
       taikhoan,
-      giamsatvung: dl1Id,
+      giamsatvung: gsvId,
     });
     const savedDaily1 = await newDaily1.save();
 
     if (savedDaily1) {
       // Thêm vào danh sách đại lý 1 của GSV
-      const gsv = await Giamsatvung.findById(dl1Id);
+      const gsv = await Giamsatvung.findById(gsvId);
       gsv.daily1 = [savedDaily1._id, ...gsv.daily1];
       await gsv.save();
       // Thêm vào danh sách duyệt đại lý 1 của bộ phận kinh doanh

@@ -118,6 +118,14 @@ const Dashboard = (props) => {
           </MenuItem>
 
           <MenuItem>
+            <NavLink to="/bophankd/giamsatvung" activeClassName="active">
+              <Image src={gsvIcon} alt="gsvIcon" />
+              <span className="ml-3">Giám sát vùng</span>
+            </NavLink>
+          </MenuItem>
+
+
+          <MenuItem>
             <NavLink to="/bophankd/daily1" activeClassName="active">
               {dsBadge?.daily1Badge > 0 ? (
                 <Badge badgeContent={dsBadge?.daily1Badge} color="secondary">
@@ -145,13 +153,7 @@ const Dashboard = (props) => {
             </NavLink>
           </MenuItem>
 
-          <MenuItem>
-            <NavLink to="/bophankd/giamsatvung" activeClassName="active">
-              <Image src={gsvIcon} alt="gsvIcon" />
-              <span className="ml-3">Giám sát vùng</span>
-            </NavLink>
-          </MenuItem>
-
+       
           <MenuItem>
             <NavLink to="/bophankd/hodan" activeClassName="active">
               <Image src={hodanIcon} alt="hodan" />

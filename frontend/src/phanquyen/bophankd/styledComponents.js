@@ -628,7 +628,7 @@ export const TieuChi = styled.div`
   }
   span {
     margin-right: 16px;
-    color: #444;
+    color: #444;confi
     font-size: 15px;
     font-family: "Poppins", sans-serif;
   }

@@ -173,9 +173,11 @@ const Giaohang = (props) => {
                       handleChangeSL={handleChangeSL}
                     />
                   </TableSection>
-                  <EmptyGiaohang>
-                    Không còn hoặc không có hàng để giao
-                  </EmptyGiaohang>
+                  {!dsSanpham.length && (
+                    <EmptyGiaohang>
+                      Không còn hoặc không có hàng để giao
+                    </EmptyGiaohang>
+                  )}
                 </>
               ) : null}
             </div>

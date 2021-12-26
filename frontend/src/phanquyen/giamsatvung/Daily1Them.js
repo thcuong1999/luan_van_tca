@@ -109,7 +109,6 @@ const Daily1Them = (props) => {
         bophankdId: gsvInfo.bophankd,
         gsvId: gsvInfo._id,
       };
-      // console.log(dl);
       const { success } = await apiDaily1.themDaily1(dl);
       if (success) {
         toast.success("Thêm thành công!", { theme: "colored" });

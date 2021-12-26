@@ -333,6 +333,7 @@ const ThongtinCanhan = ({ type }) => {
         );
         setData(daily2);
         setLoading(false);
+        console.log({ daily2 });
         break;
 
       default:
@@ -387,245 +388,129 @@ const ThongtinCanhan = ({ type }) => {
           </label>
         </Avatar>
 
-        {type === "admin" ? (
-          <>
-            <Section
-              className={
-                activeTab === "canhan" ? "canhanActive" : "canhanDeactive"
-              }
-            >
-              <FlexRow>
-                <InputBox>
-                  <Label>Tên</Label>
-                  <Input
-                    type="text"
-                    value={data?.ten}
-                    name="ten"
-                    onChange={handleChangeInfo}
-                  />
-                  {!data?.ten && <ErrMsg>{errMsg}</ErrMsg>}
-                </InputBox>
+        <>
+          <Section
+            className={
+              activeTab === "canhan" ? "canhanActive" : "canhanDeactive"
+            }
+          >
+            <FlexRow>
+              <InputBox>
+                <Label>Tên</Label>
+                <Input
+                  type="text"
+                  value={data?.ten}
+                  name="ten"
+                  onChange={handleChangeInfo}
+                />
+                {!data?.ten && <ErrMsg>{errMsg}</ErrMsg>}
+              </InputBox>
 
-                <InputBox>
-                  <Label>Số điện thoại</Label>
-                  <Input
-                    type="text"
-                    value={data?.sdt}
-                    name="sdt"
-                    onChange={handleChangeInfo}
-                  />
-                  {!data?.sdt && <ErrMsg>{errMsg}</ErrMsg>}
-                </InputBox>
-              </FlexRow>
+              <InputBox>
+                <Label>Số điện thoại</Label>
+                <Input
+                  type="text"
+                  value={data?.sdt}
+                  name="sdt"
+                  onChange={handleChangeInfo}
+                />
+                {!data?.sdt && <ErrMsg>{errMsg}</ErrMsg>}
+              </InputBox>
+            </FlexRow>
 
-              <FlexRow>
-                <InputBox>
-                  <Label>E-mail</Label>
-                  <Input
-                    type="text"
-                    value={data?.email}
-                    name="email"
-                    onChange={handleChangeInfo}
-                  />
-                  {!data?.email && <ErrMsg>{errMsg}</ErrMsg>}
-                </InputBox>
-                <InputBox>
-                  <Label>Tỉnh/Thành Phố</Label>
-                  <Select value={tinh} onChange={handleChangeTinh}>
-                    {dsTinh.map((item) => (
-                      <option value={item}>{item}</option>
-                    ))}
-                  </Select>
-                </InputBox>
-              </FlexRow>
+            <FlexRow>
+              <InputBox>
+                <Label>E-mail</Label>
+                <Input
+                  type="text"
+                  value={data?.email}
+                  name="email"
+                  onChange={handleChangeInfo}
+                />
+                {!data?.email && <ErrMsg>{errMsg}</ErrMsg>}
+              </InputBox>
+              <InputBox>
+                <Label>Tỉnh/Thành Phố</Label>
+                <Select value={tinh} onChange={handleChangeTinh}>
+                  {dsTinh.map((item) => (
+                    <option value={item}>{item}</option>
+                  ))}
+                </Select>
+              </InputBox>
+            </FlexRow>
 
-              <FlexRow>
-                <InputBox>
-                  <Label>Huyện/Quận</Label>
-                  <Select value={huyen} onChange={handleChangeHuyen}>
-                    {dsHuyen.map((item) => (
-                      <option value={item}>{item}</option>
-                    ))}
-                  </Select>
-                </InputBox>
-                <InputBox>
-                  <Label>Xã/Phường</Label>
-                  <Select value={xa} onChange={handleChangeXa}>
-                    {dsXa.map((item) => (
-                      <option value={item}>{item}</option>
-                    ))}
-                  </Select>
-                </InputBox>
-              </FlexRow>
-            </Section>
+            <FlexRow>
+              <InputBox>
+                <Label>Huyện/Quận</Label>
+                <Select value={huyen} onChange={handleChangeHuyen}>
+                  {dsHuyen.map((item) => (
+                    <option value={item}>{item}</option>
+                  ))}
+                </Select>
+              </InputBox>
+              <InputBox>
+                <Label>Xã/Phường</Label>
+                <Select value={xa} onChange={handleChangeXa}>
+                  {dsXa.map((item) => (
+                    <option value={item}>{item}</option>
+                  ))}
+                </Select>
+              </InputBox>
+            </FlexRow>
+          </Section>
 
-            <Section
-              className={
-                activeTab === "taikhoan" ? "taikhoanActive" : "taikhoanDeactive"
-              }
-            >
-              <FlexCollumn>
-                <InputBox>
-                  <Label>Tài khoản</Label>
-                  <TaikhoanText>{data?.user.taikhoan}</TaikhoanText>
-                </InputBox>
+          <Section
+            className={
+              activeTab === "taikhoan" ? "taikhoanActive" : "taikhoanDeactive"
+            }
+          >
+            <FlexCollumn>
+              <InputBox>
+                <Label>Tài khoản</Label>
+                <TaikhoanText>{data?.user.taikhoan}</TaikhoanText>
+              </InputBox>
 
-                <InputBox>
-                  <Label>Mật khẩu cũ</Label>
-                  <Input
-                    type="password"
-                    value={matkhau.matkhauCu}
-                    style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
-                    onChange={(e) =>
-                      setMatkhau({ ...matkhau, matkhauCu: e.target.value })
-                    }
-                  />
-                  {pwdErr.type === "matkhauCu" && <ErrMsg>{pwdErr.msg}</ErrMsg>}
-                </InputBox>
+              <InputBox>
+                <Label>Mật khẩu cũ</Label>
+                <Input
+                  type="password"
+                  value={matkhau.matkhauCu}
+                  style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
+                  onChange={(e) =>
+                    setMatkhau({ ...matkhau, matkhauCu: e.target.value })
+                  }
+                />
+                {pwdErr.type === "matkhauCu" && <ErrMsg>{pwdErr.msg}</ErrMsg>}
+              </InputBox>
 
-                <InputBox>
-                  <Label>Mật khẩu mới</Label>
-                  <Input
-                    type="password"
-                    value={matkhau.matkhauMoi}
-                    style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
-                    onChange={(e) =>
-                      setMatkhau({ ...matkhau, matkhauMoi: e.target.value })
-                    }
-                  />
-                  {pwdErr.type === "matkhauMoi" && (
-                    <ErrMsg>{pwdErr.msg}</ErrMsg>
-                  )}
-                </InputBox>
+              <InputBox>
+                <Label>Mật khẩu mới</Label>
+                <Input
+                  type="password"
+                  value={matkhau.matkhauMoi}
+                  style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
+                  onChange={(e) =>
+                    setMatkhau({ ...matkhau, matkhauMoi: e.target.value })
+                  }
+                />
+                {pwdErr.type === "matkhauMoi" && <ErrMsg>{pwdErr.msg}</ErrMsg>}
+              </InputBox>
 
-                <InputBox>
-                  <Label>Xác nhận mật khẩu</Label>
-                  <Input
-                    type="password"
-                    value={matkhau.xnMatkhau}
-                    style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
-                    onChange={(e) =>
-                      setMatkhau({ ...matkhau, xnMatkhau: e.target.value })
-                    }
-                  />
-                  {pwdErr.type === "xnMatkhau" && <ErrMsg>{pwdErr.msg}</ErrMsg>}
-                </InputBox>
-              </FlexCollumn>
-            </Section>
-          </>
-        ) : null}
-
-        {type === "bophankd" ||
-        type === "giamsatvung" ||
-        type === "daily1" ||
-        type === "daily2" ? (
-          <>
-            <Section
-              className={
-                activeTab === "canhan" ? "canhanActive" : "canhanDeactive"
-              }
-            >
-              <FlexRow>
-                <InputBox>
-                  <Label>Tên</Label>
-                  <Input type="text" value={data?.ten} />
-                </InputBox>
-                <InputBox>
-                  <Label>Số điện thoại</Label>
-                  <Input type="text" value={data?.sdt} />
-                </InputBox>
-              </FlexRow>
-
-              <FlexRow>
-                <InputBox>
-                  <Label>E-mail</Label>
-                  <Input type="text" value={data?.email} />
-                </InputBox>
-                <InputBox>
-                  <Label>Tỉnh</Label>
-                  <Select value={tinh} onChange={handleChangeTinh}>
-                    {dsTinh.map((item) => (
-                      <option value={item}>{item}</option>
-                    ))}
-                  </Select>
-                </InputBox>
-              </FlexRow>
-
-              <FlexRow>
-                <InputBox>
-                  <Label>Huyện</Label>
-                  <Select value={huyen} onChange={handleChangeHuyen}>
-                    {dsHuyen.map((item) => (
-                      <option value={item}>{item}</option>
-                    ))}
-                  </Select>
-                </InputBox>
-                <InputBox>
-                  <Label>Xã</Label>
-                  <Select value={xa} onChange={handleChangeXa}>
-                    {dsXa.map((item) => (
-                      <option value={item}>{item}</option>
-                    ))}
-                  </Select>
-                </InputBox>
-              </FlexRow>
-            </Section>
-
-            <Section
-              className={
-                activeTab === "taikhoan" ? "taikhoanActive" : "taikhoanDeactive"
-              }
-            >
-              <FlexCollumn>
-                <InputBox>
-                  <Label>Tài khoản</Label>
-                  <Input type="text" value={data?.user.taikhoan} />
-                </InputBox>
-
-                <InputBox>
-                  <Label>Mật khẩu cũ</Label>
-                  <Input
-                    type="password"
-                    value={matkhau.matkhauCu}
-                    style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
-                    onChange={(e) =>
-                      setMatkhau({ ...matkhau, matkhauCu: e.target.value })
-                    }
-                  />
-                  {pwdErr.type === "matkhauCu" && <ErrMsg>{pwdErr.msg}</ErrMsg>}
-                </InputBox>
-
-                <InputBox>
-                  <Label>Mật khẩu mới</Label>
-                  <Input
-                    type="password"
-                    value={matkhau.matkhauMoi}
-                    style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
-                    onChange={(e) =>
-                      setMatkhau({ ...matkhau, matkhauMoi: e.target.value })
-                    }
-                  />
-                  {pwdErr.type === "matkhauMoi" && (
-                    <ErrMsg>{pwdErr.msg}</ErrMsg>
-                  )}
-                </InputBox>
-
-                <InputBox>
-                  <Label>Xác nhận mật khẩu</Label>
-                  <Input
-                    type="password"
-                    value={matkhau.xnMatkhau}
-                    style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
-                    onChange={(e) =>
-                      setMatkhau({ ...matkhau, xnMatkhau: e.target.value })
-                    }
-                  />
-                  {pwdErr.type === "xnMatkhau" && <ErrMsg>{pwdErr.msg}</ErrMsg>}
-                </InputBox>
-              </FlexCollumn>
-            </Section>
-          </>
-        ) : null}
+              <InputBox>
+                <Label>Xác nhận mật khẩu</Label>
+                <Input
+                  type="password"
+                  value={matkhau.xnMatkhau}
+                  style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.1)" }}
+                  onChange={(e) =>
+                    setMatkhau({ ...matkhau, xnMatkhau: e.target.value })
+                  }
+                />
+                {pwdErr.type === "xnMatkhau" && <ErrMsg>{pwdErr.msg}</ErrMsg>}
+              </InputBox>
+            </FlexCollumn>
+          </Section>
+        </>
 
         <ButtonsWrapper>
           <Button onClick={handleSubmit}>Lưu</Button>
