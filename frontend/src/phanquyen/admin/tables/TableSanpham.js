@@ -28,6 +28,7 @@ const EnhancedTableToolbar = ({
   rowsSelected,
   onClickChitiet,
   onClickCapnhat,
+  handleRedirectToTaisudung,
   onClickXoa,
 }) => {
   return numSelected > 0 ? (
@@ -58,6 +59,9 @@ const EnhancedTableToolbar = ({
                   <TableButton onClick={onClickChitiet}>Chi tiết</TableButton>
                   <TableButton onClick={onClickCapnhat}>Cập nhật</TableButton>
                   <TableButton onClick={onClickXoa}>Xóa</TableButton>
+                  <TableButton onClick={handleRedirectToTaisudung}>
+                    Tái sử dụng
+                  </TableButton>
                 </>
               ) : (
                 <TableButton onClick={onClickXoa}>Xóa</TableButton>
@@ -107,6 +111,10 @@ const TableSanpham = ({ dsSanpham = [], setRowsRemoved }) => {
       toast.success("Xóa thành công!", { theme: "colored" });
       setRowsRemoved(true);
     }
+  };
+
+  const handleRedirectToTaisudung = () => {
+    history.push(`/admin/sanpham/taisudung/${selected[0]}`);
   };
 
   const handleRequestSort = (event, property) => {
@@ -169,6 +177,7 @@ const TableSanpham = ({ dsSanpham = [], setRowsRemoved }) => {
             onClickChitiet={onClickChitiet}
             onClickCapnhat={onClickCapnhat}
             onClickXoa={onClickXoa}
+            handleRedirectToTaisudung={handleRedirectToTaisudung}
           />
           <TableContainer>
             <Table

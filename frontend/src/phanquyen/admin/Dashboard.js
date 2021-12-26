@@ -42,6 +42,7 @@ import Donhang from "./Donhang";
 import DonhangThem from "./DonhangThem";
 import DonhangChitiet from "./DonhangChitiet";
 import ThongtinCanhan from "../../components/pages/ThongtinCanhan";
+import Taisudung from "./Taisudung";
 
 const Dashboard = (props) => {
   const dispatch = useDispatch();
@@ -193,6 +194,8 @@ const Dashboard = (props) => {
           path="/admin/thongtincanhan"
           render={(props) => <ThongtinCanhan {...props} type="admin" />}
         />
+
+        <Route path="/admin/sanpham/taisudung/:id" component={Taisudung} />
       </RightContent>
     </Container>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import BackdropMaterial from "../../components/BackdropMaterial";
 import apiSanpham from "../../axios/apiSanpham";
 import styled from "styled-components";
@@ -7,10 +7,7 @@ import { toast } from "react-toastify";
 import apiCongcu from "../../axios/apiCongcu";
 import apiVattu from "../../axios/apiVattu";
 import apiNguyenlieu from "../../axios/apiNguyenlieu";
-import apiLoaiSanpham from "../../axios/apiLoaiSanpham";
 import MaterialCard from "./MaterialCard";
-import DropdownMaterial2 from "../../components/DropdownMaterial2";
-import MenuItem from "@mui/material/MenuItem";
 import MultipleSelect from "../../components/MultipleSelect";
 import overall from "../../assets/icons/overall.png";
 import congcu from "../../assets/icons/congcu.png";
@@ -20,39 +17,38 @@ import _loai from "../../assets/icons/loai.png";
 import anh from "../../assets/icons/anh.png";
 import tt from "../../assets/icons/thuoctinh.png";
 import _gia from "../../assets/icons/gia.png";
+import { formatMoney } from "../../utils";
 import UploadButton from "../../components/UploadButton";
+import img_placeholder from "../../assets/images/img_placeholder.png";
 import { ImageToDisplay } from "./styledComponents";
+import { links } from "./arrayOfLinks";
 
-const SanphamThem = (props) => {
+const SanphamChinhsua = (props) => {
   const [thuoctinh, setThuoctinh] = useState([{ ten: "", giatri: "" }]);
-  const [ma, setMa] = useState("");
-  const [ten, setTen] = useState("");
-  const [mota, setMota] = useState("");
   const [hinhanh, setHinhAnh] = useState(null);
   const [imgToDisplay, setImgToDisplay] = useState(null);
-  const [loai, setLoai] = useState(null);
-  const [dsloai, setDsloai] = useState([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errMsg, setErrMsg] = useState(false);
   const [dsCongcu, setDsCongcu] = useState([]);
-  const [selectedCongcu, setSelectedCongcu] = useState([]);
   const [multipleCongcu, setMultipleCongcu] = useState([]);
   const [dsVattu, setDsVattu] = useState([]);
   const [multipleVattu, setMultipleVattu] = useState([]);
   const [selectedVattu, setSelectedVattu] = useState([]);
   const [dsNguyenlieu, setDsNguyenlieu] = useState([]);
   const [multipleNguyenlieu, setMultipleNguyenlieu] = useState([]);
-  const [selectedNguyenlieu, setSelectedNguyenlieu] = useState([]);
-  const [gia, setGia] = useState("");
-  const [dsMaSP, setDsMaSP] = useState([]);
-  const [maSPErr, setMaSPErr] = useState("");
-  const ref = useRef();
+  const [singleSanpham, setSingleSanpham] = useState(null);
+  const { id: sanphamId } = props.match.params;
+  //------------
+  const [newMa, setnewMa] = useState("");
+  const [newGia, setnewGia] = useState();
+  const [dsMaSP, setDsMaSP] = useState();
+  const [maSPErr, setMaSPErr] = useState();
 
   const handleChangeMaSP = (e) => {
     var format = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]+/;
     const val = e.target.value;
-    setMa(val);
+    setnewMa(val);
     // check white space
     if (val.indexOf(" ") >= 0) {
       setMaSPErr("Mã không có khoảng trắng");
@@ -69,105 +65,85 @@ const SanphamThem = (props) => {
 
   const fetchData = async () => {
     setLoading(true);
-    const { loaiSanpham } = await apiLoaiSanpham.dsLoaiSanpham();
+    const { sanpham } = await apiSanpham.singleSanpham(sanphamId);
     const { congcu } = await apiCongcu.dsCongcu();
     const { vattu } = await apiVattu.dsVattu();
     const { nguyenlieu } = await apiNguyenlieu.dsNguyenlieu();
+    setSingleSanpham(sanpham);
+    setDsCongcu(congcu);
+    setMultipleCongcu(
+      sanpham.dscongcu.map((item) => ({
+        congcu: item.congcu._id,
+        soluong: item.soluong,
+      }))
+    );
+    setDsVattu(vattu);
+    setSelectedVattu(sanpham.dsvattu.map((item) => item.vattu._id));
+    setMultipleVattu(
+      sanpham.dsvattu.map((item) => ({
+        vattu: item.vattu._id,
+        soluong: item.soluong,
+      }))
+    );
+    setDsNguyenlieu(nguyenlieu);
+
+    setMultipleNguyenlieu(
+      sanpham.dsnguyenlieu.map((item) => ({
+        nguyenlieu: item.nguyenlieu._id,
+        khoiluong: item.khoiluong,
+        donvitinh: item.donvitinh,
+      }))
+    );
+    setThuoctinh(sanpham.thuoctinh.length ? sanpham.thuoctinh : thuoctinh);
+    setImgToDisplay(`/uploads/${sanpham.hinhanh}`);
+    setLoading(false);
+  };
+
+  const fetchDsMaSP = async () => {
     const { sanpham } = await apiSanpham.dsSanpham();
     setDsMaSP(sanpham.map((sp) => sp.ma.toLowerCase()));
-    setDsloai(loaiSanpham);
-    setDsCongcu(congcu);
-    setDsVattu(vattu);
-    setDsNguyenlieu(nguyenlieu);
-    setLoading(false);
   };
 
   useEffect(() => {
     setSuccess(false);
     setLoading(false);
     fetchData();
+    fetchDsMaSP();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [success]);
 
-  const getThuocTinh = () => {
-    if (
-      thuoctinh.length === 1 &&
-      thuoctinh[0].ten === "" &&
-      thuoctinh[0].giatri === ""
-    ) {
-      return [];
-    }
-    return thuoctinh;
-  };
-
-  const validateFields = () => {
-    if (maSPErr) {
-      return false;
-    }
-    if (!ma) {
-      setMaSPErr("Thông tin không được để trống");
-      return false;
-    }
-    if (ma.length < 3) {
-      setMaSPErr("Mã có ít nhất 3 kí tự");
-      return false;
-    }
-    if (
-      !ma ||
-      !ten ||
-      !multipleCongcu.length ||
-      !multipleVattu.length ||
-      !multipleNguyenlieu.length ||
-      !loai ||
-      !gia
-    ) {
+  const emptyFields = () => {
+    if (!newMa || !newGia) {
       setErrMsg("Thông tin không được để trống");
-      return false;
+      return true;
     } else {
       setErrMsg("");
-      return true;
+      return false;
     }
   };
 
   const submitForm = async () => {
-    if (validateFields()) {
+    if (!emptyFields()) {
       const formData = new FormData();
-      formData.append("ma", ma);
-      formData.append("ten", ten);
-      formData.append("mota", mota);
-      formData.append("hinhanh", hinhanh);
-      formData.append("loaisanpham", loai);
-      formData.append("thuoctinh", JSON.stringify(getThuocTinh()));
-      formData.append("dscongcu", JSON.stringify(multipleCongcu));
-      formData.append("dsvattu", JSON.stringify(multipleVattu));
-      formData.append("dsnguyenlieu", JSON.stringify(multipleNguyenlieu));
-      formData.append("gia", gia);
-
+      formData.append("ma", newMa);
+      formData.append("ten", singleSanpham.ten);
+      formData.append("mota", singleSanpham.mota);
+      formData.append("newAnh", hinhanh ? hinhanh : singleSanpham.hinhanh);
+      formData.append("loaisanpham", singleSanpham.loaisanpham._id);
+      formData.append("thuoctinh", JSON.stringify(singleSanpham.thuoctinh));
+      formData.append("dscongcu", JSON.stringify(singleSanpham.dscongcu));
+      formData.append("dsvattu", JSON.stringify(singleSanpham.dsvattu));
+      formData.append(
+        "dsnguyenlieu",
+        JSON.stringify(singleSanpham.dsnguyenlieu)
+      );
+      formData.append("gia", newGia);
       const { success } = await apiSanpham.themSanpham(formData);
       if (success) {
-        toast.success("Thêm thành công!", { theme: "colored" });
-        resetFields();
-        setErrMsg("");
+        toast.success("Tái sử dụng thành công!", { theme: "colored" });
+        props.history.push("/admin/sanpham");
       }
     }
-  };
-
-  // reset fields
-  const resetFields = () => {
-    setMa("");
-    setTen("");
-    setMota("");
-    setSelectedCongcu([]);
-    setMultipleCongcu([]);
-    setSelectedVattu([]);
-    setMultipleVattu([]);
-    setSelectedNguyenlieu([]);
-    setMultipleNguyenlieu([]);
-    setLoai(null);
-    setHinhAnh(null);
-    setImgToDisplay(null);
-    setThuoctinh([{ ten: "", giatri: "" }]);
-    setGia("");
   };
 
   // handle input change
@@ -188,66 +164,6 @@ const SanphamThem = (props) => {
   // handle click event of the Add button
   const handleAddClick = () => {
     setThuoctinh([...thuoctinh, { ten: "", giatri: "" }]);
-  };
-
-  // handle select cong cu
-  const handleSelectCongcu = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setSelectedCongcu(typeof value === "string" ? value.split(",") : value);
-    setMultipleCongcu((prev) => {
-      let temp = prev.map((item) => item.congcu);
-      let arr = [];
-      for (let x of value) {
-        if (temp.includes(x)) {
-          arr.push(prev.find((y) => y.congcu === x));
-        } else {
-          arr.push({ congcu: x, soluong: 1 });
-        }
-      }
-      return arr;
-    });
-  };
-
-  // handle select vattu
-  const handleSelectVattu = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setSelectedVattu(typeof value === "string" ? value.split(",") : value);
-    setMultipleVattu((prev) => {
-      let temp = prev.map((item) => item.vattu);
-      let arr = [];
-      for (let x of value) {
-        if (temp.includes(x)) {
-          arr.push(prev.find((y) => y.vattu === x));
-        } else {
-          arr.push({ vattu: x, soluong: 1 });
-        }
-      }
-      return arr;
-    });
-  };
-
-  // handle select nglieu
-  const handleSelectNguyenlieu = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setSelectedNguyenlieu(typeof value === "string" ? value.split(",") : value);
-    setMultipleNguyenlieu((prev) => {
-      let temp = prev.map((item) => item.nguyenlieu);
-      let arr = [];
-      for (let x of value) {
-        if (temp.includes(x)) {
-          arr.push(prev.find((y) => y.nguyenlieu === x));
-        } else {
-          arr.push({ nguyenlieu: x, khoiluong: 1, donvitinh: "kg" });
-        }
-      }
-      return arr;
-    });
   };
 
   // get ten congcu / vattu / nguyenlieu
@@ -272,6 +188,7 @@ const SanphamThem = (props) => {
               <i class="fas fa-save"></i>
             </button>
           }
+          arrOfLinks={links}
         />
 
         <Content>
@@ -288,9 +205,9 @@ const SanphamThem = (props) => {
                     <Input
                       type="text"
                       placeholder="Nhập mã"
-                      value={ma}
-                      onChange={handleChangeMaSP}
+                      value={newMa}
                       style={{ width: "50%" }}
+                      onChange={handleChangeMaSP}
                     />
                     {<ErrMsg>{maSPErr}</ErrMsg>}
                   </FormGroup>
@@ -300,17 +217,27 @@ const SanphamThem = (props) => {
                     <Input
                       type="text"
                       placeholder="Nhập tên"
-                      value={ten}
-                      onChange={(e) => setTen(e.target.value)}
+                      value={singleSanpham?.ten}
+                      onChange={(e) =>
+                        setSingleSanpham({
+                          ...singleSanpham,
+                          ten: e.target.value,
+                        })
+                      }
                     />
-                    {!ten && <ErrMsg>{errMsg}</ErrMsg>}
+                    {!singleSanpham?.ten && <ErrMsg>{errMsg}</ErrMsg>}
                   </FormGroup>
 
                   <FormGroup>
                     <Label>Mô tả sản phẩm:</Label>
                     <TextArea
-                      value={mota}
-                      onChange={(e) => setMota(e.target.value)}
+                      value={singleSanpham?.mota}
+                      onChange={(e) =>
+                        setSingleSanpham({
+                          ...singleSanpham,
+                          mota: e.target.value,
+                        })
+                      }
                       rows="5"
                       placeholder="Nhập mô tả"
                     />
@@ -325,17 +252,13 @@ const SanphamThem = (props) => {
                 </BoxTitle>
                 <BoxContent>
                   {dsCongcu && dsCongcu.length ? (
-                    <MultipleSelect
-                      label="Chọn công cụ"
-                      value={selectedCongcu}
-                      onChange={handleSelectCongcu}
-                    >
-                      {dsCongcu.map((item) => (
-                        <MenuItem key={item._id} value={item._id}>
-                          {item.ten}
-                        </MenuItem>
-                      ))}
-                    </MultipleSelect>
+                    <Input
+                      type="text"
+                      value={singleSanpham?.dscongcu
+                        .map((cc) => cc.congcu.ten)
+                        .join(", ")}
+                      disabled
+                    />
                   ) : (
                     <MultipleSelect label="Chọn công cụ" />
                   )}
@@ -347,24 +270,10 @@ const SanphamThem = (props) => {
                       )}`}</CardTitle>
                       <InputSection>
                         <span>Số lượng:</span>
-                        <input
-                          type="number"
-                          min="1"
-                          value={x.soluong}
-                          onChange={(e) =>
-                            setMultipleCongcu(
-                              multipleCongcu.map((y) =>
-                                y.congcu === x.congcu
-                                  ? { ...y, soluong: e.target.value }
-                                  : y
-                              )
-                            )
-                          }
-                        />
+                        <input type="text" value={x.soluong} disabled />
                       </InputSection>
                     </MaterialCard>
                   ))}
-                  {selectedCongcu.length === 0 && <ErrMsg>{errMsg}</ErrMsg>}
                 </BoxContent>
               </Box>
 
@@ -375,17 +284,13 @@ const SanphamThem = (props) => {
                 </BoxTitle>
                 <BoxContent>
                   {dsVattu && dsVattu.length ? (
-                    <MultipleSelect
-                      label="Chọn vật tư"
-                      value={selectedVattu}
-                      onChange={handleSelectVattu}
-                    >
-                      {dsVattu.map((item) => (
-                        <MenuItem key={item._id} value={item._id}>
-                          {item.ten}
-                        </MenuItem>
-                      ))}
-                    </MultipleSelect>
+                    <Input
+                      type="text"
+                      value={singleSanpham?.dsvattu
+                        .map((cc) => cc.vattu.ten)
+                        .join(", ")}
+                      disabled
+                    />
                   ) : (
                     <MultipleSelect label="Chọn vật tư" />
                   )}
@@ -397,20 +302,7 @@ const SanphamThem = (props) => {
                       )}`}</CardTitle>
                       <InputSection>
                         <span>Số lượng:</span>
-                        <input
-                          type="number"
-                          min="1"
-                          value={x.soluong}
-                          onChange={(e) =>
-                            setMultipleVattu(
-                              multipleVattu.map((y) =>
-                                y.vattu === x.vattu
-                                  ? { ...y, soluong: e.target.value }
-                                  : y
-                              )
-                            )
-                          }
-                        />
+                        <input type="text" value={x.soluong} disabled />
                       </InputSection>
                     </MaterialCard>
                   ))}
@@ -425,17 +317,13 @@ const SanphamThem = (props) => {
                 </BoxTitle>
                 <BoxContent>
                   {dsNguyenlieu && dsNguyenlieu.length ? (
-                    <MultipleSelect
-                      label="Chọn nguyên liệu"
-                      value={selectedNguyenlieu}
-                      onChange={handleSelectNguyenlieu}
-                    >
-                      {dsNguyenlieu.map((item) => (
-                        <MenuItem key={item._id} value={item._id}>
-                          {item.ten}
-                        </MenuItem>
-                      ))}
-                    </MultipleSelect>
+                    <Input
+                      type="text"
+                      value={singleSanpham?.dsnguyenlieu
+                        .map((cc) => cc.nguyenlieu.ten)
+                        .join(", ")}
+                      disabled
+                    />
                   ) : (
                     <MultipleSelect label="Chọn nguyên liệu" />
                   )}
@@ -447,42 +335,12 @@ const SanphamThem = (props) => {
                       )}`}</CardTitle>
                       <InputSection>
                         <span>Khối lượng:</span>
-                        <input
-                          type="number"
-                          min="1"
-                          value={x.khoiluong}
-                          onChange={(e) =>
-                            setMultipleNguyenlieu(
-                              multipleNguyenlieu.map((y) =>
-                                y.nguyenlieu === x.nguyenlieu
-                                  ? { ...y, khoiluong: e.target.value }
-                                  : y
-                              )
-                            )
-                          }
-                        />
+                        <input type="text" value={x.khoiluong} disabled />
                       </InputSection>
                       <span>kg</span>
-                      {/* <InputSection>
-                        <span>Đơn vị tính:</span>
-                        <input
-                          type="text"
-                          style={{ width: 100 }}
-                          value={x.donvitinh}
-                          onChange={(e) =>
-                            setMultipleNguyenlieu(
-                              multipleNguyenlieu.map((y) =>
-                                y.nguyenlieu === x.nguyenlieu
-                                  ? { ...y, donvitinh: e.target.value }
-                                  : y
-                              )
-                            )
-                          }
-                        />
-                      </InputSection> */}
                     </MaterialCard>
                   ))}
-                  {selectedNguyenlieu.length === 0 && <ErrMsg>{errMsg}</ErrMsg>}
+                  {dsNguyenlieu.length === 0 && <ErrMsg>{errMsg}</ErrMsg>}
                 </BoxContent>
               </Box>
             </div>
@@ -495,20 +353,12 @@ const SanphamThem = (props) => {
                 </BoxTitle>
                 <BoxContent>
                   <FormGroup>
-                    {dsloai && dsloai.length ? (
-                      <DropdownMaterial2
-                        label="Chọn loại sản phẩm"
-                        value={loai}
-                        onChange={(e) => setLoai(e.target.value)}
-                      >
-                        {dsloai.map((item) => (
-                          <MenuItem value={item._id}>{item.ten}</MenuItem>
-                        ))}
-                      </DropdownMaterial2>
-                    ) : (
-                      <DropdownMaterial2 label="Chọn loại sản phẩm" />
-                    )}
-                    {!loai && <ErrMsg>{errMsg}</ErrMsg>}
+                    <Input
+                      type="text"
+                      name="ten"
+                      value={singleSanpham?.loaisanpham.ten}
+                      disabled
+                    />
                   </FormGroup>
                 </BoxContent>
               </Box>
@@ -521,7 +371,6 @@ const SanphamThem = (props) => {
                 <BoxContent>
                   <FormGroup>
                     <UploadButton
-                      ref={ref}
                       onChange={(e) => {
                         setHinhAnh(e.target.files[0]);
                         if (e.target.files.length !== 0) {
@@ -531,11 +380,21 @@ const SanphamThem = (props) => {
                         }
                       }}
                     />
-                    {imgToDisplay && (
-                      <ImageToDisplay className="text-center">
-                        <img src={imgToDisplay} alt="congcuImg" />
-                      </ImageToDisplay>
-                    )}
+                    <ImageToDisplay className="text-center">
+                      <img
+                        src={
+                          imgToDisplay
+                            ? imgToDisplay
+                            : singleSanpham?.hinhanh
+                            ? `/uploads/${singleSanpham?.hinhanh}`
+                            : img_placeholder
+                        }
+                        alt=""
+                        className={
+                          !singleSanpham?.hinhanh && !imgToDisplay && "noImage"
+                        }
+                      />
+                    </ImageToDisplay>
                   </FormGroup>
                 </BoxContent>
               </Box>
@@ -605,11 +464,10 @@ const SanphamThem = (props) => {
                     <Input
                       type="number"
                       min="1"
-                      placeholder="Nhập giá"
-                      value={gia}
-                      onChange={(e) => setGia(e.target.value)}
+                      value={newGia}
+                      onChange={(e) => setnewGia(e.target.value)}
                     />
-                    {!gia && <ErrMsg>{errMsg}</ErrMsg>}
+                    {!newGia && <ErrMsg>{errMsg}</ErrMsg>}
                   </FormGroup>
                 </BoxContent>
               </Box>
@@ -642,7 +500,6 @@ const Box = styled.div`
 const BoxTitle = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   font-family: "Montserrat", sans-serif;
-  font-weight: 500;
   color: #333;
   display: flex;
   align-items: center;
@@ -699,7 +556,7 @@ const TextArea = styled.textarea`
   outline: none;
   color: #333;
   border-radius: 3px;
-  font-size: 15;
+  font-size: 15px;
   &:focus {
     border: 1px solid blue;
   }
@@ -726,7 +583,7 @@ const PlusButton = styled.button`
   border: none;
   outline: none;
   i {
-    font-size: 12px;
+    font-size: 13px;
     color: #0088ff;
     width: 23px;
     height: 23px;
@@ -746,14 +603,8 @@ const PlusButton = styled.button`
 `;
 const ErrMsg = styled.span`
   display: block;
-  font-size: 13px;
+  font-size: 15px;
   color: red;
-  margin-top: 3px;
-`;
-const Image = styled.img`
-  width: 150px;
-  display: block;
-  margin-top: 16px;
 `;
 const CardTitle = styled.div`
   font-size: 14px;
@@ -783,4 +634,4 @@ const InputSection = styled.div`
   }
 `;
 
-export default SanphamThem;
+export default SanphamChinhsua;

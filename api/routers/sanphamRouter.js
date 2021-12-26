@@ -17,13 +17,14 @@ sanphamRouter.post("/them", upload.single("hinhanh"), async (req, res) => {
     dsvattu,
     dsnguyenlieu,
     gia,
+    newAnh,
   } = req.body;
   const sanphammoi = new Sanpham({
     ma,
     ten,
     mota,
     loaisanpham,
-    hinhanh: req.file ? req.file.filename : "",
+    hinhanh: newAnh ? newAnh : req.file ? req.file.filename : "",
     thuoctinh: JSON.parse(thuoctinh),
     dscongcu: JSON.parse(dscongcu),
     dsvattu: JSON.parse(dsvattu),

@@ -10,7 +10,7 @@ const CustomBtn = styled.button`
   background: transparent;
   color: #1cb0f6;
   border: none;
-  width: 120px;
+  min-width: 120px;
   border: 2px solid #1cb0f6;
   border-radius: 5px;
   outline: none;
