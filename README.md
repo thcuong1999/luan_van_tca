@@ -1,5 +1,7 @@
 ### ỨNG DỤNG QUẢN LÝ LÀNG NGHỀ(Underline)
 
+=============
+
 #### CÁC CÔNG NGHỆ LIÊN QUAN(Underline)
 
 - MongoDB cho cơ sở dữ liệu
@@ -9,16 +11,19 @@
 #### CÁCH SỬ DỤNG(Underline)
 
 Lấy dự án về máy vật lý
+
 `Git clone https://github.com/thcuong1999/luan_van_tca.git`
 
 Cài đặt các module cho ứng dụng chạy trên web
 
 `cd frontend`
+
 `npm i`
 
 Cài đặt các module cho ứng dụng chạy trên di động
 
 `cd mobile`
+
 `npm i`
 
 Các lệnh để khởi chạy ứng dụng
@@ -26,16 +31,19 @@ Các lệnh để khởi chạy ứng dụng
 Khởi động máy chủ
 
 `cd api`
+
 `npm start`
 
 Khởi động ứng dụng trên web
 
 `cd frontend`
+
 `npm start`
 
 Khởi động ứng dụng trên di động
 
 `cd mobile`
+
 `npm start`
 
 #### Chú ý :
