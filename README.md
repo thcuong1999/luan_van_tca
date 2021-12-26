@@ -1,12 +1,12 @@
-### ỨNG DỤNG QUẢN LÝ LÀNG NGHỀ(Underline)
+### ỨNG DỤNG QUẢN LÝ LÀNG NGHỀ
 
-#### CÁC CÔNG NGHỆ LIÊN QUAN(Underline)
+#### CÁC CÔNG NGHỆ LIÊN QUAN
 
 - MongoDB cho cơ sở dữ liệu
 - ReactJs, React native cho frontend
 - Nodejs, Express cho backend
 
-#### CÁCH SỬ DỤNG(Underline)
+#### CÁCH SỬ DỤNG
 
 Lấy dự án về máy vật lý
 
