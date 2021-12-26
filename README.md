@@ -1,7 +1,5 @@
 ### ỨNG DỤNG QUẢN LÝ LÀNG NGHỀ(Underline)
 
-=============
-
 #### CÁC CÔNG NGHỆ LIÊN QUAN(Underline)
 
 - MongoDB cho cơ sở dữ liệu
@@ -26,7 +24,7 @@ Cài đặt các module cho ứng dụng chạy trên di động
 
 `npm i`
 
-Các lệnh để khởi chạy ứng dụng
+#### Các lệnh để khởi chạy ứng dụng
 
 Khởi động máy chủ
 
