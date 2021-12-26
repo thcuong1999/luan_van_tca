@@ -54,4 +54,6 @@ Nhớ tắt tất cả dịch vụ chạy trên cổng đã sử dụng
 
 Nhớ thay đổi lại link kết nối đến database trong file .env của thư mục api
 
-Kiểm tra code kết nối database trong file config.js trong thư mục api>database có đúng với trong file .env
+Trong api > database > config.js, kiểm tra code kết nối database có đúng với trong file .env
+
+Trong mobile > src > api > axiosClient.js, lấy địa chỉ Ipv4 của máy vật lý thay vào baseURL
